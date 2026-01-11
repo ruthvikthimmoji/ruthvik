@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { uiDesigns } from "../data/ui-designs";
 
@@ -38,34 +38,42 @@ const filters = [
   { label: "Components", value: "components" },
 ];
 
-function getActiveIndex(value: string) {
-  return filters.findIndex((f) => f.value === value);
-}
-
 /* ---------------------------------------------
    COMPONENT
 --------------------------------------------- */
 export default function UIDesignsClient() {
   const [activeFilter, setActiveFilter] = useState("all");
 
+  /* ----- refs for buttons ----- */
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  /* ----- sliding indicator state ----- */
   const [indicatorStyle, setIndicatorStyle] = useState({
     width: 0,
     left: 0,
   });
 
-  useEffect(() => {
-    const activeIndex = getActiveIndex(activeFilter);
-    const activeButton = buttonRefs.current[activeIndex];
+  /* ----- SAFE ref setter (TS + Turbopack proof) ----- */
+  const setButtonRef =
+    (index: number) =>
+    (el: HTMLButtonElement | null): void => {
+      buttonRefs.current[index] = el;
+    };
 
-    if (activeButton) {
+  /* ----- update indicator on filter change ----- */
+  useEffect(() => {
+    const index = filters.findIndex((f) => f.value === activeFilter);
+    const btn = buttonRefs.current[index];
+
+    if (btn) {
       setIndicatorStyle({
-        width: activeButton.offsetWidth,
-        left: activeButton.offsetLeft,
+        width: btn.offsetWidth,
+        left: btn.offsetLeft,
       });
     }
   }, [activeFilter]);
 
+  /* ----- filter designs ----- */
   const filteredDesigns =
     activeFilter === "all"
       ? uiDesigns
@@ -88,9 +96,9 @@ export default function UIDesignsClient() {
         {/* SEGMENTED TOGGLE */}
         <div className="flex justify-center mb-20">
           <div className="relative flex items-center bg-white border border-neutral-300 rounded-full p-1 shadow-sm">
-            {/* Sliding Indicator */}
-            <div
-              className="absolute h-9 rounded-full bg-black transition-all duration-300 ease-out"
+            {/* Sliding indicator */}
+            <span
+              className="absolute h-9 rounded-full bg-black transition-all duration-300"
               style={{
                 width: indicatorStyle.width,
                 left: indicatorStyle.left,
@@ -103,9 +111,7 @@ export default function UIDesignsClient() {
               return (
                 <button
                   key={filter.value}
-                  ref={(el) => {
-                    buttonRefs.current[index] = el;
-                  }}
+                  ref={setButtonRef(index)}
                   onClick={() => setActiveFilter(filter.value)}
                   className={`
                     relative z-10
@@ -123,7 +129,7 @@ export default function UIDesignsClient() {
           </div>
         </div>
 
-        {/* GRID */}
+        {/* STICKY NOTE GRID */}
         <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
           {filteredDesigns.map((design, index) => {
             const rotation = getRotation(index);
@@ -139,7 +145,7 @@ export default function UIDesignsClient() {
                   cursor-pointer
                 "
               >
-                {/* PRICE TAG */}
+                {/* PRICE TAG CATEGORY */}
                 <div
                   className={`
                     absolute top-4 right-4
@@ -170,6 +176,7 @@ export default function UIDesignsClient() {
                   <h3 className="text-lg font-semibold text-[#111]">
                     {design.title}
                   </h3>
+
                   {design.subtitle && (
                     <p className="text-sm text-[#555] mt-1">
                       {design.subtitle}
@@ -182,10 +189,14 @@ export default function UIDesignsClient() {
         </section>
       </div>
 
-      {/* GRAIN */}
+      {/* GRAIN OVERLAY */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[url('/textures/noise.jpg')] opacity-[0.03] mix-blend-overlay"
+        className="
+          pointer-events-none absolute inset-0
+          bg-[url('/textures/noise.jpg')]
+          opacity-[0.03] mix-blend-overlay
+        "
       />
     </main>
   );
