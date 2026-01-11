@@ -60,25 +60,27 @@ export default function UIDesignsClient() {
             UI Design Gallery
           </h1>
           <p className="text-[#555] max-w-2xl mx-auto">
-            A playful whiteboard-inspired showcase of mobile, web, and component
-            UI designs.
+            A playful whiteboard-inspired showcase of mobile, web, and component UI designs.
           </p>
         </header>
 
         {/* SEGMENTED TOGGLE */}
         <div className="flex justify-center mb-20">
           <div className="relative flex items-center bg-white border border-neutral-300 rounded-full p-1 shadow-sm">
+            {/* Sliding indicator */}
             <span
               className="absolute h-9 rounded-full bg-black transition-all duration-300"
               style={{ width: indicatorStyle.width, left: indicatorStyle.left }}
             />
+
             {filters.map((filter, index) => {
               const active = activeFilter === filter.value;
+
               return (
                 <button
                   key={filter.value}
                   ref={(el) => {
-                    buttonRefs.current[index] = el; // ✅ THIS FIXES THE ERROR
+                    buttonRefs.current[index] = el; // ✅ THIS IS SAFE NOW
                   }}
                   onClick={() => setActiveFilter(filter.value)}
                   className={`relative z-10 px-5 h-9 text-sm font-medium rounded-full transition-colors duration-300 ${
@@ -96,12 +98,14 @@ export default function UIDesignsClient() {
         <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
           {filteredDesigns.map((design, index) => {
             const rotation = getRotation(index);
+
             return (
               <div
                 key={design.id}
                 style={{ transform: `rotate(${rotation}deg)` }}
                 className="relative bg-[#fff8dc] p-4 rounded-xl shadow-xl transition-all duration-300 hover:rotate-0 hover:scale-105 hover:shadow-2xl cursor-pointer"
               >
+                {/* PRICE TAG CATEGORY */}
                 <div
                   className={`absolute top-4 right-4 flex items-center gap-2 text-[11px] uppercase tracking-wide font-medium px-3 py-1.5 rounded-md shadow-md rotate-2 ${getCategoryColor(
                     design.category
@@ -123,9 +127,7 @@ export default function UIDesignsClient() {
 
                 <div className="p-2">
                   <h3 className="text-lg font-semibold text-[#111]">{design.title}</h3>
-                  {design.subtitle && (
-                    <p className="text-sm text-[#555] mt-1">{design.subtitle}</p>
-                  )}
+                  {design.subtitle && <p className="text-sm text-[#555] mt-1">{design.subtitle}</p>}
                 </div>
               </div>
             );
