@@ -1,31 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
-  // { label: "Work", href: "#work" }, // homepage section
-  { label: "Services", href: "/services" }, // homepage section
-  { label: "About", href: "./about" }, // homepage section
-  { label: "UI's", href: "/ui-designs" }, // separate page
-  // { label: "Case Studies", href: "/case-studies" }, // separate page
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "UI's", href: "/ui-designs" },
 ];
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   return (
     <motion.header
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-6 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 w-[95%] max-w-5xl"
     >
       <nav
-        aria-label="Primary navigation"
         className="
-          flex items-center gap-8
+          flex items-center justify-between
           px-6 py-3
           rounded-full
-          text-[#111]
           bg-[color:var(--surface)]
           backdrop-blur-md
           border border-[color:var(--border)]
@@ -37,51 +37,104 @@ export default function Navbar() {
           Ruthvik<span className="text-[color:var(--accent)]">.</span>
         </Link>
 
-        {/* Links */}
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="
-                text-sm
-                text-[#111]
-                transition-colors duration-200
-                hover:text-[color:var(--accent)]
-              "
+              className="text-sm text-[#111] hover:text-[color:var(--accent)] transition"
             >
               {item.label}
             </Link>
           ))}
+
           <a
             href="/resume.pdf"
             download
-            className=" px-4 py-2 rounded-full  border border-[color:var(--primary)]
-              text-[color:var(--primary)]font-medium 
-            transition hover:bg-[color:var(--primary-hover)]
-  "
+            className="px-4 py-2 rounded-full border border-[color:var(--primary)]
+            text-sm font-medium text-[color:var(--primary)]
+            hover:bg-[color:var(--primary-hover)] transition"
           >
-            Download Resume
+            Resume
           </a>
 
-          {/* CTA */}
           <a
             href="#contact"
             className="
-              ml-2 px-4 py-2 rounded-full
+              px-4 py-2 rounded-full
               bg-[color:var(--primary)]
-              text-black
-              text-sm font-medium
-              transition-all duration-200
+              text-black text-sm font-medium
               hover:bg-[color:var(--primary-hover)]
-              hover:scale-[1.05]
-              active:scale-[0.96]
-            "
+              transition"
           >
             Hire Me
           </a>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-[#111]"
+          aria-label="Toggle menu"
+        >
+          {open ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="
+              mt-3 rounded-2xl
+              bg-[color:var(--surface)]
+              border border-[color:var(--border)]
+              backdrop-blur-md
+              shadow-xl
+              p-6
+              md:hidden
+            "
+          >
+            <div className="flex flex-col gap-5">
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="text-[#111] text-sm hover:text-[color:var(--accent)]"
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <a
+                href="/resume.pdf"
+                download
+                className="text-sm font-medium text-[color:var(--primary)]"
+              >
+                Download Resume
+              </a>
+
+              <a
+                href="#contact"
+                onClick={() => setOpen(false)}
+                className="
+                  mt-2 px-4 py-2 rounded-full
+                  bg-[color:var(--primary)]
+                  text-black text-sm font-medium text-center
+                "
+              >
+                Hire Me
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
