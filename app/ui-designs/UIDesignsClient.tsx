@@ -4,11 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { uiDesigns } from "../data/ui-designs";
 
+/* ---------------------------------------------
+   ROTATION HELPER
+--------------------------------------------- */
 function getRotation(index: number) {
   const rotations = [-3, -2, -1, 1, 2, 3];
   return rotations[index % rotations.length];
 }
 
+/* ---------------------------------------------
+   CATEGORY COLOR HELPER
+--------------------------------------------- */
 function getCategoryColor(category: string) {
   switch (category) {
     case "mobile":
@@ -22,6 +28,9 @@ function getCategoryColor(category: string) {
   }
 }
 
+/* ---------------------------------------------
+   FILTER OPTIONS
+--------------------------------------------- */
 const filters = [
   { label: "All", value: "all" },
   { label: "Mobile", value: "mobile" },
@@ -29,20 +38,25 @@ const filters = [
   { label: "Components", value: "components" },
 ];
 
+/* ---------------------------------------------
+   COMPONENT
+--------------------------------------------- */
 export default function UIDesignsClient() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
 
-  const filteredDesigns =
-    activeFilter === "all"
-      ? uiDesigns
-      : uiDesigns.filter((d) => d.category === activeFilter);
+  /* ----- refs for buttons ----- */
+  const buttonRefs = useRef<HTMLButtonElement[]>([]);
 
+  /* ----- sliding indicator state ----- */
+  const [indicatorStyle, setIndicatorStyle] = useState({
+    width: 0,
+    left: 0,
+  });
+
+  /* ----- update indicator on filter change ----- */
   useEffect(() => {
     const index = filters.findIndex((f) => f.value === activeFilter);
     const btn = buttonRefs.current[index];
-
     if (btn) {
       setIndicatorStyle({
         width: btn.offsetWidth,
@@ -50,6 +64,12 @@ export default function UIDesignsClient() {
       });
     }
   }, [activeFilter]);
+
+  /* ----- filter designs ----- */
+  const filteredDesigns =
+    activeFilter === "all"
+      ? uiDesigns
+      : uiDesigns.filter((d) => d.category === activeFilter);
 
   return (
     <main className="relative min-h-screen bg-[#fdfdfd] px-6 py-32 font-sans">
@@ -60,7 +80,8 @@ export default function UIDesignsClient() {
             UI Design Gallery
           </h1>
           <p className="text-[#555] max-w-2xl mx-auto">
-            A playful whiteboard-inspired showcase of mobile, web, and component UI designs.
+            A playful whiteboard-inspired showcase of mobile, web, and component
+            UI designs.
           </p>
         </header>
 
@@ -70,7 +91,10 @@ export default function UIDesignsClient() {
             {/* Sliding indicator */}
             <span
               className="absolute h-9 rounded-full bg-black transition-all duration-300"
-              style={{ width: indicatorStyle.width, left: indicatorStyle.left }}
+              style={{
+                width: indicatorStyle.width,
+                left: indicatorStyle.left,
+              }}
             />
 
             {filters.map((filter, index) => {
@@ -80,12 +104,17 @@ export default function UIDesignsClient() {
                 <button
                   key={filter.value}
                   ref={(el) => {
-                    buttonRefs.current[index] = el; // ✅ THIS IS SAFE NOW
+                    if (el) buttonRefs.current[index] = el;
                   }}
                   onClick={() => setActiveFilter(filter.value)}
-                  className={`relative z-10 px-5 h-9 text-sm font-medium rounded-full transition-colors duration-300 ${
-                    active ? "text-white" : "text-[#111] hover:text-black"
-                  }`}
+                  className={`
+                    relative z-10
+                    px-5 h-9
+                    text-sm font-medium
+                    rounded-full
+                    transition-colors duration-300
+                    ${active ? "text-white" : "text-[#111] hover:text-black"}
+                  `}
                 >
                   {filter.label}
                 </button>
@@ -98,23 +127,35 @@ export default function UIDesignsClient() {
         <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
           {filteredDesigns.map((design, index) => {
             const rotation = getRotation(index);
+            const category = design.category || "default";
 
             return (
               <div
                 key={design.id}
                 style={{ transform: `rotate(${rotation}deg)` }}
-                className="relative bg-[#fff8dc] p-4 rounded-xl shadow-xl transition-all duration-300 hover:rotate-0 hover:scale-105 hover:shadow-2xl cursor-pointer"
+                className="
+                  relative bg-[#fff8dc] p-4 rounded-xl shadow-xl
+                  transition-all duration-300
+                  hover:rotate-0 hover:scale-105 hover:shadow-2xl
+                  cursor-pointer
+                "
               >
                 {/* PRICE TAG CATEGORY */}
                 <div
-                  className={`absolute top-4 right-4 flex items-center gap-2 text-[11px] uppercase tracking-wide font-medium px-3 py-1.5 rounded-md shadow-md rotate-2 ${getCategoryColor(
-                    design.category
-                  )}`}
+                  className={`
+                    absolute top-4 right-4
+                    flex items-center gap-2
+                    text-[11px] uppercase tracking-wide font-medium
+                    px-3 py-1.5 rounded-md
+                    shadow-md rotate-2
+                    ${getCategoryColor(category)}
+                  `}
                 >
                   <span className="w-2 h-2 rounded-full bg-white/80" />
-                  {design.category}
+                  {category}
                 </div>
 
+                {/* IMAGE */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-3">
                   <Image
                     src={design.image}
@@ -125,9 +166,15 @@ export default function UIDesignsClient() {
                   />
                 </div>
 
+                {/* INFO */}
                 <div className="p-2">
-                  <h3 className="text-lg font-semibold text-[#111]">{design.title}</h3>
-                  {design.subtitle && <p className="text-sm text-[#555] mt-1">{design.subtitle}</p>}
+                  <h3 className="text-lg font-semibold text-[#111]">
+                    {design.title}
+                  </h3>
+
+                  {design.subtitle && (
+                    <p className="text-sm text-[#555] mt-1">{design.subtitle}</p>
+                  )}
                 </div>
               </div>
             );
@@ -138,7 +185,11 @@ export default function UIDesignsClient() {
       {/* GRAIN OVERLAY */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[url('/textures/noise.jpg')] opacity-[0.03] mix-blend-overlay"
+        className="
+          pointer-events-none absolute inset-0
+          bg-[url('/textures/noise.jpg')]
+          opacity-[0.03] mix-blend-overlay
+        "
       />
     </main>
   );
