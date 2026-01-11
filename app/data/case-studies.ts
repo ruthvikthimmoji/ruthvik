@@ -1,5 +1,5 @@
 export type CaseStudy = {
-  slug: string;
+  slug: string; // canonical slug for URL
   title: string;
   tagline: string;
   role: string;
@@ -12,6 +12,7 @@ export type CaseStudy = {
   image: string;
 };
 
+// ✅ Keep slugs all lowercase to avoid URL mismatch
 export const caseStudies: CaseStudy[] = [
   {
     slug: "sportsea",
@@ -23,7 +24,9 @@ export const caseStudies: CaseStudy[] = [
     problem: "Users struggled to discover experiences.",
     solution: "Redesigned IA and booking flow.",
     outcome: "Increase in engagement and bookings.",
-    figmaEmbed: "https://www.figma.com/embed?…",
-    image: "/projects/sportsea.png",
+    figmaEmbed:
+      "https://www.figma.com/embed?embed_host=share&url=...",
+    image: "/projects/sea3.png",
   },
+  // Add more case studies here
 ];

@@ -1,13 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { CaseStudy } from "./[slug]/page";
+import { CaseStudy } from "../data/case-studies";
 
-export default function CaseStudyClient({
-  project,
-}: {
-  project: CaseStudy;
-}) {
+export default function CaseStudyClient({ project }: { project: CaseStudy }) {
   return (
     <motion.main
       initial={{ opacity: 0 }}

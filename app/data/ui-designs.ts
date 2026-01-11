@@ -10,17 +10,17 @@ export const uiDesigns = [
   {
     id: "2",
     title: "SaaS Landing Page",
-    image: "/ui/ui-2.png",
+    image: "/ui/ui-1.png",
     // link: "/case-study/saas-landing",
   },
   {
     id: "3",
     title: "Mobile App UI",
-    image: "/ui/ui-3.png",
+    image: "/ui/ui-1.png",
   },
   {
     id: "4",
     title: "Mobile App UI",
-    image: "/ui/ui-3.png",
+    image: "/ui/ui-1.png",
   },
 ];

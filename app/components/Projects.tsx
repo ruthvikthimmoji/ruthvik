@@ -1,128 +1,80 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { projects } from "@/app/data/projects";
+import { caseStudies } from "@/app/data/case-studies";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Projects() {
   return (
-    <section
-      id="work"
-      className="relative max-w-screen mx-auto px-6 py-32 bg-[#f6f4ef]
-        text-[#111]"
-    >
+    <section className="relative max-w-screen mx-auto px-6 py-32 bg-[#f6f4ef] text-[#111]">
       {/* Section intro */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
         className="mb-20 max-w-2xl mx-auto text-center"
       >
-        <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-[#111]">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-4">
           Selected Work
         </h2>
-
-        <p className="text-base md:text-lg  text-[#111]">
+        <p className="text-base md:text-lg">
           A few projects where I helped teams design clear, user-friendly
-          digital experiences that drive real results.
+          digital experiences.
         </p>
       </motion.div>
 
       {/* Projects grid */}
       <div className="flex flex-wrap justify-center gap-8">
-        {projects.map((project, index) => (
-          <motion.article
-            key={project.title}
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-            viewport={{ once: true }}
-            className="
-              group
-              p-6 rounded-2xl
-              bg-[color:var(--surface)]
-              border border-[#707070]
-              transition-all duration-300
-              hover:border-[color:var(--accent)]
-              hover:-translate-y-1
-              max-w-sm
-              w-full
-            "
-          >
-            {/* Project Preview */}
-            <div className="h-48 rounded-xl mb-6 overflow-hidden">
+        {projects.map((project, index) => {
+          // check if this project has a case study
+          const hasCaseStudy = caseStudies.some(
+            (cs) => cs.slug === project.slug
+          );
+
+          return (
+            <motion.article
+              key={project.slug}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group p-6 rounded-2xl bg-white border hover:border-[#f95738] transition max-w-sm w-full"
+            >
               <img
                 src={project.image}
                 alt={project.title}
-                width={400} // approximate width
-                height={192} // approximate height
-                className="w-full h-full object-cover rounded-xl"
+                className="h-48 w-full object-cover rounded-xl mb-6"
               />
-            </div>
 
-            {/* Tag */}
-            <span className="text-xs uppercase tracking-[0.3em] text-[#707070]">
-              {project.tag}
-            </span>
-
-            {/* Title */}
-            <h3 className="text-xl font-semibold mt-3 mb-3 text-[#111] text-center">
-              {project.title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-sm md:text-base text-[#111] mb-6 text-center">
-              {project.description}
-            </p>
-
-            <Link
-              href={`/case-study/${project.slug}`}
-              className="
-                inline-flex items-center gap-2
-                text-sm font-medium
-                text-[color:var(--accent)]
-                transition-colors
-                group-hover:text-[color:var(--primary-hover)]
-              "
-            >
-              View Case Study
-              <span className="transition-transform group-hover:translate-x-1">
-                →
+              <span className="text-xs uppercase tracking-widest text-neutral-500">
+                {project.tag}
               </span>
-            </Link>
-          </motion.article>
-        ))}
-      </div>
-      <div className="relative max-w-screen mx-auto px-6 py-12 flex items-center justify-center">
-        <Link
-          href="./ui-designs"
-          className="
-      group
-      inline-flex items-center gap-2
-      font-medium
-      text-[color:var(--accent)]
-      hover:text-[color:var(--primary)]
-      transition
-    "
-        >
-          View More
-          <span className="transition-transform group-hover:translate-x-1">
-            →
-          </span>
-        </Link>
-      </div>
 
-      <div
-        aria-hidden
-        className="
-          pointer-events-none
-          absolute inset-0
-          bg-[url('/textures/noise.jpg')]
-          opacity-[0.04]
-          mix-blend-overlay
-        "
-      />
+              <h3 className="text-xl font-semibold mt-3 mb-3 text-center">
+                {project.title}
+              </h3>
+
+              <p className="text-sm text-neutral-600 mb-6 text-center">
+                {project.description}
+              </p>
+
+              {hasCaseStudy && (
+                <Link
+                  href={`./case-study/${project.slug.toLowerCase()}`}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[#f95738]"
+                >
+                  View Case Study
+                  <span className="group-hover:translate-x-1 transition">
+                    →
+                  </span>
+                </Link>
+              )}
+            </motion.article>
+          );
+        })}
+      </div>
     </section>
   );
 }

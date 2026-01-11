@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const navItems = [
-  { label: "Work", href: "#work" }, // homepage section
+  // { label: "Work", href: "#work" }, // homepage section
   { label: "Services", href: "/services" }, // homepage section
   { label: "About", href: "./about" }, // homepage section
   { label: "UI's", href: "/ui-designs" }, // separate page

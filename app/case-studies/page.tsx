@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { uiDesigns } from "@/app/data/ui-designs";
+import { uiDesigns } from "../data/ui-designs";
+
 
 export const metadata = {
   title: "UI Designs | Product & SaaS Interfaces",
