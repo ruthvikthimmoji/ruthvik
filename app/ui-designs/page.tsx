@@ -7,9 +7,17 @@ export const metadata = {
     "A curated collection of UI designs, dashboards, mobile apps, and web interfaces crafted with a focus on clarity and conversion.",
 };
 
+/* ---------------------------------------------
+   ROTATION HELPER (AUTOMATIC)
+--------------------------------------------- */
+function getRotation(index: number) {
+  const rotations = [-3, -2, -1, 1, 2, 3];
+  return rotations[index % rotations.length];
+}
+
 export default function UIDesignsPage() {
   return (
-    <main className="min-h-screen bg-[#fdfdfd] px-6 py-32 font-sans">
+    <main className="relative min-h-screen bg-[#fdfdfd] px-6 py-32 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-20 text-center">
@@ -22,27 +30,28 @@ export default function UIDesignsPage() {
           </p>
         </header>
 
-        {/* Whiteboard / sticky notes grid */}
+        {/* Whiteboard Grid */}
         <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
           {uiDesigns.map((design, index) => {
-            // Slight rotation for sticky note effect
-            const rotateClasses = [
-              "rotate-1",
-              "-rotate-2",
-              "rotate-2",
-              "rotate-3",
-            ];
-            const rotateClass = rotateClasses[index % rotateClasses.length];
+            const rotation = getRotation(index);
 
             return (
               <div
                 key={design.id}
-                className={`
-                  relative bg-[#fff8dc] p-4 rounded-xl shadow-xl
-                  ${rotateClass} transition-transform duration-300
-                  hover:scale-105 hover:shadow-2xl
+                style={{ transform: `rotate(${rotation}deg)` }}
+                className="
+                  relative
+                  bg-[#fff8dc]
+                  p-4
+                  rounded-xl
+                  shadow-xl
+                  transition-all
+                  duration-300
+                  hover:rotate-0
+                  hover:scale-105
+                  hover:shadow-2xl
                   cursor-pointer
-                `}
+                "
               >
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-3">
@@ -60,26 +69,20 @@ export default function UIDesignsPage() {
                   <h3 className="text-lg font-semibold text-[#111]">
                     {design.title}
                   </h3>
+
                   {design.subtitle && (
                     <p className="text-sm text-[#555] mt-1">
                       {design.subtitle}
                     </p>
                   )}
                 </div>
-
-                {/* Optional: subtle hover overlay (commented out) */}
-                {/* <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 rounded-xl flex items-center justify-center transition">
-                  <span className="text-white font-medium text-sm">
-                    View Case Study →
-                  </span>
-                </div> */}
               </div>
             );
           })}
         </section>
       </div>
 
-      {/* Grain overlay for whiteboard texture */}
+      {/* Grain Overlay */}
       <div
         aria-hidden
         className="
