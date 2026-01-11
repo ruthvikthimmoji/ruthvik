@@ -5,9 +5,12 @@ import { Inter } from "next/font/google";
 import SignatureCursor from "./components/SignatureCursor";
 
 export const metadata: Metadata = {
-  title: "Freelance UI/UX Designer | SaaS & Mobile Apps",
+  title: "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps",
   description:
-    "Freelance UI/UX designer helping startups and SaaS teams design clean, conversion-focused digital products.",
+    "UI/UX designer helping startups and SaaS teams design clean, conversion-focused digital products.",
+  icons: {
+    icon: "/ruthvikP.ico", // <-- add this line
+  },
 };
 
 const inter = Inter({
