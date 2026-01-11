@@ -44,23 +44,16 @@ const filters = [
 export default function UIDesignsClient() {
   const [activeFilter, setActiveFilter] = useState("all");
 
-  /* ----- refs for buttons ----- */
+  /* refs */
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  /* ----- sliding indicator state ----- */
+  /* sliding indicator */
   const [indicatorStyle, setIndicatorStyle] = useState({
     width: 0,
     left: 0,
   });
 
-  /* ----- SAFE ref setter (TS + Turbopack proof) ----- */
-  const setButtonRef =
-    (index: number) =>
-    (el: HTMLButtonElement | null): void => {
-      buttonRefs.current[index] = el;
-    };
-
-  /* ----- update indicator on filter change ----- */
+  /* update indicator */
   useEffect(() => {
     const index = filters.findIndex((f) => f.value === activeFilter);
     const btn = buttonRefs.current[index];
@@ -73,7 +66,7 @@ export default function UIDesignsClient() {
     }
   }, [activeFilter]);
 
-  /* ----- filter designs ----- */
+  /* filtered designs */
   const filteredDesigns =
     activeFilter === "all"
       ? uiDesigns
@@ -96,7 +89,7 @@ export default function UIDesignsClient() {
         {/* SEGMENTED TOGGLE */}
         <div className="flex justify-center mb-20">
           <div className="relative flex items-center bg-white border border-neutral-300 rounded-full p-1 shadow-sm">
-            {/* Sliding indicator */}
+            {/* Indicator */}
             <span
               className="absolute h-9 rounded-full bg-black transition-all duration-300"
               style={{
@@ -111,7 +104,9 @@ export default function UIDesignsClient() {
               return (
                 <button
                   key={filter.value}
-                  ref={setButtonRef(index)}
+                  ref={(el) => {
+                    buttonRefs.current[index] = el; // ✅ NO RETURN
+                  }}
                   onClick={() => setActiveFilter(filter.value)}
                   className={`
                     relative z-10
@@ -145,7 +140,7 @@ export default function UIDesignsClient() {
                   cursor-pointer
                 "
               >
-                {/* PRICE TAG CATEGORY */}
+                {/* CATEGORY TAG */}
                 <div
                   className={`
                     absolute top-4 right-4
@@ -176,7 +171,6 @@ export default function UIDesignsClient() {
                   <h3 className="text-lg font-semibold text-[#111]">
                     {design.title}
                   </h3>
-
                   {design.subtitle && (
                     <p className="text-sm text-[#555] mt-1">
                       {design.subtitle}
@@ -189,7 +183,7 @@ export default function UIDesignsClient() {
         </section>
       </div>
 
-      {/* GRAIN OVERLAY */}
+      {/* GRAIN */}
       <div
         aria-hidden
         className="
