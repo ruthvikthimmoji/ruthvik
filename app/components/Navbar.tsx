@@ -54,7 +54,7 @@ export default function Navbar() {
             </Link>
           ))}
           <a
-            href="/Ruthvik-Resume.pdf"
+            href="/resume.pdf"
             download
             className=" px-4 py-2 rounded-full  border border-[color:var(--primary)]
               text-[color:var(--primary)]font-medium 
