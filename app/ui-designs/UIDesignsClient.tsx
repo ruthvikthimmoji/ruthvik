@@ -48,15 +48,12 @@ function getActiveIndex(value: string) {
 export default function UIDesignsClient() {
   const [activeFilter, setActiveFilter] = useState("all");
 
-  /* Sliding indicator state */
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [indicatorStyle, setIndicatorStyle] = useState({
     width: 0,
     left: 0,
   });
 
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  /* Sync indicator with active button */
   useEffect(() => {
     const activeIndex = getActiveIndex(activeFilter);
     const activeButton = buttonRefs.current[activeIndex];
@@ -91,7 +88,7 @@ export default function UIDesignsClient() {
         {/* SEGMENTED TOGGLE */}
         <div className="flex justify-center mb-20">
           <div className="relative flex items-center bg-white border border-neutral-300 rounded-full p-1 shadow-sm">
-            {/* Sliding indicator */}
+            {/* Sliding Indicator */}
             <div
               className="absolute h-9 rounded-full bg-black transition-all duration-300 ease-out"
               style={{
@@ -106,7 +103,9 @@ export default function UIDesignsClient() {
               return (
                 <button
                   key={filter.value}
-                  ref={(el) => (buttonRefs.current[index] = el)}
+                  ref={(el) => {
+                    buttonRefs.current[index] = el;
+                  }}
                   onClick={() => setActiveFilter(filter.value)}
                   className={`
                     relative z-10
@@ -124,7 +123,7 @@ export default function UIDesignsClient() {
           </div>
         </div>
 
-        {/* STICKY NOTE GRID */}
+        {/* GRID */}
         <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
           {filteredDesigns.map((design, index) => {
             const rotation = getRotation(index);
@@ -140,7 +139,7 @@ export default function UIDesignsClient() {
                   cursor-pointer
                 "
               >
-                {/* PRICE TAG CATEGORY BADGE */}
+                {/* PRICE TAG */}
                 <div
                   className={`
                     absolute top-4 right-4
@@ -171,7 +170,6 @@ export default function UIDesignsClient() {
                   <h3 className="text-lg font-semibold text-[#111]">
                     {design.title}
                   </h3>
-
                   {design.subtitle && (
                     <p className="text-sm text-[#555] mt-1">
                       {design.subtitle}
@@ -184,14 +182,10 @@ export default function UIDesignsClient() {
         </section>
       </div>
 
-      {/* GRAIN OVERLAY */}
+      {/* GRAIN */}
       <div
         aria-hidden
-        className="
-          pointer-events-none absolute inset-0
-          bg-[url('/textures/noise.jpg')]
-          opacity-[0.03] mix-blend-overlay
-        "
+        className="pointer-events-none absolute inset-0 bg-[url('/textures/noise.jpg')] opacity-[0.03] mix-blend-overlay"
       />
     </main>
   );
