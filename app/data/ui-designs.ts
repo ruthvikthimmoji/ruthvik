@@ -29,7 +29,7 @@ export const uiDesigns = [
     id: "5",
     title: "Login Page Mobile App ui",
     subtitle: "Mobile Interface",
-    image: "/ui/Login.png",
+    image: "/ui/login.png",
   },
   
   {
