@@ -9,6 +9,20 @@ export const uiDesigns = [
     category: "mobile", 
 
   },
+   {
+    id: "27",
+  title: "JuzzPay",
+    subtitle: "Dashboard-first personal finance platform",
+    image: "/ui/juz.png",
+    category: "web", 
+  },
+  {
+    id: "28",
+  title: "Sportsea",
+    subtitle: "Dashboard-first personal finance platform",
+    image: "/ui/sea1.png",
+    category: "web &mobile", 
+  },
  {
     id: "2",
     title: "Daily Tasks App UI",
@@ -185,5 +199,5 @@ export const uiDesigns = [
     image: "/ui/more.png",
     category: "components", 
   },
-  
+
 ];

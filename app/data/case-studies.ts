@@ -24,8 +24,7 @@ export const caseStudies: CaseStudy[] = [
     problem: "Users struggled to discover experiences.",
     solution: "Redesigned IA and booking flow.",
     outcome: "Increase in engagement and bookings.",
-    figmaEmbed:
-      "https://www.figma.com/embed?embed_host=share&url=...",
+    figmaEmbed:"https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/Ac8TzbgXXoyQM4UGYQyZPV/Daily-workings?node-id=73-1066",
     image: "/projects/sea3.png",
   },
   // Add more case studies here

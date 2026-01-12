@@ -76,10 +76,10 @@ export default function CaseStudyClient({ project }: { project: CaseStudy }) {
             Design Work
           </h2>
 
-          <div className="aspect-video border border-neutral-400 bg-white">
+          <div className="relative h-[70vh] md:h-[80vh] rounded-xl overflow-hidden border border-neutral-300 shadow-lg">
             <iframe
               src={project.figmaEmbed}
-              className="w-full h-full"
+              className="absolute inset-0 w-full h-full"
               allowFullScreen
             />
           </div>

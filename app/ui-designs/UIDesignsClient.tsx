@@ -140,6 +140,18 @@ export default function UIDesignsClient() {
                   cursor-pointer
                 "
               >
+                {/* IMAGE */}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-3">
+                  <Image
+                    src={design.image}
+                    alt={design.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
+
+                
                 {/* PRICE TAG CATEGORY */}
                 <div
                   className={`
@@ -155,17 +167,6 @@ export default function UIDesignsClient() {
                   {category}
                 </div>
 
-                {/* IMAGE */}
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-3">
-                  <Image
-                    src={design.image}
-                    alt={design.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
-                </div>
-
                 {/* INFO */}
                 <div className="p-2">
                   <h3 className="text-lg font-semibold text-[#111]">
@@ -173,7 +174,9 @@ export default function UIDesignsClient() {
                   </h3>
 
                   {design.subtitle && (
-                    <p className="text-sm text-[#555] mt-1">{design.subtitle}</p>
+                    <p className="text-sm text-[#555] mt-1">
+                      {design.subtitle}
+                    </p>
                   )}
                 </div>
               </div>
