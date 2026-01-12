@@ -7,6 +7,7 @@ export type ProjectCard = {
 };
 
 export const projects: ProjectCard[] = [
+
   {
     slug: "sportsea",
     title: "SportSea",
@@ -22,6 +23,15 @@ export const projects: ProjectCard[] = [
   tag: "FinTech Dashboard",
   image: "/projects/juzzpay.png",
 },
+{
+  slug: "Tripmate app UI",
+  title: "your Travel partner",
+  description:
+    "Mobile-first travel app concept that helps users discover destinations, explore curated tours, and book experiences seamlessly through a structured, intuitive UI.",
+  tag: "Travel Mobile App",
+  image: "/projects/tripmate.png",
+},
+
 {
   slug: "health-insurance-app",
   title: "Health Insurance App",

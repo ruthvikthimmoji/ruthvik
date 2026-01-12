@@ -1,5 +1,13 @@
 // app/data/uidesigns.ts
 export const uiDesigns = [
+   {
+    id: "33",
+  title: "Tripmate Travelling app",
+    subtitle: "your travelling partner",
+    image: "/ui/trip1.png",
+    category: "mobile", 
+  },
+  
   {
     id: 1,
     title: "Insurance Application UI",
