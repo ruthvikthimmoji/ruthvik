@@ -61,6 +61,13 @@ export const uiDesigns = [
     category: "mobile", 
   },
   {
+    id: "29",
+  title: "Login Screen web UI",
+    subtitle: "Onboarding made simple",
+    image: "/ui/01.png",
+    category: "web", 
+  },
+  {
     id: "7",
     title: "Bank Application Resdesign UI",
     subtitle: "Mobile Interface",
@@ -87,6 +94,13 @@ export const uiDesigns = [
     subtitle: "Mobile Interface",
     image: "/ui/cartpage.png",
     category: "mobile", 
+  },
+   {
+    id: "30",
+  title: "Apple watch Product Page Design ui",
+    subtitle: "Product page Animations",
+    image: "/ui/02.png",
+    category: "web", 
   },
   {
     id: "11",
@@ -129,6 +143,13 @@ export const uiDesigns = [
     image: "/ui/notesapp.png",
     category: "mobile", 
   },
+     {
+    id: "31",
+  title: "Landing Page Design UI",
+    subtitle: "Visually Appealing Landing Page",
+    image: "/ui/03.png",
+    category: "web", 
+  },
   {
     id: "17",
     title: "Onboarding UI",
@@ -156,6 +177,13 @@ export const uiDesigns = [
     subtitle: "Mobile Interface",
     image: "/ui/photojournal.png",
     category: "mobile", 
+  },
+     {
+    id: "32",
+  title: "Landing Page Design UI",
+    subtitle: "Simple Landing Page",
+    image: "/ui/04.png",
+    category: "web", 
   },
   {
     id: "21",
