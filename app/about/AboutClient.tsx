@@ -8,7 +8,11 @@ const fadeInUp = {
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } 
+    transition: { 
+      duration: 1, 
+      // Add 'as const' here to lock the array as a tuple
+      ease: [0.16, 1, 0.3, 1] as const 
+    } 
   },
 };
 
@@ -60,7 +64,7 @@ export default function AboutClient() {
             how it <span className="italic text-[#ff4f21]">works.</span>
           </h1>
           <p className="text-2xl md:text-4xl text-zinc-400 font-light leading-snug">
-            My journey into design wasn't just about making things look good. It was about finding the shortest path between a user and their goal.
+            My journey into design wasn&apos;t just about making things look good. It was about finding the shortest path between a user and their goal.
           </p>
         </motion.section>
 
