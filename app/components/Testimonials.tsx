@@ -5,121 +5,74 @@ import { testimonials } from "@/app/data/testimonials";
 
 export default function Testimonials() {
   return (
-    <section
-      className="
-        relative
-        max-w-screen
-        mx-auto
-        px-6
-        py-32
-        bg-[#f6f4ef]
-        text-[#111]
-      "
-    >
-      {/* Section header */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="mb-16 max-w-2xl mx-auto text-center"
-      >
-        <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-          What Clients Say
-        </h2>
-        <p className="text-base md:text-lg text-neutral-700">
-          Feedback from people I’ve worked with.
-        </p>
-      </motion.div>
+    <section className="relative py-32 bg-[#fcfaf7] text-[#1a1a1a] overflow-hidden">
+      <div className="max-w-6xl mx-auto px-8">
+        
+        {/* Section Header - Matching your Hero/Projects style */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-24"
+        >
+          <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#ff4f21] mb-4 block">
+            Kind Words
+          </span>
+          <h2 className="text-5xl md:text-7xl font-medium tracking-tighter italic font-serif">
+            Collaborator Stories
+          </h2>
+        </motion.div>
 
-      {/* Testimonials list */}
-      <div className="flex flex-col items-center gap-8">
-        {testimonials.map((t, i) => (
-          <motion.article
-            key={i}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.45,
-              delay: i * 0.08,
-              ease: "easeOut",
-            }}
-            viewport={{ once: true }}
-            className="
-              relative
-              w-full
-              max-w-2xl
-              p-5
-              rounded-2xl
-              bg-white/70
-              backdrop-blur-xl
-              border border-white/40
-              shadow-[0_20px_40px_rgba(0,0,0,0.12)]
-              transition-all duration-300
-              hover:-translate-y-1
-              hover:shadow-[0_30px_60px_rgba(0,0,0,0.18)]
-            "
-          >
-            {/* Glossy highlight */}
-            <div
-              aria-hidden
-              className="
-                pointer-events-none
-                absolute inset-0
-                rounded-2xl
-                bg-gradient-to-br
-                from-white/60
-                via-white/10
-                to-transparent
-              "
-            />
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+          {testimonials.map((t, i) => (
+            <motion.article
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true }}
+              className="group relative flex flex-col items-start"
+            >
+              {/* Large Stylized Quote Mark */}
+              <span className="text-7xl font-serif text-[#ff4f21]/10 absolute -top-8 -left-4 select-none">
+                “
+              </span>
 
-            {/* Noise grain */}
-            <div
-              aria-hidden
-              className="
-                pointer-events-none
-                absolute inset-0
-                rounded-2xl
-                bg-[url('/textures/noise.jpg')]
-                opacity-[0.05]
-                mix-blend-overlay
-              "
-            />
-
-            {/* Card content */}
-            <div className="relative flex flex-col md:flex-row gap-5">
-              {/* Image */}
-              <div className="flex-shrink-0 flex justify-center md:justify-start">
-                <img
-                  src={t.image}
-                  alt={t.name}
-                  className="
-                    w-20 h-20
-                    md:w-24 md:h-24
-                    rounded-xl
-                    object-cover
-                    shadow-md
-                  "
-                />
-              </div>
-
-              {/* Text */}
-              <div className="flex flex-col justify-center">
-                <p className="text-sm md:text-base leading-relaxed mb-3 text-neutral-800">
-                  “{t.feedback}”
+              <div className="relative z-10">
+                <p className="text-xl md:text-2xl font-light leading-relaxed text-zinc-600 mb-8 italic">
+                  {t.feedback}
                 </p>
 
-                <div>
-                  <p className="font-medium text-[color:var(--accent)] text-sm">
-                    {t.name}
-                  </p>
-                  <p className="text-xs text-neutral-600">{t.role}</p>
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <img
+                      src={t.image}
+                      alt={t.name}
+                      className="w-12 h-12 rounded-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 border border-zinc-200"
+                    />
+                    {/* Subtle Brand Accent Ring */}
+                    <div className="absolute inset-0 rounded-full border border-[#ff4f21]/0 group-hover:border-[#ff4f21]/40 transition-all duration-500 scale-125 opacity-0 group-hover:opacity-100" />
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-sm tracking-tight text-[#1a1a1a]">
+                      {t.name}
+                    </h4>
+                    <p className="text-xs text-zinc-400 font-medium uppercase tracking-widest">
+                      {t.role}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.article>
-        ))}
+
+              {/* Decorative bottom line that grows on hover */}
+              <div className="w-full h-[1px] bg-zinc-100 mt-12 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[#ff4f21] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700" />
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </div>
     </section>
   );

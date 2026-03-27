@@ -2,198 +2,128 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { uiDesigns } from "../data/ui-designs";
+import { LayoutGrid, Smartphone, Monitor, Box, ArrowUpRight, Plus } from "lucide-react";
 
-/* ---------------------------------------------
-   ROTATION HELPER
---------------------------------------------- */
-function getRotation(index: number) {
-  const rotations = [-3, -2, -1, 1, 2, 3];
-  return rotations[index % rotations.length];
-}
-
-/* ---------------------------------------------
-   CATEGORY COLOR HELPER
---------------------------------------------- */
-function getCategoryColor(category: string) {
-  switch (category) {
-    case "mobile":
-      return "bg-[#c24919] text-white";
-    case "web":
-      return "bg-[#1c5fbd] text-white";
-    case "components":
-      return "bg-[#7c3aed] text-white";
-    default:
-      return "bg-black text-white";
-  }
-}
-
-/* ---------------------------------------------
-   FILTER OPTIONS
---------------------------------------------- */
 const filters = [
-  { label: "All", value: "all" },
-  { label: "Mobile", value: "mobile" },
-  { label: "Web", value: "web" },
-  { label: "Components", value: "components" },
+  { label: "All", value: "all", icon: <LayoutGrid size={14} /> },
+  { label: "Mobile", value: "mobile", icon: <Smartphone size={14} /> },
+  { label: "Web", value: "web", icon: <Monitor size={14} /> },
+  { label: "Components", value: "components", icon: <Box size={14} /> },
 ];
 
-/* ---------------------------------------------
-   COMPONENT
---------------------------------------------- */
 export default function UIDesignsClient() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [visibleCount, setVisibleCount] = useState(12); // Initial items to show
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
 
-  /* ----- refs for buttons ----- */
-  const buttonRefs = useRef<HTMLButtonElement[]>([]);
-
-  /* ----- sliding indicator state ----- */
-  const [indicatorStyle, setIndicatorStyle] = useState({
-    width: 0,
-    left: 0,
-  });
-
-  /* ----- update indicator on filter change ----- */
+  // Update sliding indicator
   useEffect(() => {
     const index = filters.findIndex((f) => f.value === activeFilter);
     const btn = buttonRefs.current[index];
     if (btn) {
-      setIndicatorStyle({
-        width: btn.offsetWidth,
-        left: btn.offsetLeft,
-      });
+      setIndicatorStyle({ width: btn.offsetWidth, left: btn.offsetLeft });
     }
+    // Reset count when filter changes to keep things fast
+    setVisibleCount(12);
   }, [activeFilter]);
 
-  /* ----- filter designs ----- */
-  const filteredDesigns =
-    activeFilter === "all"
-      ? uiDesigns
-      : uiDesigns.filter((d) => d.category === activeFilter);
+  const filteredDesigns = activeFilter === "all" 
+    ? uiDesigns 
+    : uiDesigns.filter((d) => d.category === activeFilter);
+
+  // Slice the array based on visibleCount
+  const visibleDesigns = filteredDesigns.slice(0, visibleCount);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 12);
+  };
 
   return (
-    <main className="relative min-h-screen bg-[#fdfdfd] px-6 py-32 font-sans">
-      <div className="max-w-7xl mx-auto">
-        {/* HEADER */}
-        <header className="mb-14 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#111]">
-            UI Design Gallery
-          </h1>
-          <p className="text-[#555] max-w-2xl mx-auto">
-            A playful whiteboard-inspired showcase of mobile, web, and component
-            UI designs.
-          </p>
+    <main className="min-h-screen bg-white text-[#1a1a1a] px-8 py-40 selection:bg-[#ff4f21] selection:text-white font-sans">
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* Header Section */}
+        <header className="mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#ff4f21] mb-6 block">Gallery</span>
+            <h1 className="text-6xl md:text-9xl font-medium tracking-tighter leading-[0.85] italic font-serif mb-10">
+              Visual <br /> Exploration.
+            </h1>
+          </motion.div>
         </header>
 
-        {/* SEGMENTED TOGGLE */}
-        <div className="flex justify-center mb-20">
-          <div className="relative flex items-center bg-white border border-neutral-300 rounded-full p-1 shadow-sm">
-            {/* Sliding indicator */}
-            <span
-              className="absolute h-9 rounded-full bg-black transition-all duration-300"
-              style={{
-                width: indicatorStyle.width,
-                left: indicatorStyle.left,
-              }}
+        {/* Filter Bar */}
+        <div className="flex justify-start mb-20">
+          <div className="relative flex items-center bg-zinc-50 border border-zinc-200 p-1.5 rounded-2xl">
+            <motion.span
+              className="absolute h-9 rounded-xl bg-white shadow-sm border border-zinc-200"
+              animate={{ width: indicatorStyle.width, left: indicatorStyle.left }}
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
-
-            {filters.map((filter, index) => {
-              const active = activeFilter === filter.value;
-
-              return (
-                <button
-                  key={filter.value}
-                  ref={(el) => {
-                    if (el) buttonRefs.current[index] = el;
-                  }}
-                  onClick={() => setActiveFilter(filter.value)}
-                  className={`
-                    relative z-10
-                    px-5 h-9
-                    text-sm font-medium
-                    rounded-full
-                    transition-colors duration-300
-                    ${active ? "text-white" : "text-[#111] hover:text-black"}
-                  `}
-                >
-                  {filter.label}
-                </button>
-              );
-            })}
+            {filters.map((filter, index) => (
+              <button
+                key={filter.value}
+                ref={(el) => { buttonRefs.current[index] = el; }}
+                onClick={() => setActiveFilter(filter.value)}
+                className={`relative z-10 px-6 h-9 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 ${activeFilter === filter.value ? "text-[#ff4f21]" : "text-zinc-400 hover:text-zinc-600"}`}
+              >
+                {filter.icon} {filter.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* STICKY NOTE GRID */}
-        <section className="relative grid sm:grid-cols-2 md:grid-cols-3 gap-12 p-12 bg-[#f6f6f6] rounded-3xl shadow-xl">
-          {filteredDesigns.map((design, index) => {
-            const rotation = getRotation(index);
-            const category = design.category || "default";
-
-            return (
-              <div
+        {/* Bento Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <AnimatePresence mode="popLayout">
+            {visibleDesigns.map((design, index) => (
+              <motion.div
+                layout
                 key={design.id}
-                style={{ transform: `rotate(${rotation}deg)` }}
-                className="
-                  relative bg-[#fff8dc] p-4 rounded-xl shadow-xl
-                  transition-all duration-300
-                  hover:rotate-0 hover:scale-105 hover:shadow-2xl
-                  cursor-pointer
-                "
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
+                className="group relative flex flex-col"
               >
-                {/* IMAGE */}
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-3">
-                  <Image
-                    src={design.image}
-                    alt={design.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[40px] bg-zinc-100 border border-zinc-200/60 shadow-sm transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-[#ff4f21]/10">
+                  <Image src={design.image} alt={design.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0" />
                 </div>
-
-                
-                {/* PRICE TAG CATEGORY */}
-                <div
-                  className={`
-                    absolute top-4 right-4
-                    flex items-center gap-2
-                    text-[11px] uppercase tracking-wide font-medium
-                    px-3 py-1.5 rounded-md
-                    shadow-md rotate-2
-                    ${getCategoryColor(category)}
-                  `}
-                >
-                  <span className="w-2 h-2 rounded-full bg-white/80" />
-                  {category}
+                <div className="mt-8 px-4 flex justify-between items-start">
+                  <div>
+                    <h3 className="text-xl font-medium tracking-tight group-hover:text-[#ff4f21] transition-colors">{design.title}</h3>
+                    <p className="text-sm text-zinc-400 font-light mt-1 italic font-serif">{design.subtitle}</p>
+                  </div>
+                  <span className="text-[10px] font-bold text-zinc-200 uppercase tracking-widest">
+                    {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                  </span>
                 </div>
-
-                {/* INFO */}
-                <div className="p-2">
-                  <h3 className="text-lg font-semibold text-[#111]">
-                    {design.title}
-                  </h3>
-
-                  {design.subtitle && (
-                    <p className="text-sm text-[#555] mt-1">
-                      {design.subtitle}
-                    </p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </section>
-      </div>
 
-      {/* GRAIN OVERLAY */}
-      <div
-        aria-hidden
-        className="
-          pointer-events-none absolute inset-0
-          bg-[url('/textures/noise.jpg')]
-          opacity-[0.03] mix-blend-overlay
-        "
-      />
+        {/* LOAD MORE BUTTON */}
+        {visibleCount < filteredDesigns.length && (
+          <div className="mt-24 flex justify-center">
+            <button
+              onClick={handleLoadMore}
+              className="flex items-center gap-3 px-8 py-4 bg-white border border-zinc-200 rounded-full text-xs font-bold uppercase tracking-widest hover:border-[#ff4f21] hover:text-[#ff4f21] transition-all duration-300 active:scale-95"
+            >
+              <Plus size={16} />
+              Load More Projects
+            </button>
+          </div>
+        )}
+
+        {/* FOOTER CTA */}
+        <motion.footer initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-40 text-center py-24 border-t border-zinc-100">
+           {/* ... existing footer cta ... */}
+        </motion.footer>
+      </div>
     </main>
   );
 }

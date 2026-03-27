@@ -7,74 +7,101 @@ import { motion } from "framer-motion";
 
 export default function Projects() {
   return (
-    <section className="relative max-w-screen mx-auto px-6 py-32 bg-[#f6f4ef] text-[#111]">
-      {/* Section intro */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="mb-20 max-w-2xl mx-auto text-center"
-      >
-        <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-          Selected Work
-        </h2>
-        <p className="text-base md:text-lg">
-          A few projects where I helped teams design clear, user-friendly
-          digital experiences.
-        </p>
-      </motion.div>
+    <section
+      id="work"
+      className="relative py-32 bg-[#fcfaf7] text-[#1a1a1a] overflow-hidden"
+    >
+      {/* Section Header */}
+      <div className="max-w-6xl mx-auto px-8 mb-24">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex items-end justify-between gap-8 flex-wrap"
+        >
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#ff4f21] mb-4 block">
+              Portfolio
+            </span>
+            <h2 className="text-5xl md:text-7xl font-medium tracking-tighter italic font-serif">
+              Selected Work
+            </h2>
+          </div>
+          <p className="max-w-xs text-zinc-500 text-lg font-light leading-relaxed">
+            A curated selection of digital products focused on clarity and
+            conversion.
+          </p>
+        </motion.div>
+      </div>
 
-      {/* Projects grid */}
-      <div className="flex flex-wrap justify-center gap-8">
+      {/* Modern Projects List */}
+      <div className="max-w-6xl mx-auto px-8 space-y-40">
         {projects.map((project, index) => {
-          // check if this project has a case study
           const hasCaseStudy = caseStudies.some(
-            (cs) => cs.slug === project.slug
+            (cs) => cs.slug === project.slug,
           );
+          const isEven = index % 2 === 0;
 
           return (
             <motion.article
               key={project.slug}
-              initial={{ opacity: 0, y: 28 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="group p-6 rounded-2xl bg-white border hover:border-[#f95738] transition max-w-sm w-full"
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+              className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-12 md:gap-20 items-center`}
             >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="h-48 w-full object-cover rounded-xl mb-6"
-              />
-
-              <span className="text-xs uppercase tracking-widest text-neutral-500">
-                {project.tag}
-              </span>
-
-              <h3 className="text-xl font-semibold mt-3 mb-3 text-center">
-                {project.title}
-              </h3>
-
-              <p className="text-sm text-neutral-600 mb-6 text-center">
-                {project.description}
-              </p>
-
-              {hasCaseStudy && (
-                <Link
-                  href={`./case-study/${project.slug.toLowerCase()}`}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[#f95738]"
+              {/* Image Container with Custom Hover */}
+              <div className="w-full md:w-3/5 group relative overflow-hidden rounded-sm bg-zinc-100">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  View Case Study
-                  <span className="group-hover:translate-x-1 transition">
-                    →
-                  </span>
-                </Link>
-              )}
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full aspect-[4/3] md:aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+                  />
+                </motion.div>
+
+                {/* Overlay on Hover */}
+                <div className="absolute inset-0 bg-[#ff4f21]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </div>
+
+              {/* Project Info */}
+              <div className="w-full md:w-2/5 flex flex-col items-start">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#ff4f21] font-bold mb-4">
+                  0{index + 1} — {project.tag}
+                </span>
+
+                <h3 className="text-3xl md:text-5xl font-medium tracking-tight mb-6">
+                  {project.title}
+                </h3>
+
+                <p className="text-lg text-zinc-500 font-light leading-relaxed mb-8">
+                  {project.description}
+                </p>
+
+                {hasCaseStudy && (
+                  <Link
+                    href={`/case-study/${project.slug.toLowerCase()}`}
+                    className="group relative flex items-center gap-4 text-sm font-bold uppercase tracking-widest overflow-hidden"
+                  >
+                    <span className="relative z-10">Explore Project</span>
+                    <div className="w-8 h-px bg-[#1a1a1a] transition-all duration-300 group-hover:w-12 group-hover:bg-[#ff4f21]" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      →
+                    </span>
+                  </Link>
+                )}
+              </div>
             </motion.article>
           );
         })}
       </div>
+
+      {/* Visual Anchor Line */}
+      <div className="absolute left-1/2 top-0 w-px h-full bg-zinc-100 -z-10 hidden lg:block" />
     </section>
   );
 }
