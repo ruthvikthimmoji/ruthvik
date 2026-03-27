@@ -99,7 +99,7 @@ export default function AboutClient() {
              <Sparkles className="text-[#ff4f21] mb-6" size={32} />
              <h3 className="text-3xl font-medium tracking-tight mb-4 font-sans">Focus on the obvious.</h3>
              <p className="text-zinc-500 font-light leading-relaxed">
-               If a user has to think twice, the design has failed. My philosophy is to create products that don't just solve problems, but feel like they should have always existed.
+               If a user has to think twice, the design has failed. My philosophy is to create products that don&apos;t just solve problems, but feel like they should have always existed.
              </p>
           </div>
           <div className="space-y-12">

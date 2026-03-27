@@ -29,7 +29,10 @@ export default function Hero() {
     >
       {/* Subtle Background Detail - The "Designer's Grid" */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, size: '40px 40px', backgroundSize: '60px 60px' }} />
+           style={{ 
+  backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, 
+  backgroundSize: '60px 60px' 
+}}/>
 
       <motion.div 
         style={{ y: y1, opacity }}
