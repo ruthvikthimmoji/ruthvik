@@ -25,7 +25,7 @@ export const projects: ProjectCard[] = [
 },
 {
   slug: "Tripmate app UI",
-  title: "your Travel partner",
+  title: "Tripmate",
   description:
     "Mobile-first travel app concept that helps users discover destinations, explore curated tours, and book experiences seamlessly through a structured, intuitive UI.",
   tag: "Travel Mobile App",
