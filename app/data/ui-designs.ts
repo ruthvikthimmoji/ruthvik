@@ -228,12 +228,18 @@ export const uiDesigns = [
     image: "/ui/more.png",
     category: "web", 
   },
-   {
+{
     id: "26",
+    title: "finance widgts",
+    subtitle: "",
+    image: "/ui/COMP1.png",
+    category: "components", 
+  },
+{
+    id: "33",
     title: "More Uploading",
     subtitle: "",
     image: "/ui/more.png",
     category: "components", 
   },
-
 ];
