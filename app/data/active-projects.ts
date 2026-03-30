@@ -27,6 +27,15 @@ export const activeProjects: ActiveProject[] = [
 //     figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FGXwiFAdGEFkC5gY5NYWBJa%2FPortfolio%3Fnode-id%3D4-6213",
 //     description: "Currently refining the booking flow and vendor dashboard for a seamless sports experience."
 //   },
+{
+  id: "ram-navami-concept", 
+  name: "Ram Navami Concept",
+  type: "Event Experience",
+  status: "Final Polish", // You mentioned it's not completed yet
+  progress: 85,
+  figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FGXwiFAdGEFkC5gY5NYWBJa%2FPortfolio%3Fnode-id%3D46-6841%26t%3DKJw03P2gxOMZ2Ext-1",
+  description: "Exploring a modern digital tribute for Ram Navami, blending traditional Vedic aesthetics with high-end editorial UI patterns."
+},
   {
   // Change this ID to be simple and lowercase
   id: "personal-card", 
@@ -46,4 +55,5 @@ export const activeProjects: ActiveProject[] = [
     figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FGXwiFAdGEFkC5gY5NYWBJa%2FPortfolio%3Fnode-id%3D35-6507%26t%3DKJw03P2gxOMZ2Ext-1",
     description: "Designing a high-octane editorial experience for Formula 1 fans."
   },
+
 ];
