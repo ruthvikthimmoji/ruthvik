@@ -39,7 +39,7 @@ export default function ContactPage() {
             className="bg-white p-12 rounded-[40px] border border-zinc-200 text-center"
           >
             <CheckCircle2 className="mx-auto text-green-500 mb-6" size={48} />
-            <h2 className="text-2xl font-medium mb-2">Message Sent!</h2>
+            <h2 className="text-2xl font-medium mb-2 text-[#1a1a1a]">Message Sent!</h2>
             <p className="text-zinc-500">
               I&apos;ll get back to you within 24 hours.
             </p>
@@ -56,7 +56,8 @@ export default function ContactPage() {
               <input
                 name="senderName"
                 required
-                className="w-full bg-white border border-zinc-200 rounded-3xl px-6 py-4 outline-none focus:border-[#ff4f21] transition-all"
+                /* Added text-[#1a1a1a] */
+                className="w-full bg-white border border-zinc-200 rounded-3xl px-6 py-4 outline-none focus:border-[#ff4f21] text-[#1a1a1a] transition-all"
               />
             </div>
             <div className="space-y-2">
@@ -67,7 +68,8 @@ export default function ContactPage() {
                 name="senderEmail"
                 type="email"
                 required
-                className="w-full bg-white border border-zinc-200 rounded-3xl px-6 py-4 outline-none focus:border-[#ff4f21] transition-all"
+                /* Added text-[#1a1a1a] */
+                className="w-full bg-white border border-zinc-200 rounded-3xl px-6 py-4 outline-none focus:border-[#ff4f21] text-[#1a1a1a] transition-all"
               />
             </div>
             <div className="md:col-span-2 space-y-2">
@@ -78,7 +80,8 @@ export default function ContactPage() {
                 name="message"
                 rows={5}
                 required
-                className="w-full text-black bg-white border border-zinc-200 rounded-[32px] px-6 py-6 outline-none focus:border-[#ff4f21] transition-all resize-none"
+                /* Added text-[#1a1a1a] */
+                className="w-full bg-white border border-zinc-200 rounded-[32px] px-6 py-6 outline-none focus:border-[#ff4f21] text-[#1a1a1a] transition-all resize-none"
               />
             </div>
             <button
