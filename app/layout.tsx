@@ -4,6 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { Inter } from "next/font/google";
 import SignatureCursor from "./components/SignatureCursor";
 import FloatingSocials from "./components/FloatingSocials";
+/* 1. Import the Analytics component */
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps",
@@ -33,12 +35,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {/* Socials stay global and fixed */}
         <FloatingSocials />
 
-        {/* Note: In Next.js App Router, AnimatePresence in layout 
-           often requires a template.tsx or a specific keying strategy.
-        */}
-        <AnimatePresence mode="wait">
-           {children}
-        </AnimatePresence>
+        <AnimatePresence mode="wait">{children}</AnimatePresence>
+
+        {/* 2. Add the component at the end of the body */}
+        <Analytics />
       </body>
     </html>
   );
