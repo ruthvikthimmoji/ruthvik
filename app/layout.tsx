@@ -6,6 +6,7 @@ import SignatureCursor from "./components/SignatureCursor";
 import FloatingSocials from "./components/FloatingSocials";
 /* 1. Import the Analytics component */
 import { Analytics } from "@vercel/analytics/react";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 export const metadata: Metadata = {
   title: "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps",
@@ -39,6 +40,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
         {/* 2. Add the component at the end of the body */}
         <Analytics />
+
+        <WhatsAppButton />
       </body>
     </html>
   );
