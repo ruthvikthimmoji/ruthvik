@@ -6,7 +6,8 @@ import {
   Github, 
   Book, 
   Palette, // Used for Behance
-  Cpu,     // Used for Tech
+  Cpu,
+  Youtube,     // Used for Tech
 } from "lucide-react";
 
 export const SOCIAL_LINKS = [
@@ -17,8 +18,14 @@ export const SOCIAL_LINKS = [
     color: "hover:text-[#0077b5]" 
   },
   { 
+    name: "Youtube", 
+    href: "https://www.youtube.com/channel/UCV5blT2_sXoZGYyErwqvBoA", 
+    icon: Youtube, // Standard Lucide replacement for design work
+    color: "hover:text-[#053eff]" 
+  },
+  { 
     name: "Instagram", 
-    href: "https://www.instagram.com/ruthvikdesigns.co/", 
+    href: "https://www.instagram.com/designurustudio/?hl=en", 
     icon: Instagram, 
     color: "hover:text-[#e4405f]" 
   },
@@ -40,16 +47,17 @@ export const SOCIAL_LINKS = [
     icon: Palette, // Standard Lucide replacement for design work
     color: "hover:text-[#053eff]" 
   },
-  { 
-    name: "Tech", 
-    href: "https://ruthvikthimmoji.vercel.app/", 
-    icon: Cpu, 
-    color: "hover:text-[#ff4f21]" 
-  },
-   { 
-    name: "Github", 
-    href: "https://github.com/ruthvikthimmoji	", 
-    icon: Github, 
-    color: "hover:text-[#ff4f21]" 
-  },
+  
+  // { 
+  //   name: "Tech", 
+  //   href: "https://ruthvikthimmoji.vercel.app/", 
+  //   icon: Cpu, 
+  //   color: "hover:text-[#ff4f21]" 
+  // },
+  //  { 
+  //   name: "Github", 
+  //   href: "https://github.com/ruthvikthimmoji	", 
+  //   icon: Github, 
+  //   color: "hover:text-[#ff4f21]" 
+  // },
 ];
