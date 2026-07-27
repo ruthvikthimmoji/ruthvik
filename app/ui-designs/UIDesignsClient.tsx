@@ -155,7 +155,7 @@ export default function UIDesignsClient() {
                       </span>
 
                       {/* Hover reveal — only for designs with a matching case study */}
-                      {hasCaseStudy && (
+                      {/* {hasCaseStudy && (
                         <div
                           className="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
                           style={{
@@ -171,7 +171,7 @@ export default function UIDesignsClient() {
                             <ArrowUpRight size={13} />
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="mt-4 px-0.5 flex justify-between items-start gap-3">
@@ -188,7 +188,7 @@ export default function UIDesignsClient() {
                       </div>
                     </div>
                   </Wrapper>
-                </motion.div>
+                // </motion.div>
               );
             })}
           </AnimatePresence>
