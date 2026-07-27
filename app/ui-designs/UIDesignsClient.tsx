@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { uiDesigns } from "../data/ui-designs";
-import { caseStudies } from "../data/case-studies";
 import {
   LayoutGrid,
   Smartphone,
   Monitor,
   Box,
   ArrowRight,
-  ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -115,14 +113,6 @@ export default function UIDesignsClient() {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           <AnimatePresence mode="popLayout">
             {visibleDesigns.map((design, index) => {
-              // const hasCaseStudy = Boolean(
-              //   design.slug && caseStudies.some((cs) => cs.slug === design.slug)
-              // );
-              // const Wrapper = hasCaseStudy ? Link : "div";
-              // const wrapperProps = hasCaseStudy
-              //   ? { href: `/case-study/${design.slug!.toLowerCase()}` }
-              //   : {};
-
               return (
                 <motion.div
                   layout
@@ -132,63 +122,41 @@ export default function UIDesignsClient() {
                   exit={{ opacity: 0, scale: 0.96 }}
                   className="group flex flex-col"
                 >
-                  {/* @ts-expect-error — Wrapper is either Link or div depending on hasCaseStudy
-                  <Wrapper {...wrapperProps} className="block"> */}
-                    <div
-                      className="relative aspect-[4/3] overflow-hidden"
-                      style={{ border: `1px solid ${hairline}` }}
+                  <div
+                    className="relative aspect-[4/3] overflow-hidden"
+                    style={{ border: `1px solid ${hairline}` }}
+                  >
+                    <Image
+                      src={design.image}
+                      alt={design.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+
+                    {/* Index watermark */}
+                    <span
+                      className="absolute top-3 left-3 font-mono text-[10px] tracking-widest"
+                      style={{ color: paper, opacity: 0.6 }}
                     >
-                      <Image
-                        src={design.image}
-                        alt={design.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
 
-                      {/* Index watermark */}
-                      <span
-                        className="absolute top-3 left-3 font-mono text-[10px] tracking-widest"
-                        style={{ color: paper, opacity: 0.6 }}
+                  <div className="mt-4 px-0.5 flex justify-between items-start gap-3">
+                    <div className="truncate">
+                      <h3 className="text-base md:text-lg font-medium tracking-tight truncate" style={{ color: paper }}>
+                        {design.title}
+                      </h3>
+                      <p
+                        className="text-xs italic font-serif truncate"
+                        style={{ color: graphite }}
                       >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-
-                      {/* Hover reveal — only for designs with a matching case study */}
-                      {/* {hasCaseStudy && (
-                        <div
-                          className="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-                          style={{
-                            background:
-                              "linear-gradient(to top, rgba(14,14,16,0.85), transparent 60%)",
-                          }}
-                        >
-                          <span
-                            className="font-mono text-[10px] uppercase tracking-[0.15em] flex items-center gap-1.5"
-                            style={{ color: brass }}
-                          >
-                            View Case Study
-                            <ArrowUpRight size={13} />
-                          </span>
-                        </div>
-                      )} */}
+                        {design.subtitle}
+                      </p>
                     </div>
-
-                    <div className="mt-4 px-0.5 flex justify-between items-start gap-3">
-                      <div className="truncate">
-                        <h3 className="text-base md:text-lg font-medium tracking-tight truncate" style={{ color: paper }}>
-                          {design.title}
-                        </h3>
-                        <p
-                          className="text-xs italic font-serif truncate"
-                          style={{ color: graphite }}
-                        >
-                          {design.subtitle}
-                        </p>
-                      </div>
-                    </div>
-                  </Wrapper>
-                // </motion.div>
+                  </div>
+                </motion.div>
               );
             })}
           </AnimatePresence>
