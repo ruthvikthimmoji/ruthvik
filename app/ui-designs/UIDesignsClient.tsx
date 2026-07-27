@@ -115,13 +115,13 @@ export default function UIDesignsClient() {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           <AnimatePresence mode="popLayout">
             {visibleDesigns.map((design, index) => {
-              const hasCaseStudy = Boolean(
-                design.slug && caseStudies.some((cs) => cs.slug === design.slug)
-              );
-              const Wrapper = hasCaseStudy ? Link : "div";
-              const wrapperProps = hasCaseStudy
-                ? { href: `/case-study/${design.slug!.toLowerCase()}` }
-                : {};
+              // const hasCaseStudy = Boolean(
+              //   design.slug && caseStudies.some((cs) => cs.slug === design.slug)
+              // );
+              // const Wrapper = hasCaseStudy ? Link : "div";
+              // const wrapperProps = hasCaseStudy
+              //   ? { href: `/case-study/${design.slug!.toLowerCase()}` }
+              //   : {};
 
               return (
                 <motion.div
@@ -132,8 +132,8 @@ export default function UIDesignsClient() {
                   exit={{ opacity: 0, scale: 0.96 }}
                   className="group flex flex-col"
                 >
-                  {/* @ts-expect-error — Wrapper is either Link or div depending on hasCaseStudy */}
-                  <Wrapper {...wrapperProps} className="block">
+                  {/* @ts-expect-error — Wrapper is either Link or div depending on hasCaseStudy
+                  <Wrapper {...wrapperProps} className="block"> */}
                     <div
                       className="relative aspect-[4/3] overflow-hidden"
                       style={{ border: `1px solid ${hairline}` }}

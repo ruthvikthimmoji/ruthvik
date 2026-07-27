@@ -6,6 +6,7 @@ export const uiDesigns = [
     subtitle: "your travelling partner",
     image: "/ui/trip1.png",
     category: "mobile", 
+    slug?: string,
   },
   
   {
