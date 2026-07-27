@@ -25,7 +25,7 @@ export const SOCIAL_LINKS = [
   },
   { 
     name: "Instagram", 
-    href: "https://www.instagram.com/designurustudio/?hl=en", 
+    href: "https://www.instagram.com/ruthvikdesigns_/", 
     icon: Instagram, 
     color: "hover:text-[#e4405f]" 
   },

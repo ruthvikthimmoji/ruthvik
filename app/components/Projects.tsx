@@ -1,107 +1,188 @@
 "use client";
 
+import { useState } from "react";
 import { projects } from "@/app/data/projects";
 import { caseStudies } from "@/app/data/case-studies";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+} from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+
+// ---------------------------------------------------------------------------
+// Same tokens as Hero.tsx / Navbar.tsx / OngoingWork.tsx / SignatureCursor.tsx.
+// ---------------------------------------------------------------------------
+const ink = "#0E0E10";
+const paper = "#F3F1EC";
+const graphite = "#8B8985";
+const brass = "#C7A25C";
+const hairline = "rgba(199, 162, 92, 0.16)";
 
 export default function Projects() {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  // Preview panel follows the cursor with a spring — same "precision tool"
+  // logic as SignatureCursor, but local to this section and only active
+  // while a row is hovered.
+  const previewX = useMotionValue(0);
+  const previewY = useMotionValue(0);
+  const springConfig = { damping: 28, stiffness: 200, mass: 0.5 };
+  const smoothX = useSpring(previewX, springConfig);
+  const smoothY = useSpring(previewY, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    previewX.set(e.clientX);
+    previewY.set(e.clientY);
+  };
+
   return (
     <section
       id="work"
-      className="relative py-20 md:py-32 bg-[#fcfaf7] text-[#1a1a1a] overflow-hidden"
+      className="relative py-24 md:py-40 overflow-hidden"
+      style={{ backgroundColor: ink, color: paper }}
     >
       {/* Section Header */}
       <div className="max-w-6xl mx-auto px-6 md:px-8 mb-16 md:mb-24">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8"
+          transition={{ duration: 0.7 }}
+          className="flex items-end justify-between gap-8"
         >
-          <div className="max-w-2xl">
-            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-[#ff4f21] mb-3 md:mb-4 block">
-              Portfolio
-            </span>
-            <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium tracking-tighter italic font-serif leading-[1.1]">
+          <div>
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.35em] font-medium mb-3 md:mb-4 block"
+              style={{ color: brass }}
+            >
               Selected Work
+            </span>
+            <h2 className="font-serif italic text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] max-w-xl">
+              A short list of things worth your time.
             </h2>
           </div>
-          <p className="max-w-xs text-zinc-500 text-base md:text-lg font-light leading-relaxed">
-            A curated selection of digital products focused on clarity and
-            conversion.
-          </p>
+          <span
+            className="hidden md:block font-mono text-[10px] tracking-widest"
+            style={{ color: graphite }}
+          >
+            {String(projects.length).padStart(2, "0")} PROJECTS
+          </span>
         </motion.div>
       </div>
 
-      {/* Modern Projects List */}
-      <div className="max-w-6xl mx-auto px-6 md:px-8 space-y-24 md:space-y-40">
-        {projects.map((project, index) => {
-          const hasCaseStudy = caseStudies.some(
-            (cs) => cs.slug === project.slug,
-          );
-          const isEven = index % 2 === 0;
+      {/* Editorial list */}
+      <div
+        className="max-w-6xl mx-auto px-6 md:px-8"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setHovered(null)}
+      >
+        <div style={{ borderTop: `1px solid ${hairline}` }}>
+          {projects.map((project, index) => {
+            const hasCaseStudy = caseStudies.some(
+              (cs) => cs.slug === project.slug,
+            );
+            const isDimmed = hovered !== null && hovered !== index;
+            const isActive = hovered === index;
 
-          return (
-            <motion.article
-              key={project.slug}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              viewport={{ once: true, margin: "-50px" }}
-              className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-8 md:gap-20 items-center`}
-            >
-              {/* Image Container */}
-              <div className="w-full md:w-3/5 group relative overflow-hidden rounded-sm bg-zinc-100 shadow-sm">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full aspect-[4/3] md:aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000"
-                  />
-                </motion.div>
-
-                {/* Subtle Mobile Overlay */}
-                <div className="absolute inset-0 bg-[#ff4f21]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              </div>
-
-              {/* Project Info */}
-              <div className="w-full md:w-2/5 flex flex-col items-start">
-                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-[#ff4f21] font-bold mb-3 md:mb-4">
-                  0{index + 1} — {project.tag}
-                </span>
-
-                <h3 className="text-3xl md:text-5xl font-medium tracking-tight mb-4 md:mb-6 leading-tight">
-                  {project.title}
-                </h3>
-
-                <p className="text-base md:text-lg text-zinc-500 font-light leading-relaxed mb-6 md:mb-8">
-                  {project.description}
-                </p>
-
-                {hasCaseStudy && (
-                  <Link
-                    href={`/case-study/${project.slug.toLowerCase()}`}
-                    className="group relative flex items-center gap-3 md:gap-4 text-[10px] md:text-xs font-bold uppercase tracking-widest overflow-hidden"
+            const rowContent = (
+              <motion.div
+                onMouseEnter={() => setHovered(index)}
+                animate={{ opacity: isDimmed ? 0.35 : 1 }}
+                transition={{ duration: 0.4 }}
+                className="group flex items-center justify-between gap-6 py-7 md:py-10 cursor-pointer"
+                style={{ borderBottom: `1px solid ${hairline}` }}
+              >
+                <div className="flex items-baseline gap-5 md:gap-10 min-w-0">
+                  <span
+                    className="font-mono text-[11px] tracking-widest shrink-0"
+                    style={{ color: isActive ? brass : graphite }}
                   >
-                    <span className="relative z-10 transition-colors group-hover:text-[#ff4f21]">Explore Project</span>
-                    <div className="w-6 md:w-8 h-[1px] bg-[#1a1a1a] transition-all duration-300 group-hover:w-12 group-hover:bg-[#ff4f21]" />
-                    <span className="group-hover:translate-x-1 transition-transform duration-300 group-hover:text-[#ff4f21]">
-                      →
-                    </span>
-                  </Link>
-                )}
-              </div>
-            </motion.article>
-          );
-        })}
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3
+                    className="font-serif tracking-tight leading-none truncate transition-all duration-300"
+                    style={{
+                      fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
+                      color: isActive ? brass : paper,
+                    }}
+                  >
+                    {project.title}
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-4 md:gap-8 shrink-0">
+                  <span
+                    className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.2em]"
+                    style={{ color: graphite }}
+                  >
+                    {project.tag}
+                  </span>
+                  {hasCaseStudy && (
+                    <ArrowUpRight
+                      size={20}
+                      className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                      style={{ color: isActive ? brass : graphite }}
+                    />
+                  )}
+                </div>
+              </motion.div>
+            );
+
+            return hasCaseStudy ? (
+              <Link
+                key={project.slug}
+                href={`/case-study/${project.slug.toLowerCase()}`}
+                className="block"
+              >
+                {rowContent}
+              </Link>
+            ) : (
+              <div key={project.slug}>{rowContent}</div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Visual Anchor Line - Hidden on Mobile */}
-      <div className="absolute left-1/2 top-0 w-[1px] h-full bg-zinc-200/50 -z-10 hidden lg:block" />
+      {/* Floating preview — desktop only. Follows the cursor, shows the
+          project image + a short line pulled in from the description. */}
+      <motion.div
+        className="hidden md:block fixed top-0 left-0 z-40 pointer-events-none"
+        style={{ x: smoothX, y: smoothY }}
+      >
+        <AnimatePresence>
+          {hovered !== null && (
+            <motion.div
+              key={hovered}
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="w-[320px] overflow-hidden"
+              style={{
+                transform: "translate(32px, -140px)",
+                backgroundColor: ink,
+                border: `1px solid ${hairline}`,
+                boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
+              }}
+            >
+              <img
+                src={projects[hovered].image}
+                alt=""
+                className="w-full aspect-[4/3] object-cover"
+              />
+              <p
+                className="px-4 py-3 text-xs font-light leading-relaxed line-clamp-2"
+                style={{ color: graphite }}
+              >
+                {projects[hovered].description}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 }

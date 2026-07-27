@@ -9,28 +9,34 @@ import {
   useTransform,
 } from "framer-motion";
 
+// ---------------------------------------------------------------------------
+// Same tokens as Hero.tsx / Navbar.tsx / OngoingWork.tsx.
+// ---------------------------------------------------------------------------
+const brass = "#C7A25C";
+const paper = "#F3F1EC";
+
 export default function SignatureCursor() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
-  // 1. Core Motion Values
+  // Core motion values
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // 2. Smoothed Values (Spring Physics)
-  const springConfig = { damping: 25, stiffness: 150 };
+  // Smoothed values — slightly stiffer spring than before so the reticle
+  // reads as precise rather than floaty, which suits a "design tool" feel
+  const springConfig = { damping: 30, stiffness: 220, mass: 0.4 };
   const smoothedX = useSpring(cursorX, springConfig);
   const smoothedY = useSpring(cursorY, springConfig);
 
-  // 3. The "Pro" Fix: Transform the x/y values into a valid CSS background string
-  // This avoids CSS variables and the 'any' type altogether.
+  // Ambient glow, tied to the same spring so it trails the reticle, not the raw cursor
   const backgroundValue = useTransform(
     [smoothedX, smoothedY],
-    ([x, y]) => `radial-gradient(400px circle at ${x}px ${y}px, rgba(255, 79, 33, 0.08), transparent 80%)`
+    ([x, y]) => `radial-gradient(480px circle at ${x}px ${y}px, rgba(199, 162, 92, 0.06), transparent 80%)`
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
 
     const checkDevice = () => {
@@ -44,6 +50,7 @@ export default function SignatureCursor() {
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
+      setCoords({ x: Math.round(e.clientX), y: Math.round(e.clientY) });
     };
 
     if (!isMobile) {
@@ -68,35 +75,55 @@ export default function SignatureCursor() {
         exit={{ opacity: 0 }}
         className="pointer-events-none fixed inset-0 z-[999]"
       >
-        {/* 1. The Main Soft Glow (Now using backgroundValue) */}
+        {/* Ambient glow */}
         <motion.div
-          className="fixed inset-0 z-30 opacity-40"
-          style={{
-            background: backgroundValue,
-          }}
+          className="fixed inset-0 z-30"
+          style={{ background: backgroundValue }}
         />
 
-        {/* 2. The "Signature Dot" */}
+        {/* Reticle — horizontal + vertical hairlines crossing at the cursor,
+            like a selection tool. mix-blend-difference keeps it legible
+            over both the ink background and any lighter content. */}
         <motion.div
-          className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#ff4f21] rounded-full z-[1001] pointer-events-none mix-blend-difference"
+          className="fixed top-0 left-0 z-[1000] pointer-events-none mix-blend-difference"
           style={{
             x: smoothedX,
             y: smoothedY,
             translateX: "-50%",
             translateY: "-50%",
           }}
-        />
+        >
+          <div className="relative w-6 h-6">
+            <div
+              className="absolute top-1/2 left-0 w-full h-[1px] -translate-y-1/2"
+              style={{ backgroundColor: paper }}
+            />
+            <div
+              className="absolute left-1/2 top-0 h-full w-[1px] -translate-x-1/2"
+              style={{ backgroundColor: paper }}
+            />
+            <div
+              className="absolute top-1/2 left-1/2 w-1 h-1 rounded-full -translate-x-1/2 -translate-y-1/2"
+              style={{ backgroundColor: brass }}
+            />
+          </div>
+        </motion.div>
 
-        {/* 3. The "Trailing Ring" */}
+        {/* Coordinate readout — trails just below/right of the reticle */}
         <motion.div
-          className="fixed top-0 left-0 w-8 h-8 border border-[#ff4f21]/40 rounded-full z-[1000] pointer-events-none"
+          className="fixed top-0 left-0 z-[1001] pointer-events-none font-mono text-[10px] tracking-wider whitespace-nowrap"
           style={{
             x: smoothedX,
             y: smoothedY,
-            translateX: "-50%",
-            translateY: "-50%",
+            translateX: "14px",
+            translateY: "10px",
+            color: brass,
           }}
-        />
+        >
+          {String(coords.x).padStart(4, "0")}
+          <span style={{ color: paper, opacity: 0.4 }}> / </span>
+          {String(coords.y).padStart(4, "0")}
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );

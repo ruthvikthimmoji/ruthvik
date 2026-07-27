@@ -34,14 +34,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <SignatureCursor />
 
         {/* Socials stay global and fixed */}
-        <FloatingSocials />
 
         <AnimatePresence mode="wait">{children}</AnimatePresence>
 
         {/* 2. Add the component at the end of the body */}
         <Analytics />
 
-        <WhatsAppButton />
+        {/* <WhatsAppButton /> */}
       </body>
     </html>
   );

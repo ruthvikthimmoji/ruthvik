@@ -1,54 +1,57 @@
 "use client";
-import React from "react";
+
 import { motion } from "framer-motion";
 import { SOCIAL_LINKS } from "../data/socials";
 
-const FloatingSocials = () => {
+// ---------------------------------------------------------------------------
+// Same tokens as Hero.tsx / Navbar.tsx / OngoingWork.tsx / Projects.tsx.
+// ---------------------------------------------------------------------------
+const paper = "#F3F1EC";
+const graphite = "#8B8985";
+const brass = "#C7A25C";
+const hairline = "rgba(199, 162, 92, 0.2)";
+
+// Desktop-only by design: on small screens this would eat scarce space and
+// compete with thumb-reach content, so mobile visitors find these socials
+// in the Footer instead. Nothing here needs a button, a card, or a state —
+// it's just text, quiet in the corner, always there.
+export default function FloatingSocials() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.5 }}
-      // Responsive classes: 
-      // Mobile: Horizontal bar at bottom center
-      // Desktop (lg): Vertical bar at bottom right
-      className="fixed bottom-0 left-0 right-0 lg:left-auto lg:right-10 z-50 flex lg:flex-col items-center justify-center lg:justify-start gap-6 lg:gap-8 px-6 py-4 lg:p-0"
+      transition={{ duration: 0.8, delay: 0.6 }}
+      className="hidden md:flex fixed bottom-8 left-8 z-40 flex-col items-start gap-2.5"
     >
-      <div className="flex flex-row lg:flex-col gap-6 lg:gap-6 mb-0 lg:mb-4 bg-white/80 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none px-6 py-3 lg:p-0 rounded-full lg:rounded-none border border-zinc-200 lg:border-none shadow-xl lg:shadow-none">
-        {SOCIAL_LINKS.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex items-center justify-center p-1 text-zinc-400 hover:text-[#ff4f21] transition-all duration-300"
-          >
-            {/* The Icon */}
-            <link.icon
-              size={22} // Slightly larger for better mobile touch target
-              strokeWidth={1.5}
-              className="relative z-10 transition-transform duration-300 group-hover:-translate-y-1"
+      <span
+        className="font-mono text-[9px] uppercase tracking-[0.3em] mb-1"
+        style={{ color: brass }}
+      >
+        Elsewhere
+      </span>
+
+      {SOCIAL_LINKS.map((link) => (
+        <a
+          key={link.name}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group font-mono text-[10px] uppercase tracking-[0.15em] transition-colors"
+          style={{ color: graphite }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = paper)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = graphite)}
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <span
+              className="w-2 h-[1px] transition-all duration-300 group-hover:w-3"
+              style={{ backgroundColor: brass }}
             />
+            {link.name}
+          </span>
+        </a>
+      ))}
 
-            {/* Tooltip - Only visible on desktop (hidden on touch) */}
-            <span className="hidden lg:block absolute right-10 scale-0 group-hover:scale-100 transition-all duration-300 origin-right px-2 py-1 rounded bg-zinc-900 text-[10px] text-white uppercase tracking-widest font-bold pointer-events-none">
-              {link.name}
-            </span>
-          </a>
-        ))}
-      </div>
-
-      {/* The Architectural Anchor Line - Hidden on Mobile */}
-      <div className="hidden lg:block w-[1px] h-24 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden">
-        <motion.div
-          initial={{ y: "-100%" }}
-          animate={{ y: "100%" }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent via-[#ff4f21] to-transparent"
-        />
-      </div>
+      <div className="w-[1px] h-8 mt-1" style={{ backgroundColor: hairline }} />
     </motion.div>
   );
-};
-
-export default FloatingSocials;
+}

@@ -5,6 +5,7 @@ export interface ActiveProject {
   name: string;
   type: string;
   status: 
+   | "Tokens" 
     | "Wireframing" 
     | "UI Design" 
     | "User Testing" 
@@ -27,6 +28,17 @@ export const activeProjects: ActiveProject[] = [
 //     figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FGXwiFAdGEFkC5gY5NYWBJa%2FPortfolio%3Fnode-id%3D4-6213",
 //     description: "Currently refining the booking flow and vendor dashboard for a seamless sports experience."
 //   },
+
+{
+    id: "design-system", // Changed from 3 to a string
+    name: "Personal Design System",
+    type: "Design System",
+    status: "Tokens",
+    progress: 20,
+   figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2F63Gi1TxL2U3uxHe7dRz0Vr%2FPersonal-Design-System-Archive-1%3Fnode-id%3D0-1%26t%3DbcAYfHOz3iQVfu8J-1",
+    description: "Designing a Design System "
+  },
+
 {
   id: "ram-navami-concept", 
   name: "Ram Navami Concept",
@@ -55,5 +67,6 @@ export const activeProjects: ActiveProject[] = [
     figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2FGXwiFAdGEFkC5gY5NYWBJa%2FPortfolio%3Fnode-id%3D35-6507%26t%3DKJw03P2gxOMZ2Ext-1",
     description: "Designing a high-octane editorial experience for Formula 1 fans."
   },
+
 
 ];
