@@ -20,7 +20,10 @@ export type Exploration = {
   description?: string;
   featured: boolean; // true = shown on the homepage
   link?: string; 
-  type: string;// optional Figma / Dribbble / prototype link
+  type: string;//
+  status: string;
+  progress: string;
+  //  optional Figma / Dribbble / prototype link
 };
 
 export const explorationCategories: ExplorationCategory[] = [
