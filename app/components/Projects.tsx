@@ -1,188 +1,331 @@
 "use client";
 
-import { useState } from "react";
-import { projects } from "@/app/data/projects";
+import { projects, workTypeLabels } from "@/app/data/projects";
 import { caseStudies } from "@/app/data/case-studies";
 import Link from "next/link";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
-// ---------------------------------------------------------------------------
-// Same tokens as Hero.tsx / Navbar.tsx / OngoingWork.tsx / SignatureCursor.tsx.
-// ---------------------------------------------------------------------------
-const ink = "#0E0E10";
-const paper = "#F3F1EC";
-const graphite = "#8B8985";
-const brass = "#C7A25C";
-const hairline = "rgba(199, 162, 92, 0.16)";
+const ink = "#111111";
+const paper = "#F7F6F2";
+const muted = "#6F6D68";
+const hairline = "rgba(17, 17, 17, 0.14)";
+const accent = "#C86B3C";
 
 export default function Projects() {
-  const [hovered, setHovered] = useState<number | null>(null);
-
-  // Preview panel follows the cursor with a spring — same "precision tool"
-  // logic as SignatureCursor, but local to this section and only active
-  // while a row is hovered.
-  const previewX = useMotionValue(0);
-  const previewY = useMotionValue(0);
-  const springConfig = { damping: 28, stiffness: 200, mass: 0.5 };
-  const smoothX = useSpring(previewX, springConfig);
-  const smoothY = useSpring(previewY, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    previewX.set(e.clientX);
-    previewY.set(e.clientY);
-  };
+  const selectedProjects = projects.filter(
+    (project) => project.featured
+  );
 
   return (
     <section
       id="work"
-      className="relative py-24 md:py-40 overflow-hidden"
-      style={{ backgroundColor: ink, color: paper }}
+      className="relative overflow-hidden border-t"
+      style={{
+        backgroundColor: paper,
+        color: ink,
+        borderColor: hairline,
+      }}
     >
-      {/* Section Header */}
-      <div className="max-w-6xl mx-auto px-6 md:px-8 mb-16 md:mb-24">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex items-end justify-between gap-8"
+      <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-12">
+        {/* HEADER */}
+
+        <div
+          className="grid border-b py-10 md:grid-cols-[1fr_2fr] md:py-14"
+          style={{ borderColor: hairline }}
         >
           <div>
             <span
-              className="font-mono text-[10px] uppercase tracking-[0.35em] font-medium mb-3 md:mb-4 block"
-              style={{ color: brass }}
+              className="font-mono text-[10px] uppercase tracking-[0.25em]"
+              style={{ color: muted }}
             >
-              Selected Work
+              01 / Selected Work
             </span>
-            <h2 className="font-serif italic text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05] max-w-xl">
-              A short list of things worth your time.
-            </h2>
           </div>
-          <span
-            className="hidden md:block font-mono text-[10px] tracking-widest"
-            style={{ color: graphite }}
-          >
-            {String(projects.length).padStart(2, "0")} PROJECTS
-          </span>
-        </motion.div>
-      </div>
 
-      {/* Editorial list */}
-      <div
-        className="max-w-6xl mx-auto px-6 md:px-8"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => setHovered(null)}
-      >
-        <div style={{ borderTop: `1px solid ${hairline}` }}>
-          {projects.map((project, index) => {
+          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+            <h2 className="max-w-3xl font-serif text-4xl leading-[0.98] tracking-[-0.04em] sm:text-5xl md:text-7xl">
+              Product design work
+              <br />
+              across{" "}
+              <span className="italic" style={{ color: accent }}>
+                SaaS, mobile
+              </span>{" "}
+              and digital products.
+            </h2>
+
+            <span
+              className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{ color: muted }}
+            >
+              {String(selectedProjects.length).padStart(2, "0")} selected
+            </span>
+          </div>
+        </div>
+
+        {/* PROJECTS */}
+
+        <div>
+          {selectedProjects.map((project, index) => {
             const hasCaseStudy = caseStudies.some(
-              (cs) => cs.slug === project.slug,
+              (caseStudy) => caseStudy.slug === project.slug
             );
-            const isDimmed = hovered !== null && hovered !== index;
-            const isActive = hovered === index;
 
-            const rowContent = (
-              <motion.div
-                onMouseEnter={() => setHovered(index)}
-                animate={{ opacity: isDimmed ? 0.35 : 1 }}
-                transition={{ duration: 0.4 }}
-                className="group flex items-center justify-between gap-6 py-7 md:py-10 cursor-pointer"
-                style={{ borderBottom: `1px solid ${hairline}` }}
+            const content = (
+              <motion.article
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{
+                  duration: 0.7,
+                  delay: index * 0.05,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="group py-12 md:py-20"
               >
-                <div className="flex items-baseline gap-5 md:gap-10 min-w-0">
+                {/* META */}
+
+                <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
                   <span
-                    className="font-mono text-[11px] tracking-widest shrink-0"
-                    style={{ color: isActive ? brass : graphite }}
+                    className="font-mono text-[10px] tracking-[0.2em]"
+                    style={{ color: accent }}
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <h3
-                    className="font-serif tracking-tight leading-none truncate transition-all duration-300"
-                    style={{
-                      fontSize: "clamp(1.75rem, 5vw, 3.75rem)",
-                      color: isActive ? brass : paper,
-                    }}
+
+                  <span
+                    aria-hidden="true"
+                    className="h-px w-8 md:w-12"
+                    style={{ backgroundColor: hairline }}
+                  />
+
+                  <span
+                    className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                    style={{ color: muted }}
                   >
+                    {project.category}
+                  </span>
+
+                  <span
+                    className="border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em]"
+                    style={{ color: accent, borderColor: hairline }}
+                  >
+                    {workTypeLabels[project.type]}
+                  </span>
+                </div>
+
+                {/* TITLE + SINGLE CTA */}
+
+                <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+                  <h3 className="font-serif text-4xl tracking-[-0.035em] transition-transform duration-500 group-hover:translate-x-1 sm:text-5xl md:text-6xl">
                     {project.title}
                   </h3>
+
+                  {hasCaseStudy ? (
+                    <div
+                      className="flex items-center gap-2 text-sm"
+                      style={{ color: muted }}
+                    >
+                      <span>View case study</span>
+
+                      <ArrowUpRight
+                        size={16}
+                        strokeWidth={1.3}
+                        aria-hidden="true"
+                        className="transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1"
+                        style={{ color: accent }}
+                      />
+                    </div>
+                  ) : project.type === "professional" ? (
+                    <span className="text-sm" style={{ color: muted }}>
+                      Details available on request
+                    </span>
+                  ) : null}
                 </div>
 
-                <div className="flex items-center gap-4 md:gap-8 shrink-0">
-                  <span
-                    className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.2em]"
-                    style={{ color: graphite }}
-                  >
-                    {project.tag}
-                  </span>
-                  {hasCaseStudy && (
-                    <ArrowUpRight
-                      size={20}
-                      className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                      style={{ color: isActive ? brass : graphite }}
+                {/* IMAGE */}
+
+                <div
+                  className="relative overflow-hidden border"
+                  style={{
+                    borderColor: hairline,
+                    backgroundColor: "#ECEAE5",
+                  }}
+                >
+                  <div className="relative aspect-[16/9] overflow-hidden md:aspect-[2/1]">
+                    <Image
+                      src={project.image}
+                      alt={`${project.title} project preview`}
+                      fill
+                      priority={index === 0}
+                      sizes="(max-width: 1440px) 100vw, 1440px"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                     />
-                  )}
+
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, transparent 60%, rgba(17,17,17,0.12))",
+                      }}
+                    />
+
+                    {/* Hover-only affordance, not a second CTA */}
+
+                    {hasCaseStudy && (
+                      <div
+                        aria-hidden="true"
+                        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border bg-[#F7F6F2]/90 opacity-0 backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:opacity-100 md:right-6 md:top-6"
+                        style={{ borderColor: hairline }}
+                      >
+                        <ArrowUpRight
+                          size={16}
+                          strokeWidth={1.3}
+                          style={{ color: ink }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </motion.div>
+
+                {/* INFORMATION */}
+
+                <div
+                  className="mt-6 grid gap-8 border-b pb-12 md:grid-cols-[1fr_2fr] md:pb-16"
+                  style={{ borderColor: hairline }}
+                >
+                  <div>
+                    <span
+                      className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                      style={{ color: muted }}
+                    >
+                      Overview
+                    </span>
+                  </div>
+
+                  <div>
+                    <p
+                      className="max-w-2xl text-base leading-relaxed md:text-lg"
+                      style={{ color: muted }}
+                    >
+                      {project.description}
+                    </p>
+
+                    {/* PROJECT META */}
+
+                    <div
+                      className="mt-10 grid border-t sm:grid-cols-3"
+                      style={{ borderColor: hairline }}
+                    >
+                      <div
+                        className="border-b py-4 sm:border-b-0 sm:border-r sm:pr-5"
+                        style={{ borderColor: hairline }}
+                      >
+                        <span
+                          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                          style={{ color: muted }}
+                        >
+                          Role
+                        </span>
+                        <p className="mt-2 text-sm">{project.role}</p>
+                      </div>
+
+                      <div
+                        className="border-b py-4 sm:border-b-0 sm:border-r sm:px-5"
+                        style={{ borderColor: hairline }}
+                      >
+                        <span
+                          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                          style={{ color: muted }}
+                        >
+                          Platform
+                        </span>
+                        <p className="mt-2 text-sm">{project.platform}</p>
+                      </div>
+
+                      <div className="py-4 sm:pl-5">
+                        <span
+                          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                          style={{ color: muted }}
+                        >
+                          Year
+                        </span>
+                        <p className="mt-2 text-sm">{project.year}</p>
+                      </div>
+                    </div>
+
+                    {/* CONTRIBUTION */}
+
+                    <div className="mt-8">
+                      <span
+                        className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                        style={{ color: muted }}
+                      >
+                        Contribution
+                      </span>
+
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {project.contribution.map((item) => (
+                          <span
+                            key={item}
+                            className="border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em]"
+                            style={{ color: muted, borderColor: hairline }}
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.article>
             );
 
-            return hasCaseStudy ? (
+            if (!hasCaseStudy) {
+              return <div key={project.slug}>{content}</div>;
+            }
+
+            return (
               <Link
                 key={project.slug}
                 href={`/case-study/${project.slug.toLowerCase()}`}
+                aria-label={`${project.title} case study`}
                 className="block"
               >
-                {rowContent}
+                {content}
               </Link>
-            ) : (
-              <div key={project.slug}>{rowContent}</div>
             );
           })}
         </div>
-      </div>
 
-      {/* Floating preview — desktop only. Follows the cursor, shows the
-          project image + a short line pulled in from the description. */}
-      <motion.div
-        className="hidden md:block fixed top-0 left-0 z-40 pointer-events-none"
-        style={{ x: smoothX, y: smoothY }}
-      >
-        <AnimatePresence>
-          {hovered !== null && (
-            <motion.div
-              key={hovered}
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="w-[320px] overflow-hidden"
-              style={{
-                transform: "translate(32px, -140px)",
-                backgroundColor: ink,
-                border: `1px solid ${hairline}`,
-                boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
-              }}
+        {/* ALL WORK */}
+
+        {projects.length > selectedProjects.length && (
+          <div
+            className="flex justify-end border-t py-8 md:py-10"
+            style={{ borderColor: hairline }}
+          >
+            <Link
+              href="/ui-designs"
+              className="group flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{ color: muted }}
             >
-              <img
-                src={projects[hovered].image}
-                alt=""
-                className="w-full aspect-[4/3] object-cover"
+              <span className="transition-colors duration-300 group-hover:text-[#111111]">
+                Explore more work
+              </span>
+
+              <ArrowUpRight
+                size={13}
+                strokeWidth={1.4}
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+                style={{ color: accent }}
               />
-              <p
-                className="px-4 py-3 text-xs font-light leading-relaxed line-clamp-2"
-                style={{ color: graphite }}
-              >
-                {projects[hovered].description}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+            </Link>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

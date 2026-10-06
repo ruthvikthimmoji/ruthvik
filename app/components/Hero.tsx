@@ -1,181 +1,515 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-const roles = ["UI/UX Designer", "Problem Solver", "Product Partner"];
-
-// ---------------------------------------------------------------------------
-// Design tokens for this hero. Keep these local to the section so the palette
-// stays intentional and isn't quietly inherited by other parts of the site.
-// ---------------------------------------------------------------------------
-const ink = "#0E0E10"; // near-black background
-const paper = "#F3F1EC"; // warm ivory text
-const graphite = "#8B8985"; // muted warm grey for secondary text
-const brass = "#C7A25C"; // single restrained accent
-const brassSoft = "rgba(199, 162, 92, 0.14)"; // grid / hairline tint
+const ink = "#111111";
+const paper = "#F7F6F2";
+const muted = "#6F6D68";
+const hairline = "rgba(17, 17, 17, 0.14)";
+const accent = "#C86B3C";
 
 export default function Hero() {
-  const { scrollY } = useScroll();
   const containerRef = useRef<HTMLElement>(null);
 
-  const y1 = useTransform(scrollY, [0, 500], [0, -50]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const { scrollY } = useScroll();
 
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [showCoords, setShowCoords] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((i) => (i + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setCoords({
-      x: Math.round(e.clientX - rect.left),
-      y: Math.round(e.clientY - rect.top),
-    });
-  };
+  const y = useTransform(scrollY, [0, 600], [0, -70]);
+  const opacity = useTransform(scrollY, [0, 450], [1, 0]);
 
   return (
     <section
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setShowCoords(true)}
-      onMouseLeave={() => setShowCoords(false)}
-      className="relative min-h-[85vh] md:min-h-[90vh] px-6 md:px-8 flex flex-col justify-center overflow-hidden"
-      style={{ backgroundColor: ink, color: paper }}
+      className="relative min-h-screen overflow-hidden"
+      style={{
+        backgroundColor: paper,
+        color: ink,
+      }}
     >
-      {/* Fine hairline grid — a design-tool canvas, not a decorative texture */}
+      {/* ============================================================
+          HAIRLINE GRID
+          ============================================================ */}
+
       <div
-        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: `linear-gradient(${brassSoft} 1px, transparent 1px), linear-gradient(90deg, ${brassSoft} 1px, transparent 1px)`,
-          backgroundSize: "48px 48px",
-          maskImage: "radial-gradient(ellipse 80% 60% at 30% 40%, black 0%, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 60% at 30% 40%, black 0%, transparent 75%)",
+          backgroundImage: `
+            linear-gradient(
+              to right,
+              ${hairline} 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              to bottom,
+              ${hairline} 1px,
+              transparent 1px
+            )
+          `,
+          backgroundSize: "80px 80px",
+          maskImage:
+            "linear-gradient(to bottom, black 0%, transparent 78%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 0%, transparent 78%)",
+          opacity: 0.32,
         }}
       />
 
-      {/* Live coordinate readout — the one signature flourish, quiet everywhere else */}
-      <AnimatePresence>
-        {showCoords && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="hidden md:flex absolute bottom-10 right-10 items-center gap-2 font-mono text-[11px] tracking-wider"
-            style={{ color: graphite }}
-          >
-            <span style={{ color: brass }}>×</span>
-            <span>{String(coords.x).padStart(4, "0")}</span>
-            <span style={{ color: brass }}>y</span>
-            <span>{String(coords.y).padStart(4, "0")}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ============================================================
+          MAIN CONTAINER
+          ============================================================ */}
 
       <motion.div
-        style={{ y: y1, opacity }}
-        className="relative max-w-6xl mx-auto w-full z-10"
+        style={{
+          y,
+          opacity,
+        }}
+        className="
+          relative z-10 mx-auto flex min-h-screen
+          w-full max-w-[1440px] flex-col
+          px-6 md:px-10 lg:px-12
+        "
       >
-        {/* Eyebrow — set in mono, the register a design tool uses for metadata */}
-        <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
-          <div className="h-[1px] w-8 md:w-12" style={{ backgroundColor: brass, opacity: 0.5 }} />
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={roleIndex}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 8 }}
-              transition={{ duration: 0.4 }}
-              className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.35em] font-medium"
-              style={{ color: brass }}
-            >
-              {roles[roleIndex]}
-            </motion.p>
-          </AnimatePresence>
-        </div>
+        {/* ============================================================
+            TOP META
+            ============================================================ */}
 
-        {/* Headline — serif display, restrained italic for the one word that matters */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif text-[2.75rem] sm:text-6xl md:text-8xl font-medium tracking-tight leading-[1.02] md:leading-[0.96] max-w-5xl"
+        <div
+          className="
+            flex items-center justify-between
+            border-b py-4 md:py-5
+          "
+          style={{
+            borderColor: hairline,
+          }}
         >
-          Designing products <br className="hidden sm:block" />
-          that feel <span className="italic" style={{ color: brass }}>obvious.</span>
-        </motion.h1>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.8 }}
-          className="mt-8 md:mt-12 text-lg md:text-xl max-w-xl leading-relaxed font-light"
-          style={{ color: graphite }}
-        >
-          Turning complex SaaS challenges into clear, high-conversion digital experiences.
-        </motion.p>
-
-        {/* CTA row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-12 md:mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-10"
-        >
-          <a
-            href="#work"
-            className="group relative text-base md:text-lg font-medium overflow-hidden pb-1"
-            style={{ color: paper }}
-          >
-            <span className="relative z-10">View selected work</span>
-            <div
-              className="absolute bottom-0 left-0 w-full h-[1px] transition-transform duration-500 -translate-x-full group-hover:translate-x-0"
-              style={{ backgroundColor: brass }}
-            />
-            <span className="inline-block ml-2 transition-transform group-hover:translate-x-2" style={{ color: brass }}>
-              →
-            </span>
-          </a>
+          {/* Role */}
 
           <div className="flex items-center gap-3">
-            <span className="relative flex h-2 w-2">
-              <span
-                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
-                style={{ backgroundColor: brass }}
-              />
-              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: brass }} />
+            <span
+              aria-hidden="true"
+              className="h-1.5 w-1.5 rounded-full"
+              style={{
+                backgroundColor: accent,
+              }}
+            />
+
+            <span
+              className="
+                font-mono text-[9px]
+                uppercase tracking-[0.22em]
+                md:text-[10px]
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              UI/UX Designer · Product Design
             </span>
-            <span className="text-xs md:text-sm font-medium" style={{ color: graphite }}>
-              Available
+          </div>
+
+          {/* Location */}
+
+          <span
+            className="
+              hidden font-mono text-[9px]
+              uppercase tracking-[0.22em]
+              sm:block md:text-[10px]
+            "
+            style={{
+              color: muted,
+            }}
+          >
+            Bengaluru · India
+          </span>
+        </div>
+
+        {/* ============================================================
+            HERO CONTENT
+            ============================================================ */}
+
+        <div
+          className="
+            flex flex-1 flex-col
+            justify-center
+            py-20 md:py-24 lg:py-28
+          "
+        >
+          {/* Eyebrow */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 12,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.7,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="
+              mb-7 flex items-center gap-3
+              md:mb-9
+            "
+          >
+            <span
+              className="
+                font-mono text-[9px]
+                uppercase tracking-[0.28em]
+                md:text-[10px]
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              SaaS · Web · Mobile · Systems
+            </span>
+          </motion.div>
+
+          {/* ============================================================
+              MAIN HEADLINE
+              ============================================================ */}
+
+          <motion.h1
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.08,
+              duration: 0.9,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="
+              max-w-[1120px]
+              font-serif font-medium
+              text-[3.5rem]
+              leading-[0.92]
+              tracking-[-0.045em]
+              sm:text-6xl
+              md:text-8xl
+              lg:text-[9rem]
+            "
+          >
+            Designing products
+            <br />
+
+            <span
+              className="italic"
+              style={{
+                color: accent,
+              }}
+            >
+              that feel obvious.
+            </span>
+          </motion.h1>
+
+          {/* ============================================================
+              DESCRIPTION
+              ============================================================ */}
+
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 18,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.25,
+              duration: 0.8,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="
+              mt-8 max-w-[650px]
+              text-base leading-relaxed
+              md:mt-10 md:text-lg
+              lg:text-xl
+            "
+            style={{
+              color: muted,
+            }}
+          >
+            I design clear, scalable digital experiences for SaaS,
+            web and mobile products — with a strong focus on UI,
+            interaction and systems thinking.
+          </motion.p>
+
+          {/* ============================================================
+              CTA
+              ============================================================ */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 12,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.4,
+              duration: 0.7,
+            }}
+            className="
+              mt-10 flex flex-wrap
+              items-center gap-7
+              md:mt-12 md:gap-9
+            "
+          >
+            {/* Selected Work */}
+
+            <a
+              href="#work"
+              className="
+                group flex items-center
+                gap-3 text-sm font-medium
+                md:text-base
+              "
+            >
+              <span>View selected work</span>
+
+              <span
+                aria-hidden="true"
+                className="
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+                style={{
+                  color: accent,
+                }}
+              >
+                →
+              </span>
+            </a>
+
+            {/* Divider */}
+
+            <span
+              aria-hidden="true"
+              className="hidden h-5 w-px sm:block"
+              style={{
+                backgroundColor: hairline,
+              }}
+            />
+
+            {/* Resume */}
+
+            <a
+              href="/Ruthvikresume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                group flex items-center
+                gap-2 text-sm md:text-base
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              <span
+                className="
+                  transition-colors
+                  group-hover:text-[#111111]
+                "
+              >
+                View résumé
+              </span>
+
+              <span
+                aria-hidden="true"
+                className="
+                  text-xs transition-transform
+                  duration-300
+                  group-hover:-translate-y-0.5
+                  group-hover:translate-x-0.5
+                "
+                style={{
+                  color: accent,
+                }}
+              >
+                ↗
+              </span>
+            </a>
+          </motion.div>
+        </div>
+
+        {/* ============================================================
+            CURRENT ROLE
+            ============================================================ */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            delay: 0.65,
+            duration: 0.8,
+          }}
+          className="
+            grid border-t
+            md:grid-cols-2
+          "
+          style={{
+            borderColor: hairline,
+          }}
+        >
+          {/* Current Role */}
+
+          <div
+            className="
+              flex flex-col gap-2
+              border-b py-5
+              md:border-b-0
+              md:border-r md:pr-8
+            "
+            style={{
+              borderColor: hairline,
+            }}
+          >
+            <span
+              className="
+                font-mono text-[8px]
+                uppercase tracking-[0.25em]
+                md:text-[9px]
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              Currently
+            </span>
+
+            <div
+              className="
+                flex flex-wrap
+                items-center
+                gap-x-2 gap-y-1
+                text-sm md:text-base
+              "
+            >
+              <span className="font-medium">
+                UX/UI Designer
+              </span>
+
+              <span
+                style={{
+                  color: muted,
+                }}
+              >
+                @
+              </span>
+
+              <span className="font-medium">
+                Studycrux
+              </span>
+
+              <span
+                className="
+                  font-mono text-[9px]
+                  md:text-[10px]
+                "
+                style={{
+                  color: muted,
+                }}
+              >
+                · Jun 2026 — Present
+              </span>
+            </div>
+          </div>
+
+          {/* Focus */}
+
+          <div
+            className="
+              flex flex-col gap-2
+              py-5 md:pl-8
+            "
+          >
+            <span
+              className="
+                font-mono text-[8px]
+                uppercase tracking-[0.25em]
+                md:text-[9px]
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              Focus
+            </span>
+
+            <span className="text-sm md:text-base">
+              SaaS · Product UI · Design Systems · Mobile
             </span>
           </div>
         </motion.div>
-      </motion.div>
 
-      {/* Scroll cue — a still hairline, not a bouncing arrow */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.9, duration: 0.8 }}
-        className="absolute bottom-8 md:bottom-12 left-6 md:left-8 hidden sm:flex flex-col items-center gap-4"
-      >
-        <span
-          className="rotate-90 font-mono text-[9px] uppercase tracking-[0.3em] origin-left"
-          style={{ color: graphite }}
+        {/* ============================================================
+            FOOTER MARKER
+            ============================================================ */}
+
+        <div
+          className="
+            flex items-center
+            justify-between py-5
+          "
         >
-          Scroll
-        </span>
-        <div className="w-[1px] h-10 md:h-12" style={{ backgroundColor: brassSoft }} />
+          <span
+            className="
+              font-mono text-[8px]
+              uppercase tracking-[0.25em]
+              md:text-[9px]
+            "
+            style={{
+              color: muted,
+            }}
+          >
+            01 / 05
+          </span>
+
+          <div
+            className="
+              hidden items-center gap-3
+              sm:flex
+            "
+          >
+            <span
+              className="
+                font-mono text-[8px]
+                uppercase tracking-[0.25em]
+                md:text-[9px]
+              "
+              style={{
+                color: muted,
+              }}
+            >
+              Scroll
+            </span>
+
+            <span
+              aria-hidden="true"
+              className="block h-8 w-px"
+              style={{
+                backgroundColor: hairline,
+              }}
+            />
+          </div>
+        </div>
       </motion.div>
     </section>
   );

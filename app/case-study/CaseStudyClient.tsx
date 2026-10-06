@@ -1,263 +1,456 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import type { CaseStudy } from "@/app/data/case-studies";
+import type { WorkType } from "@/app/data/projects";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { CaseStudy } from "../data/case-studies";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 
-// ---------------------------------------------------------------------------
-// Same tokens as Hero.tsx / Navbar.tsx / Projects.tsx / Contact.tsx / Services.
-// ---------------------------------------------------------------------------
-const ink = "#0E0E10";
-const paper = "#F3F1EC";
-const graphite = "#8B8985";
-const brass = "#C7A25C";
-const hairline = "rgba(199, 162, 92, 0.16)";
+const ink = "#111111";
+const paper = "#F7F6F2";
+const muted = "#6F6D68";
+const accent = "#C86B3C";
+const hairline = "rgba(17, 17, 17, 0.14)";
 
-export default function CaseStudyClient({ project }: { project: CaseStudy }) {
-  const router = useRouter();
+const typeLabels: Record<WorkType, string> = {
+  professional: "Professional Work",
+  client: "Client Project",
+  personal: "Personal Concept",
+};
+
+export default function CaseStudyClient({
+  project,
+}: {
+  project: CaseStudy;
+}) {
   const { scrollYProgress } = useScroll();
-  const figmaY = useTransform(scrollYProgress, [0, 0.5], [0, -30]);
+  const imageY = useTransform(scrollYProgress, [0, 0.3], [0, -20]);
 
-  // Media-query state instead of reading window.innerWidth inline during
-  // render — the old version could mismatch between server and client paint.
-  const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  /* Only show process sections that have real content (images or items).
+     Text-only placeholder sections stay hidden until material is added. */
+  const visibleSections = project.sections.filter(
+    (s) => (s.images?.length ?? 0) > 0 || (s.items?.length ?? 0) > 0
+  );
 
-  const specRows = [
-    { label: "Role", value: project.role },
-    { label: "Duration", value: project.duration },
-    { label: "Impact", value: "High Growth" },
-    { label: "Tools", value: project.tools.join(" / ") },
-  ];
+  /* Numbering is computed from what is actually rendered, so labels
+     never skip or clash when a section is hidden. */
+  const order = [
+    "overview",
+    project.problem ? "problem" : null,
+    project.responsibilities.length > 0 ? "contribution" : null,
+    ...visibleSections.map((s) => `section:${s.id}`),
+    project.outcome ? "outcome" : null,
+    project.learnings?.length ? "learnings" : null,
+  ].filter(Boolean) as string[];
+
+  const num = (key: string) =>
+    String(order.indexOf(key) + 1).padStart(2, "0");
 
   return (
     <motion.main
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="relative min-h-screen pb-20 md:pb-32 overflow-x-hidden"
-      style={{ backgroundColor: ink, color: paper }}
+      className="min-h-screen overflow-x-hidden"
+      style={{ backgroundColor: paper, color: ink }}
     >
-      <style>{`::selection { background: ${brass}; color: ${ink}; }`}</style>
+      <style>{`
+        ::selection { background: ${accent}; color: ${paper}; }
+      `}</style>
 
-      {/* Ambient glow, single + restrained, consistent with the rest of the site */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div
-          className="absolute top-[10%] right-[-10%] w-[45%] h-[35%] rounded-full blur-[120px]"
-          style={{ backgroundColor: brass, opacity: 0.04 }}
-        />
+      {/* TOP BAR */}
+
+      <div
+        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between border-b bg-[#F7F6F2]/90 px-5 py-4 backdrop-blur-md md:px-8"
+        style={{ borderColor: hairline }}
+      >
+        <Link
+          href="/#work"
+          className="group flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em]"
+          style={{ color: muted }}
+          aria-label="Back to work"
+        >
+          <ArrowLeft
+            size={13}
+            strokeWidth={1.4}
+            className="transition-transform duration-300 group-hover:-translate-x-1"
+          />
+          <span className="hidden sm:inline">Back to work</span>
+        </Link>
+
+        <span
+          className="font-mono text-[9px] uppercase tracking-[0.2em]"
+          style={{ color: muted }}
+        >
+          {typeLabels[project.type]}
+        </span>
       </div>
 
-      {/* Back button */}
-      <nav className="fixed top-6 left-6 md:top-28 md:left-8 z-[60]">
-        <button
-          onClick={() => router.back()}
-          className="group flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] px-3 py-2 rounded-full backdrop-blur-md transition-colors"
-          style={{
-            color: graphite,
-            backgroundColor: "rgba(14,14,16,0.8)",
-            border: `1px solid ${hairline}`,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = brass)}
-          onMouseLeave={(e) => (e.currentTarget.style.color = graphite)}
-        >
-          <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="hidden md:inline">Back to Work</span>
-        </button>
-      </nav>
+      {/* READING PROGRESS */}
 
-      {/* Scroll progress — brass hairline, not a thick orange bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] origin-left z-[100]"
-        style={{ scaleX: scrollYProgress, backgroundColor: brass }}
+        className="fixed left-0 right-0 top-0 z-[60] h-[2px] origin-left"
+        style={{ scaleX: scrollYProgress, backgroundColor: accent }}
       />
 
-      <article className="relative z-10 max-w-6xl mx-auto px-6 md:px-8 pt-28 md:pt-40">
-        {/* HEADER */}
-        <header className="mb-24 md:mb-32">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3 mb-6 md:mb-8"
-          >
-            <span
-              className="font-mono text-[10px] uppercase tracking-[0.25em] font-medium"
-              style={{ color: brass }}
-            >
-              Case Study
-            </span>
-            <div className="h-[1px] flex-1 max-w-24" style={{ backgroundColor: hairline }} />
-            <span
-              className="font-mono text-[10px] uppercase tracking-widest"
-              style={{ color: graphite }}
-            >
-              {project.duration}
-            </span>
-          </motion.div>
+      <article className="mx-auto max-w-[1440px] px-5 pt-28 md:px-10 md:pt-36 lg:px-12">
+        {/* HERO */}
 
-          <h1 className="font-serif italic text-4xl sm:text-6xl md:text-8xl tracking-tight leading-[0.95] mb-6 md:mb-8 max-w-4xl">
-            {project.title}
-          </h1>
-
-          <p
-            className="text-lg md:text-2xl font-light leading-snug max-w-2xl"
-            style={{ color: graphite }}
-          >
-            {project.tagline}
-          </p>
-
-          {/* Spec sheet — same key/value pattern as the Footer colophon */}
-          <div className="mt-14 md:mt-16 max-w-xl" style={{ borderTop: `1px solid ${hairline}` }}>
-            {specRows.map((row) => (
-              <div
-                key={row.label}
-                className="flex items-start justify-between gap-6 py-3.5"
-                style={{ borderBottom: `1px solid ${hairline}` }}
+        <header
+          className="border-b pb-16 md:pb-24"
+          style={{ borderColor: hairline }}
+        >
+          <div className="grid gap-10 md:grid-cols-[1fr_2fr] md:gap-16">
+            <div>
+              <span
+                className="font-mono text-[9px] uppercase tracking-[0.25em]"
+                style={{ color: muted }}
               >
-                <span
-                  className="font-mono text-[10px] uppercase tracking-[0.25em] shrink-0 pt-0.5"
-                  style={{ color: brass }}
-                >
-                  {row.label}
-                </span>
-                <span className="text-sm text-right" style={{ color: paper }}>
-                  {row.value}
-                </span>
-              </div>
-            ))}
+                {project.year} / {typeLabels[project.type]}
+              </span>
+            </div>
+
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-5xl font-serif text-5xl leading-[0.95] tracking-[-0.045em] sm:text-6xl md:text-8xl"
+              >
+                {project.title}
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.8 }}
+                className="mt-8 max-w-2xl text-xl leading-relaxed md:text-2xl"
+                style={{ color: muted }}
+              >
+                {project.tagline}
+              </motion.p>
+            </div>
+          </div>
+
+          <div
+            className="mt-14 grid border-t sm:grid-cols-2 md:grid-cols-4"
+            style={{ borderColor: hairline }}
+          >
+            <Meta label="Role" value={project.role} />
+            <Meta label="Duration" value={project.duration} />
+            <Meta label="Platform" value={project.platform} />
+            <Meta label="Tools" value={project.tools.join(" · ")} />
           </div>
         </header>
 
-        {/* PROBLEM / APPROACH + PROTOTYPE */}
-        <section className="grid lg:grid-cols-12 gap-16 md:gap-20 mb-32 md:mb-52">
-          <div className="lg:col-span-5 space-y-16 md:space-y-24">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-baseline gap-4 mb-5 md:mb-6">
-                <span className="font-mono text-[11px]" style={{ color: brass }}>01</span>
-                <h2
-                  className="font-mono text-[10px] uppercase tracking-[0.3em]"
-                  style={{ color: graphite }}
-                >
-                  The Problem
-                </h2>
-              </div>
-              <p className="font-serif italic text-xl md:text-2xl leading-relaxed" style={{ color: paper }}>
-                {project.problem}
-              </p>
-            </motion.div>
+        {/* HERO IMAGE */}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-baseline gap-4 mb-5 md:mb-6">
-                <span className="font-mono text-[11px]" style={{ color: brass }}>02</span>
-                <h2
-                  className="font-mono text-[10px] uppercase tracking-[0.3em]"
-                  style={{ color: graphite }}
-                >
-                  The Approach
-                </h2>
-              </div>
-              <p className="font-serif italic text-xl md:text-2xl leading-relaxed" style={{ color: paper }}>
-                {project.solution}
-              </p>
-            </motion.div>
+        <motion.div style={{ y: imageY }} className="py-12 md:py-20">
+          <div
+            className="overflow-hidden border"
+            style={{ borderColor: hairline, backgroundColor: "#ECEAE5" }}
+          >
+            <img
+              src={project.image}
+              alt={`${project.title} project`}
+              className="h-auto w-full object-cover"
+            />
           </div>
+        </motion.div>
 
-          {/* Prototype embed */}
-          <motion.div style={{ y: isDesktop ? figmaY : 0 }} className="lg:col-span-7 relative">
-            <div
-              className="relative aspect-[4/5] sm:aspect-video lg:aspect-[4/5] overflow-hidden group"
-              style={{ border: `1px solid ${hairline}` }}
-            >
-              <div
-                className="absolute top-4 left-4 md:top-6 md:left-6 z-20 flex items-center gap-2 backdrop-blur px-3 py-1.5 rounded-full font-mono text-[9px] uppercase tracking-widest"
-                style={{ backgroundColor: "rgba(14,14,16,0.85)", border: `1px solid ${hairline}`, color: graphite }}
-              >
-                <span className="relative flex h-1.5 w-1.5">
-                  <span
-                    className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
-                    style={{ backgroundColor: brass }}
-                  />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: brass }} />
-                </span>
-                Live Prototype
+        {/* OVERVIEW */}
+
+        <section
+          className="grid gap-10 border-t py-16 md:grid-cols-[1fr_2fr] md:py-24"
+          style={{ borderColor: hairline }}
+        >
+          <SectionLabel number={num("overview")} label="Overview" />
+          <p className="max-w-3xl font-serif text-2xl leading-relaxed tracking-[-0.02em] md:text-4xl">
+            {project.overview}
+          </p>
+        </section>
+
+        {/* PROBLEM */}
+
+        {project.problem && (
+          <section
+            className="grid gap-10 border-t py-16 md:grid-cols-[1fr_2fr] md:py-24"
+            style={{ borderColor: hairline }}
+          >
+            <SectionLabel number={num("problem")} label="Problem" />
+            <p className="max-w-3xl font-serif text-2xl leading-relaxed md:text-4xl">
+              {project.problem}
+            </p>
+          </section>
+        )}
+
+        {/* CONTRIBUTION */}
+
+        {project.responsibilities.length > 0 && (
+          <section
+            className="grid gap-10 border-t py-16 md:grid-cols-[1fr_2fr] md:py-24"
+            style={{ borderColor: hairline }}
+          >
+            <SectionLabel
+              number={num("contribution")}
+              label="My Contribution"
+            />
+
+            <div className="grid sm:grid-cols-2">
+              {project.responsibilities.map((item, index) => (
+                <div
+                  key={item}
+                  className="border-b py-5 first:border-t sm:nth-[2]:border-t sm:nth-[3]:border-t"
+                  style={{ borderColor: hairline }}
+                >
+                  <div className="flex items-center gap-4">
+                    <span
+                      className="font-mono text-[9px]"
+                      style={{ color: accent }}
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-sm md:text-base">{item}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* PROCESS SECTIONS (only those with images or items) */}
+
+        {visibleSections.map((section) => (
+          <section
+            key={section.id}
+            className="border-t py-16 md:py-24"
+            style={{ borderColor: hairline }}
+          >
+            <div className="grid gap-10 md:grid-cols-[1fr_2fr]">
+              <SectionLabel
+                number={num(`section:${section.id}`)}
+                label={section.label.replace(/^\d+\s*\/\s*/, "")}
+              />
+
+              <div>
+                {section.title && (
+                  <h2 className="max-w-3xl font-serif text-3xl leading-tight tracking-[-0.03em] md:text-5xl">
+                    {section.title}
+                  </h2>
+                )}
+
+                {section.description && (
+                  <p
+                    className="mt-6 max-w-2xl text-base leading-relaxed md:text-lg"
+                    style={{ color: muted }}
+                  >
+                    {section.description}
+                  </p>
+                )}
+
+                {section.images?.map((image, index) => (
+                  <div
+                    key={`${image}-${index}`}
+                    className="mt-10 overflow-hidden border"
+                    style={{ borderColor: hairline }}
+                  >
+                    <img
+                      src={image}
+                      alt={`${project.title} — ${section.title ?? "design"}`}
+                      className="h-auto w-full object-cover"
+                    />
+                  </div>
+                ))}
+
+                {section.items && section.items.length > 0 && (
+                  <div
+                    className="mt-10 border-t"
+                    style={{ borderColor: hairline }}
+                  >
+                    {section.items.map((item, index) => (
+                      <div
+                        key={item}
+                        className="flex gap-5 border-b py-5"
+                        style={{ borderColor: hairline }}
+                      >
+                        <span
+                          className="font-mono text-[9px]"
+                          style={{ color: accent }}
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
+          </section>
+        ))}
+
+        {/* OUTCOME */}
+
+        {project.outcome && (
+          <section
+            className="border-y py-20 md:py-32"
+            style={{ borderColor: hairline }}
+          >
+            <div className="grid gap-10 md:grid-cols-[1fr_2fr]">
+              <SectionLabel number={num("outcome")} label="Outcome" />
+              <p className="max-w-4xl font-serif text-3xl leading-tight tracking-[-0.03em] md:text-5xl">
+                {project.outcome}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* LEARNINGS */}
+
+        {project.learnings && project.learnings.length > 0 && (
+          <section
+            className="grid gap-10 border-b py-16 md:grid-cols-[1fr_2fr] md:py-24"
+            style={{ borderColor: hairline }}
+          >
+            <SectionLabel number={num("learnings")} label="Learnings" />
+
+            <div>
+              {project.learnings.map((learning, index) => (
+                <div
+                  key={learning}
+                  className="flex gap-6 border-b py-6 first:border-t"
+                  style={{ borderColor: hairline }}
+                >
+                  <span
+                    className="font-mono text-[9px]"
+                    style={{ color: accent }}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p className="max-w-2xl text-base leading-relaxed md:text-lg">
+                    {learning}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* FIGMA */}
+
+        {project.figmaEmbed && (
+          <section className="py-20 md:py-32">
+            <div className="mb-10 flex items-end justify-between gap-6">
+              <div>
+                <span
+                  className="font-mono text-[9px] uppercase tracking-[0.2em]"
+                  style={{ color: accent }}
+                >
+                  Prototype
+                </span>
+                <h2 className="mt-3 font-serif text-3xl tracking-[-0.03em] md:text-5xl">
+                  Explore the design
+                </h2>
+              </div>
+
+              <ExternalLink
+                size={18}
+                strokeWidth={1.2}
+                aria-hidden="true"
+                style={{ color: muted }}
+              />
+            </div>
+
+            <div
+              className="aspect-video overflow-hidden border"
+              style={{ borderColor: hairline }}
+            >
               <iframe
                 src={project.figmaEmbed}
-                className="w-full h-full grayscale-[40%] group-hover:grayscale-0 transition-all duration-700"
+                title={`${project.title} Figma prototype`}
+                className="h-full w-full"
                 allowFullScreen
                 loading="lazy"
               />
             </div>
-          </motion.div>
-        </section>
+          </section>
+        )}
 
-        {/* OUTCOME */}
-        <section
-          className="py-20 md:py-32 text-center"
-          style={{ borderTop: `1px solid ${hairline}`, borderBottom: `1px solid ${hairline}` }}
+        {/* FOOTER */}
+
+        <footer
+          className="border-t py-20 md:py-32"
+          style={{ borderColor: hairline }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span
-              className="font-mono text-[10px] uppercase tracking-[0.35em] font-medium block mb-8 md:mb-10"
-              style={{ color: brass }}
-            >
-              Final Outcome
-            </span>
-            <p className="font-serif italic text-2xl md:text-5xl leading-tight max-w-4xl mx-auto" style={{ color: paper }}>
-              {project.outcome}
-            </p>
-          </motion.div>
-        </section>
+          <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
+            <div>
+              <span
+                className="font-mono text-[9px] uppercase tracking-[0.2em]"
+                style={{ color: muted }}
+              >
+                More work
+              </span>
+              <h2 className="mt-4 max-w-2xl font-serif text-4xl leading-tight tracking-[-0.04em] md:text-6xl">
+                Explore more product design work.
+              </h2>
+            </div>
 
-        {/* CLOSING CTA — same button as Services / Contact, not a third style */}
-        <footer className="mt-28 md:mt-44 text-center">
-          <span
-            className="font-mono text-[10px] uppercase tracking-[0.35em] font-medium block mb-6 md:mb-8"
-            style={{ color: brass }}
-          >
-            Ready for the next?
-          </span>
-          <h3 className="font-serif text-3xl sm:text-5xl md:text-7xl tracking-tight mb-10 md:mb-14 leading-[1.05]">
-            Let&rsquo;s build another <br className="hidden sm:block" />{" "}
-            <span className="italic" style={{ color: brass }}>obvious story.</span>
-          </h3>
-          <button
-            onClick={() => router.push("/contact")}
-            className="inline-flex items-center gap-3 px-8 md:px-10 py-4 md:py-5 rounded-full font-mono text-[11px] font-medium uppercase tracking-[0.2em] transition-all duration-300"
-            style={{ backgroundColor: paper, color: ink }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = brass;
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(199,162,92,0.35)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = paper;
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Start a Project
-            <ArrowRight size={16} />
-          </button>
+            <Link
+              href="/#work"
+              className="group flex shrink-0 items-center gap-3 border-b pb-2 font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{ borderColor: hairline }}
+            >
+              View selected work
+              <ArrowRight
+                size={14}
+                strokeWidth={1.3}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+                style={{ color: accent }}
+              />
+            </Link>
+          </div>
         </footer>
       </article>
     </motion.main>
+  );
+}
+
+/* ---------- small components ---------- */
+
+function SectionLabel({
+  number,
+  label,
+}: {
+  number: string;
+  label: string;
+}) {
+  return (
+    <div className="flex items-start gap-4">
+      <span className="font-mono text-[9px]" style={{ color: accent }}>
+        {number}
+      </span>
+      <span
+        className="font-mono text-[9px] uppercase tracking-[0.25em]"
+        style={{ color: muted }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function Meta({ label, value }: { label: string; value: string }) {
+  return (
+    <div
+      className="border-b py-5 sm:nth-[odd]:border-r sm:nth-[even]:border-r md:border-b-0 md:border-r md:last:border-r-0 md:px-6 md:first:pl-0"
+      style={{ borderColor: hairline }}
+    >
+      <span
+        className="block font-mono text-[9px] uppercase tracking-[0.2em]"
+        style={{ color: muted }}
+      >
+        {label}
+      </span>
+      <span className="mt-2 block text-sm">{value}</span>
+    </div>
   );
 }

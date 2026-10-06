@@ -1,210 +1,427 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { uiDesigns } from "../data/ui-designs";
 import {
   LayoutGrid,
   Smartphone,
   Monitor,
   Box,
+  LayoutDashboard,
+  Sparkles,
   ArrowRight,
+  ArrowLeft,
+  ArrowUpRight,
+  X,
 } from "lucide-react";
-import Link from "next/link";
+import Navbar from "../components/Navbar";
+import { uiDesigns, type UIDesignCategory } from "../data/ui-designs";
 
-// ---------------------------------------------------------------------------
-// Same tokens as Hero.tsx / Navbar.tsx / Projects.tsx / Contact.tsx / Services.
-// ---------------------------------------------------------------------------
-const ink = "#0E0E10";
-const paper = "#F3F1EC";
-const graphite = "#8B8985";
-const brass = "#C7A25C";
-const hairline = "rgba(199, 162, 92, 0.16)";
+const ink = "#111111";
+const paper = "#F7F6F2";
+const muted = "#6F6D68";
+const hairline = "rgba(17, 17, 17, 0.14)";
+const accent = "#C86B3C";
 
 const PAGE_SIZE = 12;
 
-const filters = [
-  { label: "All", value: "all", icon: <LayoutGrid size={13} /> },
-  { label: "Mobile", value: "mobile", icon: <Smartphone size={13} /> },
-  { label: "Web", value: "web", icon: <Monitor size={13} /> },
-  { label: "Components", value: "components", icon: <Box size={13} /> },
-];
+const categoryMeta: Record<
+  UIDesignCategory,
+  { label: string; icon: React.ReactNode }
+> = {
+  mobile: { label: "Mobile", icon: <Smartphone size={13} /> },
+  web: { label: "Web", icon: <Monitor size={13} /> },
+  dashboard: { label: "Dashboard", icon: <LayoutDashboard size={13} /> },
+  components: { label: "Components", icon: <Box size={13} /> },
+  concept: { label: "Concept", icon: <Sparkles size={13} /> },
+};
 
 export default function UIDesignsClient() {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState<
+    "all" | UIDesignCategory
+  >("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  // Reset pagination whenever the filter changes, so switching categories
-  // doesn't carry over a "loaded more" count from a different filter.
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [activeFilter]);
+  /* Only offer filters that actually have work in them. */
+  const filters = useMemo(() => {
+    const present = (
+      Object.keys(categoryMeta) as UIDesignCategory[]
+    ).filter((c) => uiDesigns.some((d) => d.category === c));
 
-  const filteredDesigns =
+    return [
+      {
+        value: "all" as const,
+        label: "All",
+        icon: <LayoutGrid size={13} />,
+        count: uiDesigns.length,
+      },
+      ...present.map((c) => ({
+        value: c,
+        label: categoryMeta[c].label,
+        icon: categoryMeta[c].icon,
+        count: uiDesigns.filter((d) => d.category === c).length,
+      })),
+    ];
+  }, []);
+
+  const filtered =
     activeFilter === "all"
       ? uiDesigns
       : uiDesigns.filter((d) => d.category === activeFilter);
 
-  const visibleDesigns = filteredDesigns.slice(0, visibleCount);
-  const remaining = filteredDesigns.length - visibleDesigns.length;
+  const visible = filtered.slice(0, visibleCount);
+  const remaining = filtered.length - visible.length;
+
+  const changeFilter = (value: "all" | UIDesignCategory) => {
+    setActiveFilter(value);
+    setVisibleCount(PAGE_SIZE);
+    setActiveIndex(null);
+  };
+
+  /* ---------- lightbox ---------- */
+
+  const close = useCallback(() => setActiveIndex(null), []);
+
+  const step = useCallback(
+    (dir: 1 | -1) =>
+      setActiveIndex((i) =>
+        i === null
+          ? i
+          : (i + dir + filtered.length) % filtered.length
+      ),
+    [filtered.length]
+  );
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = original;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [activeIndex, close, step]);
+
+  const active = activeIndex !== null ? filtered[activeIndex] : null;
 
   return (
-    <main
-      className="min-h-screen px-4 sm:px-8 py-20 md:py-40 overflow-x-hidden"
-      style={{ backgroundColor: ink, color: paper }}
-    >
-      <style>{`::selection { background: ${brass}; color: ${ink}; }`}</style>
+    <>
+      <Navbar />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <header className="mb-14 md:mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+      <main
+        className="min-h-screen overflow-x-hidden px-6 pb-24 pt-32 md:px-10 md:pt-44 lg:px-12"
+        style={{ backgroundColor: paper, color: ink }}
+      >
+        <style>{`::selection { background: ${accent}; color: ${paper}; }`}</style>
+
+        <div className="mx-auto max-w-[1440px]">
+          {/* HEADER */}
+
+          <header
+            className="grid gap-8 border-b pb-12 md:grid-cols-[1fr_2fr] md:pb-16"
+            style={{ borderColor: hairline }}
           >
-            <div className="flex items-center gap-3 mb-5 md:mb-6">
-              <div className="h-[1px] w-8" style={{ backgroundColor: brass, opacity: 0.5 }} />
-              <span
-                className="font-mono text-[10px] uppercase tracking-[0.35em] font-medium"
-                style={{ color: brass }}
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.25em]"
+              style={{ color: muted }}
+            >
+              UI Gallery
+            </span>
+
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="font-serif text-5xl leading-[0.95] tracking-[-0.045em] md:text-8xl"
               >
-                Gallery
-              </span>
+                Visual{" "}
+                <span className="italic" style={{ color: accent }}>
+                  explorations.
+                </span>
+              </motion.h1>
+
+              <p
+                className="mt-6 max-w-xl text-base leading-relaxed md:text-lg"
+                style={{ color: muted }}
+              >
+                Interfaces, components and smaller experiments that sit
+                outside the case studies.
+              </p>
             </div>
-            <h1 className="font-serif italic text-4xl sm:text-6xl md:text-8xl tracking-tight leading-[0.95]">
-              Visual <br className="hidden sm:block" /> Exploration.
-            </h1>
-          </motion.div>
-        </header>
+          </header>
 
-        {/* Filter bar — underline tabs, same mechanic as the Navbar's hover
-            underline, instead of a boxed pill with a manually-measured indicator */}
-        <div
-          className="flex items-center gap-8 md:gap-10 mb-14 md:mb-20 overflow-x-auto scrollbar-hide"
-          style={{ borderBottom: `1px solid ${hairline}` }}
-        >
-          {filters.map((filter) => {
-            const isActive = activeFilter === filter.value;
-            return (
-              <button
-                key={filter.value}
-                onClick={() => setActiveFilter(filter.value)}
-                className="relative flex items-center gap-2 pb-4 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-medium whitespace-nowrap transition-colors"
-                style={{ color: isActive ? brass : graphite }}
-              >
-                <span className="shrink-0">{filter.icon}</span>
-                {filter.label}
-                {isActive && (
-                  <motion.div
-                    layoutId="ui-filter-underline"
-                    className="absolute -bottom-[1px] left-0 w-full h-[1px]"
-                    style={{ backgroundColor: brass }}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
+          {/* FILTERS */}
 
-        {/* Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-          <AnimatePresence mode="popLayout">
-            {visibleDesigns.map((design, index) => {
+          <div
+            className="flex items-center gap-8 overflow-x-auto border-b md:gap-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{ borderColor: hairline }}
+            role="tablist"
+            aria-label="Filter designs by category"
+          >
+            {filters.map((filter) => {
+              const isActive = activeFilter === filter.value;
               return (
-                <motion.div
-                  layout
-                  key={design.id}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  className="group flex flex-col"
+                <button
+                  key={filter.value}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => changeFilter(filter.value)}
+                  className="relative flex items-center gap-2 whitespace-nowrap py-5 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors"
+                  style={{ color: isActive ? ink : muted }}
                 >
-                  <div
-                    className="relative aspect-[4/3] overflow-hidden"
-                    style={{ border: `1px solid ${hairline}` }}
-                  >
-                    <Image
-                      src={design.image}
-                      alt={design.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  <span style={{ color: isActive ? accent : muted }}>
+                    {filter.icon}
+                  </span>
+                  {filter.label}
+                  <span style={{ color: muted }}>
+                    {String(filter.count).padStart(2, "0")}
+                  </span>
+
+                  {isActive && (
+                    <motion.span
+                      layoutId="ui-filter-underline"
+                      className="absolute -bottom-px left-0 h-px w-full"
+                      style={{ backgroundColor: accent }}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
                     />
-
-                    {/* Index watermark */}
-                    <span
-                      className="absolute top-3 left-3 font-mono text-[10px] tracking-widest"
-                      style={{ color: paper, opacity: 0.6 }}
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 px-0.5 flex justify-between items-start gap-3">
-                    <div className="truncate">
-                      <h3 className="text-base md:text-lg font-medium tracking-tight truncate" style={{ color: paper }}>
-                        {design.title}
-                      </h3>
-                      <p
-                        className="text-xs italic font-serif truncate"
-                        style={{ color: graphite }}
-                      >
-                        {design.subtitle}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
+                  )}
+                </button>
               );
             })}
-          </AnimatePresence>
-        </section>
-
-        {/* Load more — functional now; the old page had this state but no
-            control that ever changed it */}
-        {remaining > 0 && (
-          <div className="flex justify-center mt-16 md:mt-20">
-            <button
-              onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
-              className="font-mono text-[10px] uppercase tracking-[0.2em] font-medium px-6 py-3 rounded-full transition-colors"
-              style={{ color: graphite, border: `1px solid ${hairline}` }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = brass)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = graphite)}
-            >
-              Load More · {remaining} remaining
-            </button>
           </div>
-        )}
 
-        {/* Footer CTA — same button language as Services / Contact / About */}
-        <footer
-          className="mt-32 md:mt-48 text-center py-16"
-          style={{ borderTop: `1px solid ${hairline}` }}
-        >
-          <h2 className="font-serif text-3xl md:text-6xl font-medium tracking-tight mb-10">
-            Want to see{" "}
-            <span className="italic" style={{ color: brass }}>more?</span>
-          </h2>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-mono text-[11px] font-medium uppercase tracking-[0.2em] transition-all duration-300"
-            style={{ backgroundColor: paper, color: ink }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = brass;
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(199,162,92,0.35)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = paper;
-              e.currentTarget.style.boxShadow = "none";
-            }}
+          {/* GRID */}
+
+          {filtered.length === 0 ? (
+            <p
+              className="py-24 text-center text-sm"
+              style={{ color: muted }}
+            >
+              Nothing in this category yet.
+            </p>
+          ) : (
+            <section className="grid grid-cols-1 gap-x-6 gap-y-12 py-12 sm:grid-cols-2 md:gap-x-10 md:py-16 lg:grid-cols-3">
+              <AnimatePresence mode="popLayout">
+                {visible.map((design, index) => (
+                  <motion.button
+                    layout
+                    key={design.id}
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    className="group flex flex-col text-left"
+                    aria-label={`View ${design.title}`}
+                  >
+                    <div
+                      className="relative aspect-[4/3] w-full overflow-hidden border"
+                      style={{
+                        borderColor: hairline,
+                        backgroundColor: "#ECEAE5",
+                      }}
+                    >
+                      <Image
+                        src={design.image}
+                        alt={design.title}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+
+                      <span
+                        className="absolute left-3 top-3 font-mono text-[10px] tracking-[0.15em]"
+                        style={{ color: paper, mixBlendMode: "difference" }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h3 className="truncate font-serif text-xl tracking-[-0.02em] md:text-2xl">
+                          {design.title}
+                        </h3>
+                        <p
+                          className="mt-1 truncate text-sm"
+                          style={{ color: muted }}
+                        >
+                          {design.subtitle}
+                        </p>
+                      </div>
+
+                      <span
+                        className="mt-1 shrink-0 border px-2 py-1 font-mono text-[8px] uppercase tracking-[0.14em]"
+                        style={{ color: muted, borderColor: hairline }}
+                      >
+                        {categoryMeta[design.category]?.label ??
+                          design.category}
+                      </span>
+                    </div>
+                  </motion.button>
+                ))}
+              </AnimatePresence>
+            </section>
+          )}
+
+          {/* LOAD MORE */}
+
+          {remaining > 0 && (
+            <div className="flex justify-center pb-4">
+              <button
+                onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
+                className="border px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:text-[#111111]"
+                style={{ color: muted, borderColor: hairline }}
+              >
+                Load more · {remaining} remaining
+              </button>
+            </div>
+          )}
+
+          {/* CTA */}
+
+          <footer
+            className="mt-24 border-t py-16 text-center md:mt-32"
+            style={{ borderColor: hairline }}
           >
-            Get in touch
-            <ArrowRight size={16} />
-          </Link>
-        </footer>
-      </div>
-    </main>
+            <h2 className="mb-10 font-serif text-4xl tracking-[-0.035em] md:text-6xl">
+              Have a product that needs{" "}
+              <span className="italic" style={{ color: accent }}>
+                clearer design?
+              </span>
+            </h2>
+
+            <Link
+              href="/#contact"
+              className="group inline-flex items-center gap-3 px-8 py-4 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-[#C86B3C]"
+              style={{ backgroundColor: ink, color: paper }}
+            >
+              Get in touch
+              <ArrowRight
+                size={15}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </Link>
+          </footer>
+        </div>
+      </main>
+
+      {/* LIGHTBOX */}
+
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[300] flex flex-col"
+            style={{ backgroundColor: "rgba(17,17,17,0.92)" }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={active.title}
+          >
+            <button
+              className="absolute inset-0 cursor-default"
+              onClick={close}
+              aria-label="Close preview"
+            />
+
+            <div
+              className="relative z-10 flex items-center justify-between px-5 py-4 md:px-8"
+              style={{ color: paper }}
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] opacity-70">
+                {String((activeIndex ?? 0) + 1).padStart(2, "0")} /{" "}
+                {String(filtered.length).padStart(2, "0")}
+              </span>
+
+              <button
+                onClick={close}
+                aria-label="Close preview"
+                className="flex h-9 w-9 items-center justify-center"
+                autoFocus
+              >
+                <X size={20} strokeWidth={1.5} />
+              </button>
+            </div>
+
+            <div className="pointer-events-none relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 md:px-16">
+              <Image
+                src={active.image}
+                alt={active.title}
+                width={1600}
+                height={1200}
+                sizes="100vw"
+                className="pointer-events-auto h-auto max-h-[72vh] w-auto max-w-full object-contain"
+              />
+            </div>
+
+            <div
+              className="relative z-10 flex items-center justify-between gap-6 px-5 py-5 md:px-8"
+              style={{ color: paper }}
+            >
+              <div className="min-w-0">
+                <h3 className="truncate font-serif text-2xl tracking-[-0.02em]">
+                  {active.title}
+                </h3>
+                <p className="mt-1 truncate text-sm opacity-60">
+                  {active.subtitle}
+                </p>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-5">
+                {active.link && (
+                  <a
+                    href={active.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] sm:flex"
+                  >
+                    Open
+                    <ArrowUpRight
+                      size={13}
+                      style={{ color: accent }}
+                    />
+                  </a>
+                )}
+
+                <button
+                  onClick={() => step(-1)}
+                  aria-label="Previous design"
+                  className="flex h-9 w-9 items-center justify-center border border-white/20"
+                >
+                  <ArrowLeft size={16} strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={() => step(1)}
+                  aria-label="Next design"
+                  className="flex h-9 w-9 items-center justify-center border border-white/20"
+                >
+                  <ArrowRight size={16} strokeWidth={1.5} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

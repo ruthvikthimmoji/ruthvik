@@ -1,132 +1,112 @@
 @import "tailwindcss";
 
 /* ----------------------------------
-   DESIGN TOKENS — Ink · Paper · Brass
-   (same palette used across Hero, Navbar, Projects, Contact, Services, etc.)
+   DESIGN TOKENS â€” Ink Â· Paper Â· Terracotta
+   Use as classes: bg-paper text-ink text-muted border-hairline text-accent
 ----------------------------------- */
-:root {
-  /* Base */
-  --background: #0e0e10; /* ink */
-  --foreground: #f3f1ec; /* paper */
+@theme {
+  --color-ink: #111111;
+  --color-paper: #f7f6f2;
+  --color-sunken: #eceae5; /* image placeholders, subtle surfaces */
+  --color-muted: #6f6d68;
+  --color-accent: #c86b3c;
+  --color-accent-hover: #b25a2e;
+  --color-hairline: rgba(17, 17, 17, 0.14);
+  --color-hairline-strong: rgba(17, 17, 17, 0.28);
+  --color-danger: #c0392b;
 
-  /* Text */
-  --text-primary: #f3f1ec;   /* paper */
-  --text-secondary: #8b8985; /* graphite */
-  --text-muted: rgba(243, 241, 236, 0.48);
-
-  /* Brand / Accent */
-  --primary: #c7a25c; /* brass */
-  --primary-hover: #d9b878;
-
-  --accent: #c7a25c;
-  --accent-hover: #d9b878;
-
-  /* Kept distinct from the brand accent — errors shouldn't share the same
-     color as "this is clickable/important" */
-  --danger: #e0654f;
-
-  /* Surfaces & borders */
-  --surface: rgba(255, 255, 255, 0.03);
-  --border: rgba(199, 162, 92, 0.16); /* hairline */
+  /* Aliases so any older component using these names keeps compiling.
+     They now resolve to the new palette. */
+  --color-background: #f7f6f2;
+  --color-foreground: #111111;
+  --color-primary: #c86b3c;
+  --color-primary-hover: #b25a2e;
+  --color-surface: #eceae5;
+  --color-border: rgba(17, 17, 17, 0.14);
 }
 
-/* ----------------------------------
-   TAILWIND THEME INLINE MAPPING
------------------------------------ */
+/* Fonts are provided by next/font in layout.tsx.
+   Each var() has a fallback so a missing font can never invalidate the rule. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-
-  --color-danger: var(--danger);
-
-  --color-surface: var(--surface);
-  --color-border: var(--border);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  /* New — falls back gracefully if --font-fraunces isn't wired up yet in layout.tsx */
-  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-inter, system-ui), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces, Georgia), Georgia, serif;
+  --font-mono: var(--font-geist-mono, ui-monospace), ui-monospace, monospace;
 }
 
 /* ----------------------------------
-   BASE STYLES
+   BASE
 ----------------------------------- */
 html {
+  color-scheme: light;
   scroll-behavior: smooth;
-  scrollbar-color: rgba(199, 162, 92, 0.35) var(--background);
+  scroll-padding-top: 88px; /* clears the fixed navbar on #anchor jumps */
+  scrollbar-color: rgba(17, 17, 17, 0.3) var(--color-paper);
   scrollbar-width: thin;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-inter, system-ui), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ----------------------------------
-   TEXT UTILITIES
------------------------------------ */
-.text-secondary {
-  color: var(--text-secondary);
-}
-
-.text-muted {
-  color: var(--text-muted);
-}
-
-/* ----------------------------------
-   SELECTION
------------------------------------ */
 ::selection {
-  background: var(--accent);
-  color: var(--background);
+  background: var(--color-accent);
+  color: var(--color-paper);
 }
 
 /* ----------------------------------
-   SCROLLBAR — themed instead of the OS default
+   SCROLLBAR
 ----------------------------------- */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--color-paper);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(199, 162, 92, 0.35);
+  background-color: rgba(17, 17, 17, 0.25);
   border-radius: 999px;
-  border: 2px solid var(--background);
+  border: 2px solid var(--color-paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(199, 162, 92, 0.6);
+  background-color: rgba(17, 17, 17, 0.45);
 }
 
 /* ----------------------------------
-   FOCUS RING — only for keyboard nav, not mouse clicks
+   FOCUS â€” keyboard only
 ----------------------------------- */
 :focus {
   outline: none;
 }
 :focus-visible {
-  outline: 1px solid var(--accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 /* ----------------------------------
-   CASE STUDY TYPOGRAPHY
+   LEGACY TEXT UTILITIES (kept for older components)
+----------------------------------- */
+.text-secondary {
+  color: var(--color-muted);
+}
+
+/* ----------------------------------
+   CASE STUDY TYPOGRAPHY (legacy; unused by CaseStudyClient)
 ----------------------------------- */
 .case-study p {
   font-size: 1.05rem;
   line-height: 1.9;
-  color: var(--text-secondary);
+  color: var(--color-muted);
 }
 
 .case-study h2 {
@@ -134,8 +114,8 @@ body {
   margin-top: 4rem;
   margin-bottom: 1rem;
   font-weight: 600;
-  font-family: var(--font-serif);
-  color: var(--text-primary);
+  font-family: var(--font-fraunces, Georgia), Georgia, serif;
+  color: var(--color-ink);
 }
 
 .case-study h3 {
@@ -143,5 +123,5 @@ body {
   margin-top: 2.5rem;
   margin-bottom: 0.75rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--color-ink);
 }
