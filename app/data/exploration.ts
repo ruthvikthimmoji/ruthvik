@@ -19,7 +19,8 @@ export type Exploration = {
   image: string;
   description?: string;
   featured: boolean; // true = shown on the homepage
-  link?: string; // optional Figma / Dribbble / prototype link
+  link?: string; 
+  type: string;// optional Figma / Dribbble / prototype link
 };
 
 export const explorationCategories: ExplorationCategory[] = [
