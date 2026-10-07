@@ -16,7 +16,7 @@ const navItems = [
   { label: "Work", href: "#work" },
   { label: "About", href: "/about" },
 ...(posts.length > 0 ? [{ label: "Writing", href: "/writing" }] : []),
-  { label: "UI", href: "/ui" },
+  { label: "UI", href: "/ui-designs" },
 ];
 
 export default function Navbar() {

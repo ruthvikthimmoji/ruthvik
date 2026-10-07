@@ -17,7 +17,7 @@ import {
   X,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
-import { uiDesigns, type UIDesignCategory } from "../data/ui-designs";
+import { uiDesigns } from "../data/ui-designs";
 
 const ink = "#111111";
 const paper = "#F7F6F2";
