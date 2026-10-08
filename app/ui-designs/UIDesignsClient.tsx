@@ -682,7 +682,7 @@ export default function UIDesignsClient() {
 
                 {/* EXTERNAL LINK */}
 
-                {active.link && (
+                {/* {active.link && (
                   <a
                     href={active.link}
                     target="_blank"
@@ -698,7 +698,7 @@ export default function UIDesignsClient() {
                       }}
                     />
                   </a>
-                )}
+                )} */}
 
                 {/* PREVIOUS */}
 
