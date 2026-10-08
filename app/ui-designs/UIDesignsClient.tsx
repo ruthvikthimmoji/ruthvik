@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+
 import {
   LayoutGrid,
   Smartphone,
@@ -26,6 +27,11 @@ const hairline = "rgba(17, 17, 17, 0.14)";
 const accent = "#C86B3C";
 
 const PAGE_SIZE = 12;
+type UIDesignCategory =
+  | "mobile"
+  | "web"
+  | "dashboard"
+  | "branding";
 
 const categoryMeta: Record<
   UIDesignCategory,
