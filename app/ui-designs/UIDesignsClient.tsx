@@ -31,6 +31,8 @@ type UIDesignCategory =
   | "mobile"
   | "web"
   | "dashboard"
+  |"components"
+  |"concept"
   | "branding";
 
 const categoryMeta: Record<
@@ -42,6 +44,10 @@ const categoryMeta: Record<
   dashboard: { label: "Dashboard", icon: <LayoutDashboard size={13} /> },
   components: { label: "Components", icon: <Box size={13} /> },
   concept: { label: "Concept", icon: <Sparkles size={13} /> },
+  branding: {
+    label: "",
+    icon: undefined
+  }
 };
 
 export default function UIDesignsClient() {
