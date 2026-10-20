@@ -29,10 +29,5 @@ export default async function CaseStudyPage({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <CaseStudyClient
-      project={study}
-      caseStudy={study}
-    />
-  );
+  return <CaseStudyClient project={study} />;
 }
