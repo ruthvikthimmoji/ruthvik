@@ -1,26 +1,18 @@
 import Image from "next/image";
 import type { Block } from "../data/writing";
 
-const ink = "#111111";
-const muted = "#6F6D68";
-const hairline = "rgba(17, 17, 17, 0.14)";
-const accent = "#C86B3C";
-
 function Render({ block }: { block: Block }) {
   switch (block.type) {
     case "h2":
       return (
-        <h2 className="mb-5 mt-14 font-serif text-3xl tracking-[-0.03em] md:text-4xl">
+        <h2 className="mb-5 mt-14 font-display text-3xl font-semibold tracking-[-0.035em] md:text-4xl">
           {block.text}
         </h2>
       );
 
     case "quote":
       return (
-        <blockquote
-          className="my-10 border-l-2 pl-6 font-serif text-2xl italic leading-snug md:text-3xl"
-          style={{ borderColor: accent, color: ink }}
-        >
+        <blockquote className="my-10 border-l-2 border-accent pl-6 font-serif text-2xl italic leading-snug text-ink md:text-3xl">
           {block.text}
         </blockquote>
       );
@@ -31,13 +23,11 @@ function Render({ block }: { block: Block }) {
           {block.items.map((item) => (
             <li
               key={item}
-              className="flex gap-3 text-base leading-relaxed md:text-lg"
-              style={{ color: muted }}
+              className="flex gap-3 text-base leading-relaxed text-ink/80 md:text-lg"
             >
               <span
                 aria-hidden="true"
-                className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full"
-                style={{ backgroundColor: accent }}
+                className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-accent"
               />
               {item}
             </li>
@@ -48,10 +38,7 @@ function Render({ block }: { block: Block }) {
     case "image":
       return (
         <figure className="my-10">
-          <div
-            className="overflow-hidden border"
-            style={{ borderColor: hairline }}
-          >
+          <div className="overflow-hidden rounded-xl border border-hairline bg-sunken">
             <Image
               src={block.src}
               alt={block.alt}
@@ -62,22 +49,15 @@ function Render({ block }: { block: Block }) {
             />
           </div>
           {block.caption && (
-            <figcaption
-              className="mt-3 font-mono text-[10px] uppercase tracking-[0.15em]"
-              style={{ color: muted }}
-            >
-              {block.caption}
-            </figcaption>
+            <figcaption className="frame-label mt-3">{block.caption}</figcaption>
           )}
         </figure>
       );
 
     default:
+      // Long-form reading: slightly brighter than "muted" for comfort in dark mode
       return (
-        <p
-          className="my-6 text-base leading-[1.85] md:text-lg"
-          style={{ color: muted }}
-        >
+        <p className="my-6 text-base leading-[1.85] text-ink/80 md:text-lg">
           {block.text}
         </p>
       );

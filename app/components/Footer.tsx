@@ -1,16 +1,21 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import { Check, Copy, ArrowUp } from "lucide-react";
-import { SOCIAL_LINKS } from "../data/socials";
-
-/* Dark closing section — same ink + terracotta as the Process section. */
-const ink = "#111111";
-const paper = "#F7F6F2";
-const muted = "rgba(247, 246, 242, 0.55)";
-const accent = "#C86B3C";
-const hairline = "rgba(247, 246, 242, 0.14)";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowUp,
+  ArrowUpRight,
+  Check,
+  Clock,
+  Copy,
+  FileDown,
+  Mail,
+  MapPin,
+  Phone,
+  Sparkles,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { SOCIAL_LINKS } from "@/app/data/socials";
+import KineticText from "./KineticText";
 
 const EMAIL = "thimmojiruthvik@gmail.com";
 const PHONE_DISPLAY = "+91 63619 06550";
@@ -22,22 +27,14 @@ type SpecRow = {
   value: string;
   href?: string;
   download?: boolean;
+  icon?: React.ReactNode;
 };
-
-const buildRows = (time: string): SpecRow[] => [
-  { label: "Role", value: "UI/UX Designer" },
-  { label: "Location", value: "Bengaluru, India" },
-  { label: "Local Time", value: time || "—" },
-  { label: "Status", value: "Available" },
-  { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
-  { label: "Phone", value: PHONE_DISPLAY, href: PHONE_HREF },
-  { label: "Resume", value: "Download PDF", href: RESUME, download: true },
-];
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [time, setTime] = useState("");
 
+  /* Local time (Bengaluru) */
   useEffect(() => {
     const update = () =>
       setTime(
@@ -48,7 +45,6 @@ export default function Contact() {
           hour12: true,
         })
       );
-
     update();
     const interval = setInterval(update, 60000);
     return () => clearInterval(interval);
@@ -60,265 +56,294 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard unavailable (permissions / insecure context): open mail instead
       window.location.href = `mailto:${EMAIL}`;
     }
   };
 
-  const rows = buildRows(time);
+  const rows: SpecRow[] = [
+    { label: "Role", value: "Product / UI/UX Designer" },
+    {
+      label: "Location",
+      value: "Bengaluru, India",
+      icon: <MapPin size={12} className="text-accent" />,
+    },
+    {
+      label: "Local Time",
+      value: time ? `${time} IST` : "—",
+      icon: <Clock size={12} className="text-accent" />,
+    },
+    { label: "Status", value: "Available for Roles & Contracts" },
+    {
+      label: "Email",
+      value: EMAIL,
+      href: `mailto:${EMAIL}`,
+      icon: <Mail size={12} className="text-accent" />,
+    },
+    {
+      label: "Phone",
+      value: PHONE_DISPLAY,
+      href: PHONE_HREF,
+      icon: <Phone size={12} className="text-accent" />,
+    },
+    {
+      label: "Résumé",
+      value: "Download Curriculum Vitae",
+      href: RESUME,
+      download: true,
+      icon: <FileDown size={12} className="text-accent" />,
+    },
+  ];
 
   return (
-    <section
+    <footer
       id="contact"
-      className="relative overflow-hidden pb-10 pt-20 md:pt-32"
-      style={{ backgroundColor: ink, color: paper }}
+      className="relative overflow-hidden border-t border-hairline bg-paper pt-24 text-ink md:pt-36"
     >
+      {/* Ambient background atmosphere glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px] md:h-[600px] md:w-[600px] md:blur-[120px]"
-        style={{ backgroundColor: accent, opacity: 0.07 }}
+        className="pointer-events-none absolute right-[-100px] top-[100px] h-[350px] w-[350px] rounded-full bg-accent/10 blur-[120px] md:right-[-120px] md:h-[500px] md:w-[500px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[15%] left-[-150px] h-[350px] w-[350px] rounded-full bg-accent/5 blur-[120px]"
       />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-10 lg:px-12">
-        {/* CTA */}
-
+        {/* ================= HERO CTA ================= */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="mb-28 flex flex-col items-center text-center md:mb-36"
+          className="mb-24 flex flex-col items-center text-center md:mb-32"
         >
-          <span
-            className="mb-8 font-mono text-[10px] uppercase tracking-[0.25em]"
-            style={{ color: muted }}
-          >
-            07 / Contact
-          </span>
-
-          <div
-            className="mb-8 flex w-fit items-center gap-2 border px-4 py-1.5"
-            style={{ borderColor: hairline }}
-          >
+          {/* Availability Status Pill */}
+          <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-hairline bg-sunken/80 px-4 py-2 backdrop-blur-md">
             <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span
-                className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                style={{ backgroundColor: accent }}
-              />
-              <span
-                className="relative inline-flex h-2 w-2 rounded-full"
-                style={{ backgroundColor: accent }}
-              />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            <span
-              className="font-mono text-[10px] uppercase tracking-[0.22em]"
-              style={{ color: muted }}
-            >
-              Taking on new projects
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+              Available for Q1 2027 Opportunities
             </span>
           </div>
 
-          <h2 className="mb-10 max-w-4xl font-serif text-4xl font-medium leading-[1] tracking-[-0.04em] sm:text-5xl md:text-8xl md:leading-[0.92]">
-            Have an idea? <br />
-            Let&rsquo;s make it{" "}
-            <span className="italic" style={{ color: accent }}>
-              obvious.
+          {/* Kinetic Headline */}
+          <h2
+            aria-label="Have an idea? Let’s make it obvious."
+            className="mb-10 max-w-5xl text-4xl leading-[1.02] tracking-[-0.045em] sm:text-6xl md:text-8xl md:leading-[0.92]"
+          >
+            <span className="block">
+              <KineticText
+                text="Have an idea?"
+                base={520}
+                peak={800}
+                className="font-display font-medium"
+              />
+            </span>
+            <span className="block">
+              <KineticText
+                text="Let’s make it"
+                base={520}
+                peak={800}
+                className="font-display font-medium"
+              />{" "}
+              <KineticText
+                text="obvious."
+                base={400}
+                peak={800}
+                className="font-serif italic text-accent"
+              />
             </span>
           </h2>
 
-          {/* Primary action: always opens the mail client */}
+          <p className="mb-10 max-w-lg text-base leading-relaxed text-muted md:text-lg">
+            Whether you need a full SaaS redesign, a cohesive mobile experience, or an early-stage design partner — let’s build something impactful.
+          </p>
 
-          <a
-            href={`mailto:${EMAIL}`}
-            className="group relative inline-block pb-3 text-xl font-medium sm:text-2xl md:text-4xl"
-            style={{ color: paper }}
-          >
-            <span className="relative block overflow-hidden py-1">
-              <span className="block transition-transform duration-500 group-hover:-translate-y-[120%]">
-                Connect via Email
-              </span>
-              <span
+          {/* Connected Action Box */}
+          <div className="flex flex-col items-center gap-4 sm:flex-row">
+            {/* Primary Email Launch Button */}
+            <a
+              href={`mailto:${EMAIL}`}
+              data-cursor="Say hi"
+              className="group inline-flex items-center gap-3 rounded-full bg-ink px-8 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-paper shadow-md transition-all duration-300 hover:opacity-90"
+            >
+              <span>Send Message</span>
+              <ArrowUpRight
+                size={15}
                 aria-hidden="true"
-                className="absolute inset-0 hidden translate-y-full items-center justify-center font-mono text-sm transition-transform duration-500 group-hover:translate-y-0 md:flex md:text-xl"
-                style={{ color: accent }}
-              >
-                {EMAIL}
-              </span>
-            </span>
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </a>
 
-            <span
-              aria-hidden="true"
-              className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
-              style={{ backgroundColor: accent }}
-            />
-          </a>
-
-          {/* Secondary action: copy */}
-
-          <div className="mt-6 flex h-6 items-center">
+            {/* Quick Copy Email Button */}
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors hover:text-[#C86B3C]"
-              style={{ color: copied ? accent : muted }}
+              className="group inline-flex items-center gap-2 rounded-full border border-hairline bg-paper px-6 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted transition-all duration-300 hover:border-hairline-strong hover:text-ink"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {copied ? (
                   <motion.span
                     key="copied"
-                    initial={{ opacity: 0, y: 4 }}
+                    initial={{ opacity: 0, y: 3 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    className="flex items-center gap-2"
+                    exit={{ opacity: 0, y: -3 }}
+                    className="flex items-center gap-2 text-accent"
                   >
-                    <Check size={12} aria-hidden="true" />
-                    Copied
+                    <Check size={14} aria-hidden="true" />
+                    Copied to clipboard
                   </motion.span>
                 ) : (
                   <motion.span
                     key="copy"
-                    initial={{ opacity: 0, y: 4 }}
+                    initial={{ opacity: 0, y: 3 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
+                    exit={{ opacity: 0, y: -3 }}
                     className="flex items-center gap-2"
                   >
-                    <Copy size={12} aria-hidden="true" />
-                    Copy email
+                    <Copy size={13} aria-hidden="true" />
+                    Copy Email
                   </motion.span>
                 )}
               </AnimatePresence>
             </button>
-
-            <span className="sr-only" aria-live="polite">
-              {copied ? "Email copied to clipboard" : ""}
-            </span>
           </div>
         </motion.div>
 
-        {/* COLOPHON */}
-
-        <div style={{ borderTop: `1px solid ${hairline}` }}>
-          <div className="grid grid-cols-1 gap-10 pb-14 pt-14 md:grid-cols-12 md:gap-16 md:pb-16 md:pt-16">
+        {/* ================= SPECIFICATIONS & DOSSIER ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="border-t border-hairline py-12 md:py-16"
+        >
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-16">
+            {/* Left Bio Column */}
             <div className="flex flex-col justify-between md:col-span-5">
               <div>
-                <h3 className="mb-5 font-serif text-3xl font-medium tracking-[-0.03em] md:text-4xl">
-                  Ruthvik Thimmoji
-                  <span style={{ color: accent }}>.</span>
+                <span className="frame-label">Design Dossier</span>
+
+                <h3 className="mt-4 font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl md:text-5xl">
+                  Ruthvik Thimmoji<span className="text-accent">.</span>
                 </h3>
-                <p
-                  className="max-w-xs text-sm leading-relaxed"
-                  style={{ color: muted }}
-                >
-                  I design functional, aesthetic digital products that
-                  stand the test of time.
+
+                <p className="mt-4 max-w-sm text-base leading-relaxed text-muted">
+                  Product Designer crafting rigorous, usable digital systems that solve real business problems without unnecessary friction.
                 </p>
               </div>
 
-              <nav
-                aria-label="Social links"
-                className="mt-10 hidden flex-wrap gap-x-5 gap-y-2 md:flex"
-              >
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-[10px] uppercase tracking-[0.15em] transition-colors hover:text-[#C86B3C]"
-                    style={{ color: muted }}
-                  >
-                    {link.name}
-                  </a>
-                ))}
-              </nav>
+              {/* Desktop Social Links */}
+              <div className="mt-10 hidden space-y-3 md:block">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                  Network &amp; Socials
+                </span>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {SOCIAL_LINKS.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-1.5 rounded-full border border-hairline bg-paper px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted transition-all duration-300 hover:border-accent hover:text-accent"
+                    >
+                      <span>{link.name}</span>
+                      <ArrowUpRight
+                        size={10}
+                        aria-hidden="true"
+                        className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
 
+            {/* Right Specifications Table */}
             <div className="md:col-span-7">
-              <div style={{ borderTop: `1px solid ${hairline}` }}>
+              <dl className="overflow-hidden rounded-xl border border-hairline bg-sunken/40 shadow-sm">
                 {rows.map((row) => (
                   <div
                     key={row.label}
-                    className="flex items-center justify-between gap-6 py-3.5 md:py-4"
-                    style={{ borderBottom: `1px solid ${hairline}` }}
+                    className="flex items-center justify-between gap-6 border-b border-hairline px-5 py-4 transition-colors duration-200 hover:bg-paper/40 last:border-b-0 md:px-6 md:py-4.5"
                   >
-                    <span
-                      className="shrink-0 font-mono text-[10px] uppercase tracking-[0.22em]"
-                      style={{ color: accent }}
-                    >
+                    <dt className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                      {row.icon}
                       {row.label}
-                    </span>
+                    </dt>
 
-                    {row.href ? (
-                      <a
-                        href={row.href}
-                        download={row.download ? true : undefined}
-                        className="truncate text-right text-sm transition-colors hover:text-[#C86B3C]"
-                        style={{ color: paper }}
-                      >
-                        {row.value}
-                      </a>
-                    ) : (
-                      <span
-                        className="truncate text-right text-sm"
-                        style={{ color: muted }}
-                      >
-                        {row.value}
-                      </span>
-                    )}
+                    <dd className="min-w-0 text-right text-sm">
+                      {row.href ? (
+                        <a
+                          href={row.href}
+                          download={row.download ? true : undefined}
+                          className="group inline-flex max-w-full items-center gap-2 font-medium text-ink transition-colors duration-200 hover:text-accent"
+                        >
+                          <span className="truncate">{row.value}</span>
+                          <ArrowUpRight
+                            size={13}
+                            aria-hidden="true"
+                            className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-accent"
+                          />
+                        </a>
+                      ) : (
+                        <span className="block truncate font-medium text-muted">
+                          {row.value}
+                        </span>
+                      )}
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
 
-              <nav
-                aria-label="Social links"
-                className="mt-6 flex flex-wrap gap-x-5 gap-y-2 md:hidden"
-              >
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-[10px] uppercase tracking-[0.15em]"
-                    style={{ color: muted }}
-                  >
-                    {link.name}
-                  </a>
-                ))}
-              </nav>
+              {/* Mobile Social Links */}
+              <div className="mt-8 space-y-3 md:hidden">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                  Network &amp; Socials
+                </span>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {SOCIAL_LINKS.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-1.5 rounded-full border border-hairline bg-paper px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted transition-all hover:border-accent hover:text-accent"
+                    >
+                      <span>{link.name}</span>
+                      <ArrowUpRight size={10} aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* CLOSING LINE */}
-
-          <div
-            className="flex items-center justify-between gap-6 pb-2 pt-6"
-            style={{ borderTop: `1px solid ${hairline}` }}
-          >
-            <span
-              className="font-mono text-[10px] uppercase tracking-[0.22em]"
-              style={{ color: muted }}
-            >
-              © 2026 Ruthvik Thimmoji
-            </span>
+          {/* ================= COPYRIGHT BOTTOM BAR ================= */}
+          <div className="mt-12 flex flex-col gap-4 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="frame-label">© 2026 Ruthvik Thimmoji</span>
+            </div>
 
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0 })}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label="Back to top"
-              className="group flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors hover:text-[#C86B3C]"
-              style={{ color: muted }}
+              className="group flex items-center gap-2 self-start rounded-full border border-hairline bg-paper px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted transition-all duration-300 hover:border-accent hover:text-ink sm:self-auto"
             >
               Back to top
               <ArrowUp
-                size={11}
+                size={12}
                 aria-hidden="true"
-                className="transition-transform group-hover:-translate-y-0.5"
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 text-accent"
               />
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </footer>
   );
 }

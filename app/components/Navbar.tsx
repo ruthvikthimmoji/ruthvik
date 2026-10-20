@@ -1,553 +1,291 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
+import { ArrowUpRight, Download, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { posts } from "@/app/data/writing";
-import { Menu, X, ArrowUpRight, Download } from "lucide-react";
+import { useIsMac } from "@/app/lib/use-is-mac";
+import ThemeToggle from "./ThemeToggle";
 
-const ink = "#111111";
-const paper = "#F7F6F2";
-const muted = "#6F6D68";
-const hairline = "rgba(17, 17, 17, 0.14)";
-const accent = "#C86B3C";
-
+// "/#work" (not "#work") so the link also works from case study and other pages
 const navItems = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "/#work" },
   { label: "About", href: "/about" },
-...(posts.length > 0 ? [{ label: "Writing", href: "/writing" }] : []),
+  ...(posts.length > 0 ? [{ label: "Writing", href: "/writing" }] : []),
   { label: "UI", href: "/ui-designs" },
 ];
 
+const openPalette = () =>
+  window.dispatchEvent(new Event("open-command-palette"));
+
 export default function Navbar() {
+  const pathname = usePathname();
+  const isMac = useIsMac();
+
   const [open, setOpen] = useState(false);
   const [resumeOpen, setResumeOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
 
-  /* ================================================================
-     SCROLL STATE
-  ================================================================ */
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 20));
 
+  /* Close mobile menu when resizing to desktop */
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false);
     };
-
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  /* ================================================================
-     CLOSE MOBILE MENU ON DESKTOP
-  ================================================================ */
-
+  /* Command palette can ask the navbar to open the résumé */
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    const onOpenResume = () => setResumeOpen(true);
+    window.addEventListener("open-resume", onOpenResume);
+    return () => window.removeEventListener("open-resume", onOpenResume);
   }, []);
 
-  /* ================================================================
-     LOCK BODY WHEN MENU / RESUME IS OPEN
-  ================================================================ */
-
+  /* Lock body scroll + Esc to close while menu / résumé is open */
   useEffect(() => {
     if (!open && !resumeOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-
+    const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         setOpen(false);
         setResumeOpen(false);
       }
     };
-
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKey);
 
     return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = original;
+      window.removeEventListener("keydown", onKey);
     };
   }, [open, resumeOpen]);
 
-  /* ================================================================
-     HELPERS
-  ================================================================ */
-
-  const closeMenu = () => {
-    setOpen(false);
-  };
-
+  const closeMenu = () => setOpen(false);
   const openResume = () => {
     setOpen(false);
     setResumeOpen(true);
   };
 
+  const isActive = (href: string) =>
+    !href.includes("#") && pathname.startsWith(href);
+
   return (
     <>
-      {/* ================================================================
-          NAVBAR
-      ================================================================ */}
-
       <motion.header
-        initial={{
-          y: -20,
-          opacity: 0,
-        }}
-        animate={{
-          y: 0,
-          opacity: 1,
-        }}
-        transition={{
-          duration: 0.7,
-          ease: [0.16, 1, 0.3, 1],
-        }}
-        className="fixed inset-x-0 top-0 z-[100]"
-        style={{
-          backgroundColor: scrolled
-            ? "rgba(247, 246, 242, 0.92)"
-            : paper,
-          backdropFilter: scrolled ? "blur(14px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
-          borderBottom: `1px solid ${hairline}`,
-        }}
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed inset-x-0 top-0 z-[100] border-b transition-colors duration-300 ${
+          scrolled
+            ? "border-hairline bg-paper/80 backdrop-blur-xl"
+            : "border-transparent bg-paper"
+        }`}
       >
         <nav
-          className="
-            mx-auto flex h-[72px] w-full max-w-[1440px]
-            items-center justify-between
-            px-6
-            md:h-[80px] md:px-10
-            lg:px-12
-          "
           aria-label="Main navigation"
+          className="mx-auto flex h-[72px] w-full max-w-[1440px] items-center justify-between px-6 md:h-[80px] md:px-10 lg:px-12"
         >
-          {/* ============================================================
-              LOGO
-          ============================================================ */}
-
+          {/* Logo */}
           <Link
             href="/"
             onClick={closeMenu}
+            aria-label="Ruthvik, home"
             className="group flex items-center gap-2"
-            aria-label="Ruthvik — Home"
           >
-            <span
-              className="
-                font-serif text-[18px]
-                tracking-[-0.02em]
-                md:text-[20px]
-              "
-              style={{
-                color: ink,
-              }}
-            >
+            <span className="font-display text-[20px] font-semibold tracking-[-0.03em] text-ink md:text-[22px]">
               Ruthvik
             </span>
-
             <span
               aria-hidden="true"
-              className="
-                h-1.5 w-1.5 rounded-full
-                transition-transform duration-300
-                group-hover:scale-[1.7]
-              "
-              style={{
-                backgroundColor: accent,
-              }}
+              className="h-1.5 w-1.5 rounded-full bg-accent transition-transform duration-300 group-hover:scale-[1.7]"
             />
           </Link>
 
-          {/* ============================================================
-              DESKTOP NAVIGATION
-          ============================================================ */}
-
-          <div className="hidden items-center md:flex">
-            <div className="flex items-center gap-8">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="
-                    group relative
-                    py-2
-                    font-mono text-[10px]
-                    uppercase tracking-[0.18em]
-                  "
-                  style={{
-                    color: muted,
-                  }}
-                >
-                  <span
-                    className="
-                      transition-colors duration-300
-                      group-hover:text-[#111111]
-                    "
+          {/* Desktop links: hover pill slides between items, like a Figma toolbar */}
+          <ul
+            className="hidden items-center gap-1 md:flex"
+            onMouseLeave={() => setHovered(null)}
+          >
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    onMouseEnter={() => setHovered(item.label)}
+                    onFocus={() => setHovered(item.label)}
+                    onBlur={() => setHovered(null)}
+                    className="relative block rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em]"
                   >
-                    {item.label}
-                  </span>
+                    {hovered === item.label && (
+                      <motion.span
+                        layoutId="nav-hover"
+                        aria-hidden="true"
+                        className="absolute inset-0 rounded-full bg-sunken"
+                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                      />
+                    )}
+                    <span
+                      className={`relative transition-colors ${
+                        active || hovered === item.label ? "text-ink" : "text-muted"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    {active && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent"
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
-                  {/* Hairline hover indicator */}
+          {/* Right cluster */}
+          <div className="flex items-center gap-2 md:gap-3">
+            <button
+              type="button"
+              onClick={openPalette}
+              aria-label="Open command palette"
+              className="hidden items-center gap-3 rounded-full border border-hairline bg-sunken/60 py-2 pl-4 pr-2 text-muted transition-colors hover:border-hairline-strong hover:text-ink lg:flex"
+            >
+              <Search size={14} strokeWidth={1.5} aria-hidden="true" />
+              <span className="font-mono text-[11px]">Jump to…</span>
+              <kbd className="rounded-full border border-hairline px-2 py-0.5 font-mono text-[10px]">
+                {isMac ? "⌘K" : "Ctrl K"}
+              </kbd>
+            </button>
 
-                  <span
-                    aria-hidden="true"
-                    className="
-                      absolute bottom-0 left-0
-                      h-px w-full
-                      origin-left scale-x-0
-                      transition-transform duration-300
-                      group-hover:scale-x-100
-                    "
-                    style={{
-                      backgroundColor: accent,
-                    }}
-                  />
-                </Link>
-              ))}
-            </div>
-
-            {/* Divider */}
-
-            <span
-              aria-hidden="true"
-              className="mx-7 h-6 w-px"
-              style={{
-                backgroundColor: hairline,
-              }}
-            />
-
-            {/* Resume */}
+            <ThemeToggle className="hidden md:flex" />
 
             <button
+              type="button"
               onClick={() => setResumeOpen(true)}
-              className="
-                group flex items-center gap-2
-                py-2
-                font-mono text-[10px]
-                uppercase tracking-[0.18em]
-              "
-              style={{
-                color: muted,
-              }}
-              aria-label="Open resume"
+              aria-label="Open résumé"
+              className="group hidden items-center gap-2 rounded-full bg-ink px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-85 md:flex"
             >
-              <span
-                className="
-                  transition-colors duration-300
-                  group-hover:text-[#111111]
-                "
-              >
-                Resume
-              </span>
-
+              Résumé
               <ArrowUpRight
                 size={12}
-                strokeWidth={1.5}
+                strokeWidth={1.75}
                 aria-hidden="true"
-                className="
-                  transition-transform duration-300
-                  group-hover:-translate-y-0.5
-                  group-hover:translate-x-0.5
-                "
-                style={{
-                  color: accent,
-                }}
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               />
             </button>
-          </div>
 
-          {/* ============================================================
-              MOBILE MENU BUTTON
-          ============================================================ */}
-
-          <button
-            onClick={() => setOpen((value) => !value)}
-            className="
-              flex h-9 w-9
-              items-center justify-center
-              md:hidden
-            "
-            style={{
-              color: ink,
-            }}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-navigation"
-          >
-            <AnimatePresence
-              mode="wait"
-              initial={false}
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-navigation"
+              className="flex h-9 w-9 items-center justify-center text-ink md:hidden"
             >
-              {open ? (
-                <motion.span
-                  key="close"
-                  initial={{
-                    opacity: 0,
-                    rotate: -45,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: 45,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
-                >
-                  <X
-                    size={20}
-                    strokeWidth={1.5}
-                  />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="menu"
-                  initial={{
-                    opacity: 0,
-                    rotate: 45,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: -45,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
-                >
-                  <Menu
-                    size={20}
-                    strokeWidth={1.5}
-                  />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+              <AnimatePresence mode="wait" initial={false}>
+                {open ? (
+                  <motion.span
+                    key="close"
+                    initial={{ opacity: 0, rotate: -45 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 45 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X size={20} strokeWidth={1.5} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 45 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -45 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu size={20} strokeWidth={1.5} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </nav>
 
-        {/* ================================================================
-            MOBILE MENU
-        ================================================================ */}
-
+        {/* Mobile menu */}
         <AnimatePresence>
           {open && (
             <motion.div
               id="mobile-navigation"
-              initial={{
-                height: 0,
-                opacity: 0,
-              }}
-              animate={{
-                height: "auto",
-                opacity: 1,
-              }}
-              exit={{
-                height: 0,
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.4,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="overflow-hidden md:hidden"
-              style={{
-                borderTop: `1px solid ${hairline}`,
-                backgroundColor: paper,
-              }}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden border-t border-hairline bg-paper md:hidden"
             >
               <div className="px-6 pb-8 pt-2">
-                {/* Navigation links */}
-
-                <div>
-                  {navItems.map((item, index) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="
-                        group flex items-center
-                        justify-between
-                        border-b py-5
-                      "
-                      style={{
-                        borderColor: hairline,
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <span
-                          className="
-                            font-mono text-[9px]
-                            tracking-[0.15em]
-                          "
-                          style={{
-                            color: accent,
-                          }}
-                        >
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-
-                        <span
-                          className="
-                            font-serif text-3xl
-                            tracking-[-0.03em]
-                            transition-transform duration-300
-                            group-hover:translate-x-1
-                          "
-                          style={{
-                            color: ink,
-                          }}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-
-                      <ArrowUpRight
-                        size={18}
-                        strokeWidth={1.2}
-                        aria-hidden="true"
-                        className="
-                          transition-transform duration-300
-                          group-hover:-translate-y-1
-                          group-hover:translate-x-1
-                        "
-                        style={{
-                          color: muted,
-                        }}
-                      />
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Resume */}
+                {navItems.map((item, index) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className="group flex items-center justify-between border-b border-hairline py-5"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="font-mono text-[10px] tracking-[0.15em] text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-display text-3xl font-medium tracking-[-0.03em] text-ink transition-transform duration-300 group-hover:translate-x-1">
+                        {item.label}
+                      </span>
+                    </div>
+                    <ArrowUpRight
+                      size={18}
+                      strokeWidth={1.2}
+                      aria-hidden="true"
+                      className="text-muted transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+                    />
+                  </Link>
+                ))}
 
                 <button
+                  type="button"
                   onClick={openResume}
-                  className="
-                    mt-0 flex w-full
-                    items-center justify-between
-                    border-b py-5 text-left
-                  "
-                  style={{
-                    borderColor: hairline,
-                  }}
+                  className="flex w-full items-center justify-between border-b border-hairline py-5 text-left"
                 >
                   <div className="flex items-center gap-4">
-                    <span
-                      className="
-                        font-mono text-[9px]
-                        tracking-[0.15em]
-                      "
-                      style={{
-                        color: accent,
-                      }}
-                    >
-                      05
+                    <span className="font-mono text-[10px] tracking-[0.15em] text-accent">
+                      {String(navItems.length + 1).padStart(2, "0")}
                     </span>
-
-                    <span
-                      className="
-                        font-serif text-3xl
-                        tracking-[-0.03em]
-                      "
-                      style={{
-                        color: ink,
-                      }}
-                    >
-                      Resume
+                    <span className="font-display text-3xl font-medium tracking-[-0.03em] text-ink">
+                      Résumé
                     </span>
                   </div>
-
-                  <ArrowUpRight
-                    size={18}
-                    strokeWidth={1.2}
-                    aria-hidden="true"
-                    style={{
-                      color: muted,
-                    }}
-                  />
+                  <ArrowUpRight size={18} strokeWidth={1.2} aria-hidden="true" className="text-muted" />
                 </button>
 
-                {/* ========================================================
-                    CURRENT STATUS
-                ======================================================== */}
-
-                <div className="mt-8 grid grid-cols-2 gap-6">
+                <div className="mt-8 flex items-end justify-between gap-6">
                   <div>
-                    <span
-                      className="
-                        font-mono text-[8px]
-                        uppercase tracking-[0.2em]
-                      "
-                      style={{
-                        color: muted,
-                      }}
-                    >
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
                       Currently
                     </span>
-
-                    <p className="mt-2 text-sm font-medium">
-                      UX/UI Designer
-                    </p>
-
-                    <p
-                      className="mt-1 text-xs"
-                      style={{
-                        color: muted,
-                      }}
-                    >
-                      Studycrux
-                    </p>
+                    <p className="mt-2 text-sm font-medium text-ink">UX/UI Designer</p>
+                    <p className="mt-1 text-xs text-muted">Studycrux</p>
                   </div>
-
-                  <div>
-                    <span
-                      className="
-                        font-mono text-[8px]
-                        uppercase tracking-[0.2em]
-                      "
-                      style={{
-                        color: muted,
-                      }}
-                    >
-                      Focus
-                    </span>
-
-                    <p
-                      className="
-                        mt-2 text-xs
-                        leading-relaxed
-                      "
-                      style={{
-                        color: muted,
-                      }}
-                    >
-                      SaaS · Product UI
-                      <br />
-                      Design Systems · Mobile
-                    </p>
-                  </div>
+                  <ThemeToggle />
                 </div>
               </div>
             </motion.div>
@@ -555,193 +293,63 @@ export default function Navbar() {
         </AnimatePresence>
       </motion.header>
 
-      {/* ================================================================
-          RESUME PREVIEW
-      ================================================================ */}
-
+      {/* Résumé preview */}
       <AnimatePresence>
         {resumeOpen && (
           <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            className="
-              fixed inset-0 z-[200]
-              flex items-center
-              justify-center
-              p-4 md:p-8
-            "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
           >
-            {/* Backdrop */}
-
-            <motion.button
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              aria-label="Close resume preview"
+            <button
+              type="button"
+              aria-label="Close résumé preview"
               onClick={() => setResumeOpen(false)}
-              className="
-                absolute inset-0
-                cursor-default
-              "
-              style={{
-                backgroundColor: "rgba(17, 17, 17, 0.78)",
-              }}
+              className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
             />
 
-            {/* Resume window */}
-
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-                scale: 0.98,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                y: 20,
-                scale: 0.98,
-              }}
-              transition={{
-                duration: 0.35,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="
-                relative flex
-                h-[88vh] w-full
-                max-w-4xl
-                flex-col overflow-hidden
-              "
-              style={{
-                backgroundColor: paper,
-                border:
-                  "1px solid rgba(247, 246, 242, 0.2)",
-                boxShadow:
-                  "0 30px 100px rgba(0,0,0,0.35)",
-              }}
               role="dialog"
               aria-modal="true"
-              aria-label="Ruthvik resume"
+              aria-label="Ruthvik résumé"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="relative flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-hairline-strong bg-paper shadow-2xl"
             >
-              {/* Resume toolbar */}
-
-              <div
-                className="
-                  flex shrink-0
-                  items-center
-                  justify-between
-                  px-5 py-4
-                  md:px-6
-                "
-                style={{
-                  borderBottom: `1px solid ${hairline}`,
-                }}
-              >
+              <div className="flex shrink-0 items-center justify-between border-b border-hairline px-5 py-4 md:px-6">
                 <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="h-1.5 w-1.5 rounded-full"
-                    style={{
-                      backgroundColor: accent,
-                    }}
-                  />
-
-                  <span
-                    className="
-                      font-mono text-[9px]
-                      uppercase tracking-[0.22em]
-                    "
-                    style={{
-                      color: muted,
-                    }}
-                  >
-                    Resume / Ruthvik
-                  </span>
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span className="frame-label">Résumé / Ruthvik</span>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  {/* Download */}
-
                   <a
                     href="/Ruthvikresume.pdf"
                     download
-                    className="
-                      group flex items-center gap-2
-                      font-mono text-[9px]
-                      uppercase tracking-[0.18em]
-                    "
-                    style={{
-                      color: muted,
-                    }}
+                    className="group flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted transition-colors hover:text-ink"
                   >
-                    <span
-                      className="
-                        transition-colors
-                        group-hover:text-[#111111]
-                      "
-                    >
-                      Download
-                    </span>
-
-                    <Download
-                      size={12}
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                      style={{
-                        color: accent,
-                      }}
-                    />
+                    Download
+                    <Download size={12} strokeWidth={1.5} aria-hidden="true" className="text-accent" />
                   </a>
-
-                  {/* Close */}
-
                   <button
+                    type="button"
                     onClick={() => setResumeOpen(false)}
-                    aria-label="Close resume preview"
-                    className="
-                      flex h-8 w-8
-                      items-center
-                      justify-center
-                    "
-                    style={{
-                      color: muted,
-                    }}
+                    aria-label="Close résumé preview"
+                    className="flex h-8 w-8 items-center justify-center text-muted transition-colors hover:text-ink"
                   >
-                    <X
-                      size={18}
-                      strokeWidth={1.5}
-                    />
+                    <X size={18} strokeWidth={1.5} />
                   </button>
                 </div>
               </div>
 
-              {/* Resume */}
-
               <div className="min-h-0 flex-1 bg-white">
                 <iframe
                   src="/Ruthvikresume.pdf#toolbar=0"
-                  title="Ruthvik resume"
-                  className="
-                    h-full w-full
-                    border-none
-                  "
+                  title="Ruthvik résumé"
+                  className="h-full w-full border-none"
                 />
               </div>
             </motion.div>

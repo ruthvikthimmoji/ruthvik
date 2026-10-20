@@ -1,87 +1,124 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 const steps = [
   {
     number: "01",
     title: "Understand",
     description:
-      "Understand users, business goals, constraints and the context behind the problem.",
+      "Understand users, business goals, and context before touching visual design.",
+    ask: "What is quietly losing users today?",
+    outputs: ["UX audit", "Friction mapping", "Problem framing"],
   },
   {
     number: "02",
     title: "Structure",
     description:
-      "Map flows, information architecture and interaction patterns before visual execution.",
+      "Map flows, information architecture, and interactions before visual execution.",
+    ask: "What should the user do next, at every step?",
+    outputs: ["User flows", "IA mapping", "Lo-fi wireframes"],
   },
   {
     number: "03",
     title: "Design",
     description:
-      "Turn the structure into clear interfaces, components and responsive experiences.",
+      "Translate wireframes into responsive systems, design tokens, and dev-ready UI.",
+    ask: "What can engineers build without guessing?",
+    outputs: ["Design systems", "Component variants", "Hi-fi UI"],
   },
   {
     number: "04",
     title: "Iterate",
     description:
-      "Test, gather feedback and refine the experience instead of treating the first version as final.",
+      "Prototype, test with real users, and refine based on feedback and engineering handoff.",
+    ask: "What did we get wrong in version one?",
+    outputs: ["Interactive prototypes", "Usability rounds", "Dev specs"],
   },
 ];
 
 export default function Process() {
   return (
-    <section
-      id="process"
-      className="border-t bg-[#111111] text-[#F7F6F2]"
-    >
+    <section id="process" className="relative border-t border-hairline bg-paper text-ink">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-12">
-
-        <div className="grid border-b border-white/[0.14] py-8 md:grid-cols-[1fr_2fr] md:py-10">
-          <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">
-              03 / How I work
+        {/* Compact Header */}
+        <div className="grid items-baseline gap-4 border-b border-hairline py-8 md:grid-cols-[1fr_2.5fr] md:py-10">
+          <div className="flex items-center gap-3">
+            <span className="frame-label">04 / Methodology</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
+              4 Phases
             </span>
           </div>
 
-          <div>
-            <p className="max-w-xl text-sm leading-relaxed text-white/50 md:text-base">
-              I like understanding the problem before jumping into
-              polished screens. The process changes with the product,
-              but the thinking stays structured.
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-baseline">
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+              From ambiguity to predictable execution.
+            </h2>
+            <p className="max-w-md text-xs leading-relaxed text-muted sm:text-sm">
+              Structured thinking upfront saves engineering cycles downstream.
             </p>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, index) => (
-            <motion.div
+        {/* Compact 4-Column Pipeline Grid */}
+        <div className="grid grid-cols-1 divide-y divide-hairline border-b border-hairline sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
+          {steps.map((step, i) => (
+            <motion.article
               key={step.number}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{
-                once: true,
-                amount: 0.2,
-              }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.08,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="border-b border-white/[0.14] py-10 md:border-r md:px-7 lg:min-h-[280px] lg:py-12"
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="group relative flex flex-col justify-between p-6 transition-colors duration-300 hover:bg-sunken/40 md:p-8"
             >
-              <span className="font-mono text-[10px] text-[#C86B3C]">
-                {step.number}
-              </span>
+              {/* Top Meta Bar */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold tracking-[0.2em] text-accent">
+                    {step.number}
+                  </span>
+                  {i < steps.length - 1 && (
+                    <ArrowRight
+                      size={13}
+                      className="hidden text-hairline-strong opacity-40 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-accent group-hover:opacity-100 lg:block"
+                    />
+                  )}
+                </div>
 
-              <h3 className="mt-8 font-serif text-3xl tracking-[-0.03em]">
-                {step.title}
-              </h3>
+                {/* Step Title */}
+                <h3 className="mt-4 font-display text-xl font-semibold tracking-[-0.02em] text-ink transition-colors duration-200 group-hover:text-accent sm:text-2xl">
+                  {step.title}
+                </h3>
 
-              <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/50">
-                {step.description}
-              </p>
-            </motion.div>
+                {/* Core Guiding Question */}
+                <p className="mt-3 font-serif text-sm italic leading-snug text-accent">
+                  “{step.ask}”
+                </p>
+
+                {/* Concise Description */}
+                <p className="mt-3 text-xs leading-relaxed text-muted sm:text-sm">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Bottom Deliverables Chips */}
+              <div className="mt-8 border-t border-hairline pt-4">
+                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                  Outputs
+                </span>
+                <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                  {step.outputs.map((out) => (
+                    <li
+                      key={out}
+                      className="rounded-md border border-hairline bg-paper/60 px-2 py-0.5 font-mono text-[10px] text-muted transition-colors group-hover:border-hairline-strong group-hover:text-ink"
+                    >
+                      {out}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.article>
           ))}
         </div>
       </div>

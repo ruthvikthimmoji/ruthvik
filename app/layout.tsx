@@ -1,7 +1,13 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces, Geist_Mono } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Fraunces,
+  Geist_Mono,
+  Inter,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import CommandPalette from "./components/CommandPalette";
 import SignatureCursor from "./components/SignatureCursor";
 
 const inter = Inter({
@@ -9,6 +15,14 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+/* Display font: variable weight, used for big kinetic headlines */
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+});
+
+/* Legacy: still used by sections that haven't been migrated yet.
+   Remove once nothing uses `font-serif`. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   style: ["normal", "italic"],
@@ -20,13 +34,17 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-/* Set NEXT_PUBLIC_SITE_URL in Vercel (e.g. https://yourdomain.com).
-   Needed so OpenGraph images resolve to absolute URLs. */
+/* Absolute URL base for OpenGraph images.
+   Priority: your own NEXT_PUBLIC_SITE_URL, then the Vercel production URL
+   (set automatically on Vercel), then localhost for local dev. This is what
+   fixes the localhost:3000 links in your social previews. */
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
 
-const title =
-  "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps";
+const title = "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps";
 
 const description =
   "UI/UX designer helping startups and SaaS teams design clean, conversion-focused digital products.";
@@ -65,8 +83,21 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F7F6F2",
+  themeColor: "#0D0D0E",
 };
+
+/* Runs before first paint so there is no light-to-dark flash.
+   Dark is the default; a saved choice in localStorage wins. */
+const themeScript = `
+(function () {
+  try {
+    var t = localStorage.getItem("theme");
+    document.documentElement.dataset.theme = t === "light" ? "light" : "dark";
+  } catch (e) {
+    document.documentElement.dataset.theme = "dark";
+  }
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -76,10 +107,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${geistMono.variable}`}
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${inter.variable} ${bricolage.variable} ${fraunces.variable} ${geistMono.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="relative overflow-x-hidden bg-paper font-sans text-ink">
         <SignatureCursor />
+        <CommandPalette />
 
         {children}
 

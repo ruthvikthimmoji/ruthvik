@@ -1,245 +1,265 @@
-// app/data/uidesigns.ts
-export const uiDesigns = [
-   {
-    id: "33",
-  title: "Tripmate Travelling app",
-    subtitle: "your travelling partner",
-    image: "/ui/trip1.png",
-    category: "mobile", 
-  },
-  
+/**
+ * UI gallery data (app/ui-designs).
+ * Files live in /public/ui/. Order here = display order.
+ *
+ * `category` can be one value or several (e.g. ["web", "mobile"]); the item
+ * then shows under each of those filters.
+ */
+
+export type UIDesignCategory =
+  | "mobile"
+  | "web"
+  | "dashboard"
+  | "components"
+  | "concept"
+  | "branding";
+
+export type UIDesign = {
+  id: string; // must be unique
+  title: string;
+  subtitle?: string;
+  image: string;
+  category: UIDesignCategory | UIDesignCategory[];
+  link?: string; // optional external link (Figma / Dribbble) shown in the lightbox
+};
+
+export const categoriesOf = (design: UIDesign): UIDesignCategory[] =>
+  Array.isArray(design.category) ? design.category : [design.category];
+
+export const uiDesigns: UIDesign[] = [
   {
-    id: 1,
+    id: "33",
+    title: "Tripmate Travelling App",
+    subtitle: "Your travelling partner",
+    image: "/ui/trip1.png",
+    category: "mobile",
+  },
+  {
+    id: "1",
     title: "Insurance Application UI",
     subtitle: "Mobile Interface",
-    image: "/ui/insuapp.png", // make sure this image exists in /public/ui/
-    // link: "/case-study/dashboard-concept", // optional
-    category: "mobile", 
-
+    image: "/ui/insuapp.png",
+    category: "mobile",
   },
-   {
+  {
     id: "27",
-  title: "JuzzPay",
+    title: "JuzzPay",
     subtitle: "Dashboard-first personal finance platform",
     image: "/ui/juz.png",
-    category: "web", 
+    category: "web",
   },
   {
     id: "28",
-  title: "Sportsea",
-    subtitle: "Dashboard-first personal finance platform",
+    title: "SportSea",
+    subtitle: "Sports experience booking",
     image: "/ui/sea1.png",
-    category: "web &mobile", 
+    category: ["web", "mobile"],
   },
- {
+  {
     id: "2",
     title: "Daily Tasks App UI",
     subtitle: "Mobile Interface",
     image: "/ui/dailytaskapp.png",
-    category: "mobile", 
-
+    category: "mobile",
   },
   {
     id: "3",
-    title: "Language Learning app UI",
+    title: "Language Learning App UI",
     subtitle: "Mobile Interface",
     image: "/ui/learning app.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "4",
-    title: "Music player interface UI",
+    title: "Music Player Interface UI",
     subtitle: "Mobile Interface",
     image: "/ui/musicplayer .png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "5",
-    title: "Login Page Mobile App ui",
+    title: "Login Page Mobile App UI",
     subtitle: "Mobile Interface",
     image: "/ui/login.png",
-    category: "mobile", 
+    category: "mobile",
   },
-  
   {
     id: "6",
-    title: "amazon Product Page Resdesign UI",
+    title: "Amazon Product Page Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/amzonproductpage.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "29",
-  title: "Login Screen web UI",
+    title: "Login Screen Web UI",
     subtitle: "Onboarding made simple",
     image: "/ui/01.png",
-    category: "web", 
+    category: "web",
   },
   {
     id: "7",
-    title: "Bank Application Resdesign UI",
+    title: "Bank Application Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/bankappredesign.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "8",
-    title: "Blinkit checkout Page Resdesign UI",
+    title: "Blinkit Checkout Page Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/blinkitcheckout.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "9",
-    title: "Booking.com Page Resdesign UI",
+    title: "Booking.com Page Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/bookingcom.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "10",
     title: "Items Cart Page UI",
     subtitle: "Mobile Interface",
     image: "/ui/cartpage.png",
-    category: "mobile", 
+    category: "mobile",
   },
-   {
+  {
     id: "30",
-  title: "Apple watch Product Page Design ui",
-    subtitle: "Product page Animations",
+    title: "Apple Watch Product Page Design UI",
+    subtitle: "Product page animations",
     image: "/ui/02.png",
-    category: "web", 
+    category: "web",
   },
   {
     id: "11",
-    title: "District Resturant Page Redesign UI",
+    title: "District Restaurant Page Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/district.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "12",
     title: "Finance Application UI",
     subtitle: "Mobile Interface",
     image: "/ui/financeapp.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "13",
-    title: "Furlrnco Page Resdesign UI",
+    title: "Furlenco Page Redesign UI", // check spelling against the real brand
     subtitle: "Mobile Interface",
     image: "/ui/furlrncoui.png",
-    category: "mobile", 
+    category: "mobile",
   },
-   {
+  {
     id: "14",
-    title: "Jpay finanmce App UI",
+    title: "JPay Finance App UI",
     subtitle: "Mobile Interface",
     image: "/ui/jpay.png",
+    category: "mobile", // was missing in the old data
   },
-   {
+  {
     id: "15",
-    title: "Maintainence App UI",
+    title: "Maintenance App UI",
     subtitle: "Mobile Interface",
     image: "/ui/maintainenceapp.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "16",
     title: "Notes App UI",
     subtitle: "Mobile Interface",
     image: "/ui/notesapp.png",
-    category: "mobile", 
+    category: "mobile",
   },
-     {
+  {
     id: "31",
-  title: "Landing Page Design UI",
-    subtitle: "Visually Appealing Landing Page",
+    title: "Landing Page Design UI",
+    subtitle: "Visually appealing landing page",
     image: "/ui/03.png",
-    category: "web", 
+    category: "web",
   },
   {
     id: "17",
     title: "Onboarding UI",
     subtitle: "Mobile Interface",
     image: "/ui/onboardingui.png",
-    category: "mobile", 
+    category: "mobile",
   },
-   {
+  {
     id: "18",
     title: "Onboarding UI 2",
     subtitle: "Mobile Interface",
     image: "/ui/onboardingui2.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "19",
-    title: "Personalfinance UI",
+    title: "Personal Finance UI",
     subtitle: "Mobile Interface",
     image: "/ui/personalfinance.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "20",
-    title: "Photo journal Selling Application UI",
+    title: "Photo Journal Selling Application UI",
     subtitle: "Mobile Interface",
     image: "/ui/photojournal.png",
-    category: "mobile", 
+    category: "mobile",
   },
-     {
+  {
     id: "32",
-  title: "Landing Page Design UI",
-    subtitle: "Simple Landing Page",
+    title: "Landing Page Design UI",
+    subtitle: "Simple landing page",
     image: "/ui/04.png",
-    category: "web", 
+    category: "web",
   },
   {
     id: "21",
     title: "Ride Booking Application UI",
     subtitle: "Mobile Interface",
     image: "/ui/riderapp.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "22",
     title: "Social Media Profile Page UI",
     subtitle: "Mobile Interface",
     image: "/ui/socialmediaprofile.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "23",
-    title: "success & Failure UI",
+    title: "Success & Failure UI",
     subtitle: "Mobile Interface",
     image: "/ui/successfailure.png",
-    category: "mobile", 
+    category: "mobile",
   },
   {
     id: "24",
-    title: "UPI Circle redesign UI",
+    title: "UPI Circle Redesign UI",
     subtitle: "Mobile Interface",
     image: "/ui/upicircle.png",
-    category: "mobile", 
+    category: "mobile",
   },
-   {
+  {
     id: "25",
     title: "More Uploading",
-    subtitle: "",
     image: "/ui/more.png",
-    category: "web", 
+    category: "web",
   },
-{
+  {
     id: "26",
-    title: "finance widgts",
-    subtitle: "",
+    title: "Finance Widgets",
     image: "/ui/COMP1.png",
-    category: "components", 
+    category: "components",
   },
-{
-    id: "33",
+  {
+    id: "34", // was a duplicate "33"
     title: "More Uploading",
-    subtitle: "",
     image: "/ui/more.png",
-    category: "components", 
+    category: "components",
   },
 ];

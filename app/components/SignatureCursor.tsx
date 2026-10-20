@@ -1,130 +1,90 @@
 "use client";
 
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
-  useTransform,
-} from "framer-motion";
 
-// ---------------------------------------------------------------------------
-// Same tokens as Hero.tsx / Navbar.tsx / OngoingWork.tsx.
-// ---------------------------------------------------------------------------
-const brass = "#C7A25C";
-const paper = "#F3F1EC";
+/**
+ * Figma-style "multiplayer" name tag that trails your real cursor.
+ * - Native cursor stays visible (nothing is hidden or replaced).
+ * - Only on devices with a fine pointer + hover (so never on touch).
+ * - Off when the user prefers reduced motion.
+ * - Add data-cursor="Some label" to any element to change the tag text on hover.
+ */
+const DEFAULT_LABEL = "You";
 
 export default function SignatureCursor() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [enabled, setEnabled] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const [label, setLabel] = useState(DEFAULT_LABEL);
 
-  // Core motion values
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-
-  // Smoothed values — slightly stiffer spring than before so the reticle
-  // reads as precise rather than floaty, which suits a "design tool" feel
-  const springConfig = { damping: 30, stiffness: 220, mass: 0.4 };
-  const smoothedX = useSpring(cursorX, springConfig);
-  const smoothedY = useSpring(cursorY, springConfig);
-
-  // Ambient glow, tied to the same spring so it trails the reticle, not the raw cursor
-  const backgroundValue = useTransform(
-    [smoothedX, smoothedY],
-    ([x, y]) => `radial-gradient(480px circle at ${x}px ${y}px, rgba(199, 162, 92, 0.06), transparent 80%)`
-  );
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const springConfig = { stiffness: 420, damping: 36, mass: 0.5 };
+  const sx = useSpring(x, springConfig);
+  const sy = useSpring(y, springConfig);
 
   useEffect(() => {
-    setMounted(true);
-
-    const checkDevice = () => {
-      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      const isSmallScreen = window.innerWidth < 1024;
-      setIsMobile(isTouch || isSmallScreen);
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setEnabled(fine.matches && !reduced.matches);
+    update();
+    fine.addEventListener("change", update);
+    reduced.addEventListener("change", update);
+    return () => {
+      fine.removeEventListener("change", update);
+      reduced.removeEventListener("change", update);
     };
+  }, []);
 
-    checkDevice();
+  useEffect(() => {
+    if (!enabled) return;
 
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      setCoords({ x: Math.round(e.clientX), y: Math.round(e.clientY) });
+    const onMove = (e: MouseEvent) => {
+      x.set(e.clientX + 14);
+      y.set(e.clientY + 16);
+      setVisible(true);
     };
+    const onOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        "[data-cursor]"
+      );
+      setLabel(target?.dataset.cursor ?? DEFAULT_LABEL);
+    };
+    const onDown = () => setPressed(true);
+    const onUp = () => setPressed(false);
+    const onLeave = () => setVisible(false);
 
-    if (!isMobile) {
-      window.addEventListener("mousemove", moveCursor);
-    }
-
-    window.addEventListener("resize", checkDevice);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseover", onOver);
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mouseup", onUp);
+    document.documentElement.addEventListener("mouseleave", onLeave);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("resize", checkDevice);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseover", onOver);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
     };
-  }, [cursorX, cursorY, isMobile]);
+  }, [enabled, x, y]);
 
-  if (!mounted || isMobile) return null;
+  if (!enabled) return null;
 
   return (
-    <AnimatePresence>
+    <motion.div
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[400]"
+      style={{ x: sx, y: sy }}
+    >
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="pointer-events-none fixed inset-0 z-[999]"
+        animate={{ opacity: visible ? 1 : 0, scale: pressed ? 0.92 : 1 }}
+        transition={{ duration: 0.18 }}
+        className="whitespace-nowrap rounded-full rounded-tl-none bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-paper shadow-lg"
       >
-        {/* Ambient glow */}
-        <motion.div
-          className="fixed inset-0 z-30"
-          style={{ background: backgroundValue }}
-        />
-
-        {/* Reticle — horizontal + vertical hairlines crossing at the cursor,
-            like a selection tool. mix-blend-difference keeps it legible
-            over both the ink background and any lighter content. */}
-        <motion.div
-          className="fixed top-0 left-0 z-[1000] pointer-events-none mix-blend-difference"
-          style={{
-            x: smoothedX,
-            y: smoothedY,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-        >
-          <div className="relative w-6 h-6">
-            <div
-              className="absolute top-1/2 left-0 w-full h-[1px] -translate-y-1/2"
-              style={{ backgroundColor: paper }}
-            />
-            <div
-              className="absolute left-1/2 top-0 h-full w-[1px] -translate-x-1/2"
-              style={{ backgroundColor: paper }}
-            />
-            <div
-              className="absolute top-1/2 left-1/2 w-1 h-1 rounded-full -translate-x-1/2 -translate-y-1/2"
-              style={{ backgroundColor: brass }}
-            />
-          </div>
-        </motion.div>
-
-        {/* Coordinate readout — trails just below/right of the reticle */}
-        <motion.div
-          className="fixed top-0 left-0 z-[1001] pointer-events-none font-mono text-[10px] tracking-wider whitespace-nowrap"
-          style={{
-            x: smoothedX,
-            y: smoothedY,
-            translateX: "14px",
-            translateY: "10px",
-            color: brass,
-          }}
-        >
-          {String(coords.x).padStart(4, "0")}
-          <span style={{ color: paper, opacity: 0.4 }}> / </span>
-          {String(coords.y).padStart(4, "0")}
-        </motion.div>
+        {label}
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 }

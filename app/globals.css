@@ -1,53 +1,91 @@
 @import "tailwindcss";
 
-/* ----------------------------------
-   DESIGN TOKENS â€” Ink Â· Paper Â· Terracotta
-   Use as classes: bg-paper text-ink text-muted border-hairline text-accent
------------------------------------ */
-@theme {
+/* ==================================================================
+   DESIGN TOKENS: "The Workspace"
+   Token NAMES are unchanged (bg-paper, text-ink, text-muted,
+   border-hairline, text-accent ...) so every existing component keeps
+   working. Only the VALUES swap between dark (default) and light.
+   ================================================================== */
+
+/* LIGHT values live in @theme. `static` makes Tailwind always emit them,
+   so the dark override below can never be tree-shaken away. */
+@theme static {
   --color-ink: #111111;
   --color-paper: #f7f6f2;
-  --color-sunken: #eceae5; /* image placeholders, subtle surfaces */
+  --color-sunken: #eceae5;
   --color-muted: #6f6d68;
   --color-accent: #c86b3c;
   --color-accent-hover: #b25a2e;
   --color-hairline: rgba(17, 17, 17, 0.14);
   --color-hairline-strong: rgba(17, 17, 17, 0.28);
   --color-danger: #c0392b;
-
-  /* Aliases so any older component using these names keeps compiling.
-     They now resolve to the new palette. */
-  --color-background: #f7f6f2;
-  --color-foreground: #111111;
-  --color-primary: #c86b3c;
-  --color-primary-hover: #b25a2e;
-  --color-surface: #eceae5;
-  --color-border: rgba(17, 17, 17, 0.14);
 }
 
-/* Fonts are provided by next/font in layout.tsx.
-   Each var() has a fallback so a missing font can never invalidate the rule. */
+/* DARK values (default theme, set before paint by the script in layout.tsx) */
+:root,
+:root[data-theme="light"],
+html.light {
+  --color-ink: #111111;
+  --color-paper: #f7f6f2;
+  --color-sunken: #eceae5;
+  --color-muted: #6f6d68;
+  --color-accent: #c86b3c;
+  --color-accent-hover: #b25a2e;
+  --color-hairline: rgba(17, 17, 17, 0.14);
+  --color-hairline-strong: rgba(17, 17, 17, 0.28);
+  --color-danger: #c0392b;
+  color-scheme: light;
+}
+
+/* 2. DARK MODE VALUES */
+:root[data-theme="dark"],
+html.dark {
+  --color-ink: #f1efe9;
+  --color-paper: #0d0d0e;
+  --color-sunken: #161618;
+  --color-muted: #8d8b86;
+  --color-accent: #e2804a;
+  --color-accent-hover: #ee9461;
+  --color-hairline: rgba(241, 239, 233, 0.1);
+  --color-hairline-strong: rgba(241, 239, 233, 0.22);
+  --color-danger: #ef6b5b;
+  color-scheme: dark;
+}
+
+/* Legacy aliases: older components that use these names follow the theme */
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-hover);
+  --color-surface: var(--color-sunken);
+  --color-border: var(--color-hairline);
+}
+
+/* Fonts come from next/font in layout.tsx. Each var() has a fallback so a
+   missing font can never invalidate the rule. */
 @theme inline {
   --font-sans: var(--font-inter, system-ui), system-ui, sans-serif;
-  --font-serif: var(--font-fraunces, Georgia), Georgia, serif;
+  --font-display: var(--font-bricolage, system-ui), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces, Georgia), Georgia, serif; /* legacy, removed once all sections are migrated */
   --font-mono: var(--font-geist-mono, ui-monospace), ui-monospace, monospace;
 }
 
-/* ----------------------------------
+/* ==================================================================
    BASE
------------------------------------ */
-html {
+   ================================================================== */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
   color-scheme: light;
-  scroll-behavior: smooth;
-  scroll-padding-top: 88px; /* clears the fixed navbar on #anchor jumps */
-  scrollbar-color: rgba(17, 17, 17, 0.3) var(--color-paper);
-  scrollbar-width: thin;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px; /* clears the fixed navbar on #anchor jumps */
+  scrollbar-color: var(--color-hairline-strong) var(--color-paper);
+  scrollbar-width: thin;
 }
 
 body {
@@ -55,6 +93,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-inter, system-ui), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 ::selection {
@@ -62,9 +101,7 @@ body {
   color: var(--color-paper);
 }
 
-/* ----------------------------------
-   SCROLLBAR
------------------------------------ */
+/* Scrollbar (WebKit) */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -73,17 +110,15 @@ body {
   background: var(--color-paper);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(17, 17, 17, 0.25);
+  background-color: var(--color-hairline-strong);
   border-radius: 999px;
   border: 2px solid var(--color-paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(17, 17, 17, 0.45);
+  background-color: var(--color-muted);
 }
 
-/* ----------------------------------
-   FOCUS â€” keyboard only
------------------------------------ */
+/* Focus: keyboard only */
 :focus {
   outline: none;
 }
@@ -93,35 +128,50 @@ body {
   border-radius: 2px;
 }
 
-/* ----------------------------------
-   LEGACY TEXT UTILITIES (kept for older components)
------------------------------------ */
+/* ==================================================================
+   CANVAS UTILITIES (used by the hero and case study pages)
+   ================================================================== */
+.bg-dots {
+  background-image: radial-gradient(
+    var(--color-hairline-strong) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-hairline) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-hairline) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Figma-style frame label that sits above a "frame" */
+.frame-label {
+  font-family: var(--font-geist-mono, ui-monospace), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Legacy text utility (kept for older components) */
 .text-secondary {
   color: var(--color-muted);
 }
 
-/* ----------------------------------
-   CASE STUDY TYPOGRAPHY (legacy; unused by CaseStudyClient)
------------------------------------ */
-.case-study p {
-  font-size: 1.05rem;
-  line-height: 1.9;
-  color: var(--color-muted);
-}
-
-.case-study h2 {
-  font-size: 1.75rem;
-  margin-top: 4rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  font-family: var(--font-fraunces, Georgia), Georgia, serif;
-  color: var(--color-ink);
-}
-
-.case-study h3 {
-  font-size: 1.2rem;
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
-  font-weight: 500;
-  color: var(--color-ink);
+/* ==================================================================
+   ACCESSIBILITY
+   ================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
