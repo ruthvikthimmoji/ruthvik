@@ -658,6 +658,347 @@ export const caseStudies: CaseStudy[] = [
     // tokens: { colors: [{ name: "Primary", hex: "#000000" }], type: [{ role: "Heading", font: "Inter", spec: "32 / 40 · 600" }], spacing: ["4", "8", "16", "24"] },
     nextSlug: "studycrux-cms",
   },
+  // =====================================================
+  // LATTICE DESIGN SYSTEM: Design System & Component Library
+  // =====================================================
+  {
+    slug: "lattice-design-system",
+    published: true,
+    type: "personal", // or "client" / "professional"
+
+    title: "Lattice Design System",
+    tagline: "A scalable, token-driven component architecture built for speed and consistency.",
+    headline: "Unified foundational tokens, accessible variants, and atomic patterns engineered for seamless design-to-code alignment.",
+    image: "/projects/lattice.png", // Ensure this image exists in your public/projects folder
+
+    year: "2025",
+    duration: "4 weeks",
+    role: "Design Systems Designer",
+    team: "Independent systems architecture",
+    platform: "Web & Mobile (Figma)",
+    tools: ["Figma", "Design Tokens", "Auto Layout", "WCAG 2.1"],
+
+    tldr: {
+      problem:
+        "Component fragmentation, inconsistent spacing, and undocumented interactive states slow product teams down and create continuous drift between Figma and production code.",
+      solution:
+        "Engineered Lattice: an atomic token hierarchy (color, typography, elevation, spacing) paired with comprehensive component variants, strict state machines, and accessibility benchmarks.",
+      result:
+        "A cohesive, multi-state UI system featuring 40+ atomic and molecular components with zero-guesswork developer documentation.",
+    },
+
+    context:
+      "Lattice was created to solve design debt at its root. Rather than treating design as isolated static artboards, Lattice establishes a systematic foundation of design primitives that scale from micro-interactions to complex data-heavy enterprise layouts.",
+    problem:
+      "When products scale rapidly, UI elements drift: inconsistent corner radii, arbitrary hex values, mismatched button heights, and missing error/empty states. Engineers waste time guessing edge cases, and designers repeatedly rebuild the same primitives.",
+    goals: [
+      "Establish a mathematical 4px/8px spacing and typographic scale",
+      "Standardize WCAG 2.1 AA compliant color ramps with semantic aliases",
+      "Build production-ready Figma component sets with full variant properties",
+      "Document deterministic states: default, hover, focus, pressed, disabled, and loading",
+    ],
+    responsibilities: [
+      "Design token architecture",
+      "Component variant engineering",
+      "Color theory & contrast auditing",
+      "Responsive typography scale",
+      "Auto layout & constraint testing",
+      "Documentation & developer handoff specs",
+    ],
+
+    sections: [
+      {
+        id: "foundations",
+        label: "02 / Foundations",
+        title: "Primitives before components.",
+        description:
+          "A resilient system starts with mathematical primitives. Tokens decouple style decisions from specific UI elements, allowing global updates without breaking downstream screens.",
+        items: [
+          "Color Architecture — 10-step tonal ramps for neutral, primary brand, accent, and semantic intents (success, warning, error, info).",
+          "Typography Scale — Modular type hierarchy with defined line-heights and optical tracking calibrated for legibility across viewports.",
+          "Spatial Grid — Strict 4px base increment for padding, margins, and component heights (28px compact to 48px touch-friendly).",
+          "Elevation & Depth — 4-tier elevation tokens combining subtle border hairlines with ambient and direct drop-shadows.",
+        ],
+        callout: "Global primitives ➔ Semantic aliases ➔ Component-level tokens.",
+      },
+      {
+        id: "atomic-components",
+        label: "03 / Components",
+        title: "Predictable behavior across every state.",
+        description:
+          "Components are engineered with Figma component properties (variants, booleans, text swaps, and instance swaps) so designers cannot accidentally assemble invalid combinations.",
+        insightLabels: { from: "Edge Case", to: "System Response" },
+        insights: [
+          {
+            finding:
+              "Buttons often break when text labels wrap or when icons are dynamically toggled.",
+            decision:
+              "Built buttons with fluid Auto Layout, fixed min-widths, and slot-based icon properties that auto-align to the text baseline.",
+          },
+          {
+            finding:
+              "Input fields frequently omit focus-visible and validation messaging states.",
+            decision:
+              "Constructed inputs with unified container shells that support helper text, error tooltips, leading/trailing icons, and a high-contrast focus ring.",
+          },
+          {
+            finding:
+              "Interactive elements often rely only on color to communicate state changes.",
+            decision:
+              "Paired color shifts with secondary cues: micro-copy, icon changes, and explicit border weight adjustments for full accessibility.",
+          },
+        ],
+        images: [
+          {
+            src: "/projects/lattice/components.png",
+            alt: "Lattice atomic components preview",
+            caption: "Button sets, form controls, chips, and badge variants with boolean toggles.",
+          },
+        ],
+      },
+      {
+        id: "layouts-and-molecules",
+        label: "04 / Patterns",
+        title: "From atoms to coherent workflows.",
+        description:
+          "Molecules and organisms assemble primitives into repeatable UX patterns: search and filter bars, data table rows with sorting states, modal dialogue sheets, and navigation rails.",
+        items: [
+          "Data Displays — Table cells and scannable cards that maintain layout integrity with variable text lengths.",
+          "Form Patterns — Logical tab orders, inline error handling, and disabled submit states until validation conditions pass.",
+          "Feedback Containers — Toast notifications, inline banners, and alert dialogs with standardized severity colors.",
+        ],
+        callout: "Consistency at scale requires clear composition rules, not just isolated buttons.",
+      },
+      {
+        id: "accessibility",
+        label: "05 / Accessibility",
+        title: "Compliance built into the defaults.",
+        description:
+          "Accessibility is not an afterthought or an audit checklist at the end. Contrast ratios and touch targets are baked directly into the default token values.",
+        items: [
+          "All body text and interactive foreground tokens hit a minimum 4.5:1 contrast against light and dark surfaces.",
+          "Interactive mobile touch targets maintain a minimum 44x44px boundary even when visual badges appear compact.",
+          "Keyboard focus rings utilize a 2px offset with high-contrast accent borders for clear navigation without a mouse.",
+        ],
+      },
+      {
+        id: "handoff",
+        label: "06 / Developer Handoff",
+        title: "Closing the gap between Figma and code.",
+        description:
+          "Every component references tokens using naming conventions that mirror standard CSS variables and Tailwind class mappings (`--color-surface-sunken`, `spacing-4`, `radius-md`).",
+        items: [
+          "Explicit property naming matches React component props (`variant='primary' | 'secondary'`, `size='sm' | 'md' | 'lg'`).",
+          "Documented bounding boxes, minimum heights, and auto-layout flex behavior.",
+          "Live Dev Mode inspection enabled with embedded documentation notes on each component canvas.",
+        ],
+      },
+    ],
+
+    outcome:
+      "A complete, battle-tested design system architecture with hundreds of variants spanning core actions, inputs, navigation, and data presentation. Ready for production deployment in React and Next.js applications.",
+    reflection: [
+      "A design system is never finished; it is a living infrastructure that evolves with product needs.",
+      "Strict token naming up front prevents massive refactoring downstream when introducing dark mode or multi-brand themes.",
+      "Figma component properties should simplify choices for designers, eliminating variant bloat while preserving creative flexibility.",
+    ],
+
+    // Real Design System Tokens for Dev Mode Inspector
+    tokens: {
+      colors: [
+        { name: "Primary 500", hex: "#1A4FD6" },
+        { name: "Primary 600 (Hover)", hex: "#143EAA" },
+        { name: "Neutral 900 (Text)", hex: "#111111" },
+        { name: "Neutral 500 (Muted)", hex: "#6F6D68" },
+        { name: "Surface Paper", hex: "#F7F6F2" },
+        { name: "Surface Sunken", hex: "#EAE8E2" },
+        { name: "Border Hairline", hex: "rgba(17,17,17,0.14)" },
+        { name: "Semantic Danger", hex: "#C0392B" },
+      ],
+      type: [
+        { role: "Display", font: "Bricolage Grotesque", spec: "48 / 52 · SemiBold" },
+        { role: "Heading", font: "Inter", spec: "24 / 32 · SemiBold" },
+        { role: "Body", font: "Inter", spec: "16 / 24 · Regular" },
+        { role: "Mono / Label", font: "Geist Mono", spec: "11 / 16 · Medium" },
+      ],
+      spacing: ["4px", "8px", "12px", "16px", "24px", "32px", "48px", "64px"],
+    },
+
+    // Embed URL correctly encoded with your Figma file link
+    figmaEmbed: "https://embed.figma.com/design/Igsj1oEmxfqpbJniYHVpey/Lattice?node-id=0-1&embed-host=share",
+    nextSlug: "sportsea",
+  },
+
+  // =====================================================
+  // PARITY B2B: Cross-Border Invoicing & FX Hedging Portal
+  // =====================================================
+  {
+    slug: "parity-b2b",
+    published: true,
+    type: "professional", // or "client"
+
+    title: "Parity B2B",
+    tagline: "Shielding cross-border invoicing from FX volatility and compliance limbo.",
+    headline: "An operational FinTech platform combining smart invoicing with semi-automated FX hedging and a transparent AML resolution engine.",
+    image: "/projects/parity-b2b.png", // Add your cover preview in public/projects/
+
+    year: "2025",
+    duration: "6 weeks",
+    role: "Lead Product Designer",
+    team: "Problem definition, system architecture, UX/UI, usability validation",
+    platform: "Desktop Web Application (1440 × 900px)",
+    tools: ["Figma", "FigJam", "Notion"],
+
+    tldr: {
+      problem:
+        "Global agencies billing in foreign currencies on Net-30 terms lose 4% to 7% of profit margins to currency volatility, while unexpected SWIFT AML flags freeze operational cash flow for days.",
+      solution:
+        "Designed Parity B2B: an operational FinTech suite offering one-click guaranteed forward rate hedging, virtual local rail routing (ACH/SEPA), and a transparent, self-service compliance resolution engine.",
+      result:
+        "Targeted ≥45% hedging opt-in on invoices over $10K, reduced compliance hold resolution times from 96 hours to <24 hours, and guaranteed 100% payroll payout predictability.",
+    },
+
+    context:
+      "Global service businesses and engineering consultancies operating internationally routinely bill clients in USD or EUR while paying team salaries, office leases, and vendor tools in local currencies like INR. Between invoice creation and payment clearance, currency drift silently erodes profits.",
+    problem:
+      "Cross-border receivables suffer from three critical breakdowns: the Margin Erosion Trap (losing ₹46,000+ on a single $20K invoice due to a 3% dip), the SWIFT Black Box (opaque delays and multi-leg wire fees), and Regulatory Limbo (central banks flagging transfers over $10K without self-service escrow clearance).",
+    goals: [
+      "Lock in guaranteed local-currency payout certainty prior to payroll cycles",
+      "Provide frictionless domestic bank rails (ACH/SEPA) for international clients",
+      "Cut compliance hold resolution from an industry average of 96h to under 24h",
+      "Replace derivative market jargon with outcome-driven, transparent risk presets",
+    ],
+    responsibilities: [
+      "Problem definition & founder discovery interviews",
+      "JTBD & end-to-end journey mapping",
+      "Deterministic financial state machine modeling",
+      "Interactive 800px slide-over invoice creation drawer",
+      "High-salience escrow & compliance resolution system",
+      "Design tokens & tabular numerical formatting specs",
+    ],
+
+    metrics: [
+      { value: "≥ 45%", label: "Target Hedging Adoption on >$10k" },
+      { value: "< 24h", label: "Compliance Resolution (down from 96h)" },
+      { value: "100%", label: "Payout Certainty on Protected Invoices" },
+    ],
+
+    sections: [
+      {
+        id: "market-friction",
+        label: "02 / Market Friction",
+        title: "Three acute breakdowns in cross-border receivables.",
+        description:
+          "In-depth discovery interviews with studio founders and financial controllers identified the structural gaps in existing banking infrastructure.",
+        items: [
+          "The Margin Erosion Trap — A $20,000 invoice on Net-30 terms slipping from ₹83.50 to ₹81.20 wipes out ₹46,000+ in raw profit upon conversion, often exceeding an agency's monthly cloud infrastructure budget.",
+          "The SWIFT Black Box — Traditional wires bounce through multiple intermediary correspondent banks, deducting $25–$50 per leg with zero tracking.",
+          "Regulatory Limbo — Remittances crossing thresholds ($10,000+) trigger opaque AML compliance holds with generic error codes, freezing funds for days.",
+        ],
+        callout:
+          "“I need certainty. I cannot tell my engineering team that their salaries are delayed because currency fluctuated.”",
+      },
+      {
+        id: "as-is-to-be",
+        label: "03 / Journey Transformation",
+        title: "As-Is legacy wires vs. Parity B2B operational flow.",
+        description:
+          "Synthesizing the core Jobs-To-Be-Done (JTBD) into an end-to-end operational service architecture.",
+        items: [
+          "Invoice Creation: Static PDF with international SWIFT details ➔ Smart invoice with dynamic semi-automated FX protection cards.",
+          "Client Payment: International wire with $35 wire fees & 3–5 day delays ➔ Domestic virtual bank rails (ACH/SEPA) with 24h clearance.",
+          "Currency Drift: Silent 3.8% loss on payout day ➔ Guaranteed hedge rate locked at invoice generation and honored automatically.",
+          "Compliance Hold: Escrow freeze with 4-day email ping-pong ➔ Real-time high-contrast banner with guided PDF contract upload & OCR matching.",
+        ],
+      },
+      {
+        id: "hedging-model",
+        label: "04 / Product Logic",
+        title: "The semi-automated hedging model.",
+        description:
+          "User research revealed that pure automation felt risky to founders (fear of missing market rallies), while manual forex trading was overly intimidating. Parity B2B provides a hybrid preset model:",
+        items: [
+          "1. Guaranteed Shield (Recommended Default): 100% of the invoice is locked at the current forward rate (e.g., ₹83.40/USD) for a flat 0.45% protection fee. Payout is guaranteed regardless of market drops.",
+          "2. Smart Floor Collar: Zero fee. The invoice floats with the market, but triggers an automatic forward lock if the currency drops below a user-defined floor rate (e.g., ₹82.80/USD).",
+          "3. Pure Market Float: Zero protection, zero fee. Settles at the prevailing spot rate when the client's domestic transfer clears.",
+        ],
+        callout:
+          "Deterministic State Machine: Draft ➔ Sent (Hedge Active) ➔ Funds in Transit ➔ Action Required (Escrow Hold) ➔ Settled & Disbursed.",
+      },
+      {
+        id: "usability-pivots",
+        label: "05 / Usability Iterations",
+        title: "Three critical pivots from testing with studio founders.",
+        insightLabels: { from: "Usability Failure", to: "Architectural Pivot" },
+        insights: [
+          {
+            finding:
+              "Initial prototypes used Wall Street derivative jargon: '30-Day FX Forward Swap', '0.45% Hedging Premium', and 'Downside Slippage Boundary', intimidating users.",
+            decision:
+              "Reframed around concrete outcomes: 'Guaranteed Shield', 'Protection Fee', and 'Minimum Safety Floor'. Comprehension jumped from 40% to 100%.",
+          },
+          {
+            finding:
+              "Full-page invoice creation disconnected users from their recent transaction records and client payment histories.",
+            decision:
+              "Migrated to an 800px slide-over drawer with a contextual background scrim, allowing users to cross-reference ledger data without abandoning form state.",
+          },
+          {
+            finding:
+              "Passive compliance notifications hidden in a bell icon dropdown were missed, leaving funds trapped in escrow for days.",
+            decision:
+              "Designed a high-salience sticky banner directly at the top of the dashboard with an explicit status badge, reducing resolution response times by 75%.",
+          },
+        ],
+      },
+      {
+        id: "visual-system",
+        label: "06 / Design System",
+        title: "Tabular formatting & high-contrast semantic states.",
+        description:
+          "FinTech dashboards demand absolute precision. Every tabular element, currency display, and balance card utilizes Inter with OpenType tabular numbers (tnum) enabled for vertical visual alignment.",
+        items: [
+          "Canvas Surfaces: Slate Background (#F8FAFC) & Crisp Card Enclosures (#FFFFFF).",
+          "Structural Borders: Hairline Boundaries (#E2E8F0) & Secondary Metadata (#64748B).",
+          "Semantic Action & Status: Royal Trust Blue (#2563EB) for primary actions, Emerald Green (#16A34A) for Safe/Settled, Amber Gold (#D97706) for Transit, and Crimson Red (#DC2626) for Compliance Holds.",
+        ],
+      },
+    ],
+
+    outcome:
+      "A complete desktop FinTech architecture that turns volatile foreign exchange into predictable cash flow. Completed market research, JTBD mapping, state machine modeling, and design token architecture.",
+    reflection: [
+      "In FinTech, clarity of financial outcome always trumps derivative market jargon.",
+      "Compliance shouldn't feel like a punishment; guided self-service turns an escrow block into an empowering 2-minute task.",
+      "Predictable payroll beats speculative currency trading for service founders every single time.",
+    ],
+
+    // Design Tokens for Dev Mode Inspector
+    tokens: {
+      colors: [
+        { name: "Primary Action", hex: "#2563EB" },
+        { name: "Settled / Safe", hex: "#16A34A" },
+        { name: "In Transit", hex: "#D97706" },
+        { name: "Compliance Hold", hex: "#DC2626" },
+        { name: "Slate Canvas", hex: "#F8FAFC" },
+        { name: "Surface Card", hex: "#FFFFFF" },
+        { name: "Hairline Border", hex: "#E2E8F0" },
+      ],
+      type: [
+        { role: "Display", font: "Inter (tnum)", spec: "32 / 40 · Bold" },
+        { role: "Page Title", font: "Inter (tnum)", spec: "24 / 32 · SemiBold" },
+        { role: "Section Header", font: "Inter", spec: "18 / 24 · SemiBold" },
+        { role: "Body", font: "Inter", spec: "14 / 20 · Regular" },
+        { role: "Badges", font: "Inter", spec: "12 / 16 · Medium" },
+      ],
+      spacing: ["4px", "8px", "12px", "16px", "20px", "24px", "32px", "40px"],
+    },
+
+    // Verified Figma Embed
+    figmaEmbed:
+      "https://embed.figma.com/design/wQGYsRElKQO3oLSJKaPowY/Parity-B2B-%E2%80%94-Cross-Border-Invoicing---FX-Hedging-Portal?node-id=0-1&embed-host=share",
+    nextSlug: "lattice-design-system",
+  },
 ];
 
 // ---------- HELPERS ----------

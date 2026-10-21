@@ -155,6 +155,30 @@ export const projects: ProjectCard[] = [
     featured: false,
     caseStudy: false,
   },
+
+  {
+    slug: "parity-b2b",
+    title: "Parity B2B",
+    category: "FinTech & Cross-Border B2B",
+    type: "professional", // or "client"
+    featured: true,
+    platform: "Web Application",
+    year: "2025",
+    role: "Lead Product Designer",
+    image: "/projects/parity-b2b.png",
+    description:
+      "Operational cross-border B2B invoicing platform pairing smart virtual bank rails with semi-automated FX hedging and rapid compliance escrow resolution.",
+    contribution: [
+      "FX Hedging UI",
+      "Financial State Machine",
+      "Slide-Over Invoicing",
+      "Compliance Resolution Engine",
+      "Tabular Design System",
+    ],
+    image: "",
+    featured: false,
+    caseStudy: false
+  },
 ];
 
 /* ---------- helpers ---------- */

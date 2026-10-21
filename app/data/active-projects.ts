@@ -29,15 +29,15 @@ export const activeProjects: ActiveProject[] = [
 //     description: "Currently refining the booking flow and vendor dashboard for a seamless sports experience."
 //   },
 
-{
-    id: "design-system", // Changed from 3 to a string
-    name: "Personal Design System",
-    type: "Design System",
-    status: "Tokens",
-    progress: 20,
-   figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2F63Gi1TxL2U3uxHe7dRz0Vr%2FPersonal-Design-System-Archive-1%3Fnode-id%3D0-1%26t%3DbcAYfHOz3iQVfu8J-1",
-    description: "Designing a Design System "
-  },
+// {
+//     id: "design-system", // Changed from 3 to a string
+//     name: "Personal Design System",
+//     type: "Design System",
+//     status: "Tokens",
+//     progress: 20,
+//    figmaEmbed: "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2F63Gi1TxL2U3uxHe7dRz0Vr%2FPersonal-Design-System-Archive-1%3Fnode-id%3D0-1%26t%3DbcAYfHOz3iQVfu8J-1",
+//     description: "Designing a Design System "
+//   },
 
 // {
 //   id: "ram-navami-concept", 
