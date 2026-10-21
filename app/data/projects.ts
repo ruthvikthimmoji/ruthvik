@@ -175,7 +175,7 @@ export const projects: ProjectCard[] = [
       "Compliance Resolution Engine",
       "Tabular Design System",
     ],
-    image: "",
+    image: "/projects/insurance.png",
     featured: false,
     caseStudy: false
   },
