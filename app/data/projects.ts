@@ -94,6 +94,26 @@ export const projects: ProjectCard[] = [
     caseStudy: true,
   },
 
+    {
+    slug: "lattice-design-system",
+    title: "Lattice",
+    description:
+      "A personal design system built in Figma: foundations, components and guidelines for designing consistent product interfaces.",
+    type: "personal",
+    category: "Design System",
+    role: "UI/UX Designer",
+    year: "2026",
+    platform: "Web + Mobile",
+    contribution: [
+      "Design tokens",
+      "Component library",
+      "Documentation",
+    ],
+    image: "/projects/lattice.png",
+    featured: true,
+    caseStudy: false,
+  },
+
   {
     slug: "health-insurance-app",
     title: "Health Insurance App",
