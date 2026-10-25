@@ -188,34 +188,47 @@ export default function Capabilities() {
         </div>
 
         {/* 15-Minute UX Teardown Offer Card */}
-        {/* <div className="my-10 rounded-2xl border border-hairline bg-sunken/50 p-8 shadow-sm transition-all duration-300 hover:border-hairline-strong md:p-12">
+        {/* 15-Minute UX Teardown Offer Card with 3D Avatar */}
+        <div className="my-10 rounded-2xl border border-hairline bg-sunken/50 p-8 shadow-sm transition-all duration-300 hover:border-hairline-strong md:p-12">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full border border-hairline bg-paper px-3 py-1">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
-                  Free 15-Min UX Teardown
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+              {/* 3D Avatar Circle with Online Dot */}
+              <div className="relative h-20 w-20 shrink-0">
+                <div className="relative h-full w-full overflow-hidden rounded-2xl border border-hairline-strong bg-paper shadow-md">
+                  <img
+                    src="/avatar-3d.jpg"
+                    alt="Ruthvik 3D Avatar"
+                    className="h-full w-full object-cover object-top"
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-paper">
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
                 </span>
               </div>
 
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl md:text-4xl">
-                Not sure why users are dropping off? Let’s audit it.
-              </h3>
+              <div className="space-y-2.5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-hairline bg-paper px-3 py-1">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
+                    Free 15-Min UX Teardown
+                  </span>
+                </div>
 
-              <p className="max-w-xl text-sm leading-relaxed text-muted">
-                Send over your staging link or live screen. I will record a concise video teardown highlighting your biggest conversion and usability leaks — no strings attached.
-              </p>
+                <h3 className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">
+                  Not sure what&apos;s costing you users? I&apos;ll take a look.
+                </h3>
+
+                <p className="max-w-xl text-sm leading-relaxed text-muted">
+                  Send over your staging link or live product. I&apos;ll record a concise teardown highlighting your biggest conversion and usability friction points.
+                </p>
+              </div>
             </div>
 
             <a
               href={`mailto:${EMAIL}?subject=Free%2015-min%20UX%20review`}
               data-cursor="Audit"
-              className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-ink px-8 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-paper shadow-md transition-all duration-300 hover:opacity-90"
+              className="group inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-ink px-7 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-paper shadow-md transition-all duration-300 hover:opacity-90 md:self-auto"
             >
-              <span>Request Teardown</span>
+              <span>Request a Review</span>
               <ArrowRight
                 size={14}
                 aria-hidden="true"
@@ -223,7 +236,7 @@ export default function Capabilities() {
               />
             </a>
           </div>
-        </div> */}
+        </div>
       </div>
     </section>
   );

@@ -36,14 +36,24 @@ import { education, roles } from "../data/experience";
 
 function TiltPortrait() {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [avatarMode, setAvatarMode] = useState<"photo" | "3d">("3d");
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+  const mouseXSpring = useSpring(x, { stiffness: 160, damping: 18 });
+  const mouseYSpring = useSpring(y, { stiffness: 160, damping: 18 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  // Stronger 3D tilt range for a tactile 3D model feel
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["14deg", "-14deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-14deg", "14deg"]);
+
+  // Parallax inner image shift for depth
+  const imgX = useTransform(mouseXSpring, [-0.5, 0.5], ["-10px", "10px"]);
+  const imgY = useTransform(mouseYSpring, [-0.5, 0.5], ["-10px", "10px"]);
+
+  // Dynamic cursor-tracked specular highlight
+  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"]);
+  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -58,41 +68,128 @@ function TiltPortrait() {
   };
 
   return (
-    <div style={{ perspective: 1000 }} className="relative flex justify-center">
+    <div
+      style={{ perspective: 1200 }}
+      className="relative flex flex-col items-center"
+    >
+      {/* Ambient 3D Backlight Glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-accent/25 via-emerald-400/10 to-transparent blur-2xl"
+      />
+
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY }}
-        className="group relative aspect-[3/4] w-full max-w-[340px] overflow-hidden rounded-2xl border border-hairline bg-sunken p-2.5 shadow-2xl transition-all duration-300 hover:border-hairline-strong md:max-w-[380px]"
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className="group relative aspect-[3/4] w-full max-w-[340px] rounded-2xl border border-hairline-strong bg-sunken/90 p-2.5 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)] transition-colors duration-300 hover:border-accent/60 md:max-w-[380px]"
       >
-        <div className="relative h-full w-full overflow-hidden rounded-xl bg-paper">
-          <Image
-            src="/about.png"
-            alt="Portrait of Ruthvik P. Thimmoji"
-            fill
-            sizes="(max-width: 768px) 100vw, 380px"
-            className="object-cover object-top grayscale filter transition-all duration-700 ease-out group-hover:scale-105 group-hover:grayscale-0"
-            priority
+        {/* Main Viewport Container */}
+        <div
+          style={{ transform: "translateZ(20px)" }}
+          className="relative h-full w-full overflow-hidden rounded-xl bg-paper shadow-inner"
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={avatarMode}
+              initial={{ opacity: 0, rotateY: -90, scale: 0.92 }}
+              animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+              exit={{ opacity: 0, rotateY: 90, scale: 0.92 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              style={{ x: imgX, y: imgY }}
+              className="relative h-full w-full"
+            >
+              {/* Idle breathing animation for 3D character */}
+              <motion.div
+                animate={
+                  avatarMode === "3d"
+                    ? { y: [0, -6, 0], scale: [1.04, 1.07, 1.04] }
+                    : { scale: 1.03 }
+                }
+                transition={
+                  avatarMode === "3d"
+                    ? { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                    : { duration: 0.5 }
+                }
+                className="relative h-full w-full"
+              >
+                <Image
+                  src={avatarMode === "photo" ? "/about.png" : "/avatar-3d.jpg"}
+                  alt="Portrait of Ruthvik P. Thimmoji"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 380px"
+                  className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                  priority
+                />
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dynamic 3D Specular Light Glare */}
+          <motion.div
+            aria-hidden="true"
+            style={{
+              background: useTransform(
+                [glareX, glareY],
+                ([gx, gy]) =>
+                  `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.22) 0%, transparent 60%)`
+              ),
+            }}
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           />
 
+          {/* Bottom Depth Vignette */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
           />
+        </div>
 
-          <span className="absolute left-3 top-3 font-mono text-[9px] text-white/70 backdrop-blur-md">
-            + 12.9716° N, 77.5946° E
-          </span>
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/60 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-widest text-white/80 backdrop-blur-md">
-            Plate 01
-          </span>
+        {/* Floating 3D Coordinate Pill (Pops out at translateZ 45px) */}
+        <div
+          style={{ transform: "translateZ(45px)" }}
+          className="pointer-events-none absolute left-5 top-5 z-20 rounded-full border border-white/20 bg-black/65 px-3 py-1 font-mono text-[9px] tracking-wider text-white/90 shadow-lg backdrop-blur-md"
+        >
+          + 12.9716° N, 77.5946° E
+        </div>
+
+        {/* Interactive 3D Mode Switcher (Pops out at translateZ 50px) */}
+        <div
+          style={{ transform: "translateZ(50px)" }}
+          className="absolute bottom-5 right-5 z-20 inline-flex rounded-full border border-white/25 bg-black/75 p-1 shadow-xl backdrop-blur-md"
+        >
+          <button
+            type="button"
+            onClick={() => setAvatarMode("3d")}
+            className={`rounded-full px-3 py-1 font-mono text-[9px] uppercase tracking-wider transition-all ${
+              avatarMode === "3d"
+                ? "bg-accent font-semibold text-white shadow-sm"
+                : "text-white/70 hover:text-white"
+            }`}
+          >
+            3D Avatar
+          </button>
+          <button
+            type="button"
+            onClick={() => setAvatarMode("photo")}
+            className={`rounded-full px-3 py-1 font-mono text-[9px] uppercase tracking-wider transition-all ${
+              avatarMode === "photo"
+                ? "bg-accent font-semibold text-white shadow-sm"
+                : "text-white/70 hover:text-white"
+            }`}
+          >
+            Photo
+          </button>
         </div>
       </motion.div>
     </div>
   );
 }
-
 /* =========================================================
    ROTATING MONOGRAPH SEAL (SVG)
 ========================================================= */
@@ -111,17 +208,25 @@ function MonographSeal() {
           d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
           fill="none"
         />
-        <text className="font-mono text-[8.5px] uppercase tracking-[0.24em] fill-accent">
+        <text className="fill-accent font-mono text-[8.5px] uppercase tracking-[0.24em]">
           <textPath href="#sealPath" startOffset="0%">
             · RUTHVIK THIMMOJI · DESIGN &amp; CODE ·
           </textPath>
         </text>
       </motion.svg>
-      <span className="font-serif text-lg italic text-ink">R</span>
+
+      {/* Centered Custom "R" Brand Logo */}
+      <svg
+        viewBox="0 0 100 60"
+        fill="currentColor"
+        aria-hidden="true"
+        className="absolute h-4 w-auto text-ink"
+      >
+        <path d="M 0 22.74 C 28 31, 55 44, 69.1 59.78 L 93.78 59.78 C 87 50, 78 44, 65.24 38.99 C 88 37.5, 100 31, 99.6 24.5 C 99.2 12, 65 -1.5, 21.67 1.1 C 52 2.5, 76 11.5, 75.75 21.5 C 75.5 29.5, 45 31, 0 22.74 Z" />
+      </svg>
     </div>
   );
 }
-
 /* =========================================================
    DUAL MINDSET INTERACTIVE BLUEPRINT
 ========================================================= */

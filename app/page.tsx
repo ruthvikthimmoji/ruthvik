@@ -11,6 +11,7 @@ import Experience from "./components/Experience";
 export default function Home() {
   return (
     <main className="bg-paper text-ink">
+      
       <Navbar />
 
       {/* 01 / Hero */}

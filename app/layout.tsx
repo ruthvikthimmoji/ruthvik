@@ -9,6 +9,7 @@ import {
 import { Analytics } from "@vercel/analytics/react";
 import CommandPalette from "./components/CommandPalette";
 import SignatureCursor from "./components/SignatureCursor";
+import SplashScreen from "./components/SplashScreen";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,7 +58,7 @@ export const metadata: Metadata = {
   },
   description,
   icons: {
-    icon: "/ruthvikP.ico",
+    icon: "icon.svg",
   },
   openGraph: {
     type: "website",
@@ -115,6 +116,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="relative overflow-x-hidden bg-paper font-sans text-ink">
+              <SplashScreen />
         <SignatureCursor />
         <CommandPalette />
 

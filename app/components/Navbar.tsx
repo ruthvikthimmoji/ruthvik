@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { posts } from "@/app/data/writing";
 import { useIsMac } from "@/app/lib/use-is-mac";
 import ThemeToggle from "./ThemeToggle";
+import BrandLogo from "./BrandLogo";
 
 // "/#work" (not "#work") so the link also works from case study and other pages
 const navItems = [
@@ -98,20 +99,26 @@ export default function Navbar() {
           aria-label="Main navigation"
           className="mx-auto flex h-[72px] w-full max-w-[1440px] items-center justify-between px-6 md:h-[80px] md:px-10 lg:px-12"
         >
-          {/* Logo */}
+        {/* Brand Logo with Custom "R" Mark + Glowing Accent Dot */}
           <Link
             href="/"
             onClick={closeMenu}
             aria-label="Ruthvik, home"
-            className="group flex items-center gap-2"
+            className="group flex shrink-0 items-center gap-2.5"
           >
-            <span className="font-display text-[20px] font-semibold tracking-[-0.03em] text-ink md:text-[22px]">
-              Ruthvik
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-hairline bg-sunken/70 text-ink transition-all duration-300 group-hover:border-accent group-hover:text-accent">
+              <BrandLogo className="h-4 w-auto transition-transform duration-300 group-hover:scale-110" />
             </span>
-            <span
-              aria-hidden="true"
-              className="h-1.5 w-1.5 rounded-full bg-accent transition-transform duration-300 group-hover:scale-[1.7]"
-            />
+
+            <div className="flex items-center gap-1.5">
+              <span className="font-display text-[19px] font-semibold tracking-[-0.03em] text-ink md:text-[21px]">
+                Ruthvik
+              </span>
+              <span className="relative flex h-2 w-2" aria-hidden="true">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60 duration-1000" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent transition-transform duration-300 group-hover:scale-125" />
+              </span>
+            </div>
           </Link>
 
           {/* Desktop links: hover pill slides between items, like a Figma toolbar */}
