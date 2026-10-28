@@ -117,13 +117,18 @@ export const projects: ProjectCard[] = [
     slug: "lattice-design-system",
     title: "Lattice",
     description:
-      "A personal design system built in Figma — tokens, components and usage guidelines for building consistent product interfaces across web and mobile.",
+      "A themeable design system built solo in Figma — 25 components and 150 variables that work in Light, Dark, Default and Compact through variable modes, cutting variants by 75% and passing WCAG AA in both themes.",
     type: "personal",
     category: "Design System",
-    role: "UI/UX Designer",
+    role: "Solo Designer",
     year: "2026",
-    platform: "Web + Mobile",
-    contribution: ["Design tokens", "Component library", "Documentation"],
+    platform: "Figma",
+    contribution: [
+      "Token architecture",
+      "Component library",
+      "Accessibility (WCAG AA)",
+      "Documentation",
+    ],
     image: "/projects/lattice.png",
     featured: true,
     caseStudy: true, // live site links to /case-studies/lattice-design-system
