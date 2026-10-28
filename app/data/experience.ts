@@ -3,6 +3,8 @@
  * Used by: components/Experience.tsx (homepage) and about/AboutClient.tsx.
  * Source: LinkedIn profile export. Newest first.
  *
+ * Keep dates identical to LinkedIn — recruiters cross-check the two.
+ *
  * If you did other work that isn't on LinkedIn (e.g. a frontend role, or
  * Designuru Studio), add it here ONCE and both pages update.
  */
@@ -26,23 +28,26 @@ export const roles: Role[] = [
     location: "Bengaluru, India",
     current: true,
     description:
-      "Working across CMS experiences, dashboards, SaaS workflows and product interfaces — translating complex requirements into clearer user flows, scalable UI and reusable design patterns.",
-    tags: ["CMS", "SaaS products", "UX flows", "Design systems"],
+      "Designing the CMS, dashboards and core product workflows — turning complex requirements into clear user flows, scalable UI and a reusable design system the team builds from.",
+    tags: ["CMS", "SaaS dashboards", "UX flows", "Design systems"],
   },
   {
+    // Overlaps Studycrux by ~2 months — matches LinkedIn.
+    // If freelance actually ended when you joined Studycrux, change to
+    // "Oct 2023 — May 2026" / "2 yrs 8 mos" here AND on LinkedIn.
     period: "Oct 2023 — Jul 2026",
     duration: "2 yrs 10 mos",
     title: "UI/UX Designer",
     company: "Freelance",
     location: "Bengaluru, India",
     description:
-      "Helped SaaS startups improve product usability, clarity and user experience — turning complex products into simple, usable ones.",
+      "Designed web and mobile products for startups and SaaS teams — dashboards, onboarding flows and booking experiences — from UX audits and user flows to hi-fi UI and developer handoff.",
     tags: [
       "SaaS dashboards",
       "Onboarding flows",
       "UX audits",
       "Design systems",
-      "React-ready prototypes",
+      "Dev handoff",
     ],
   },
   {
@@ -51,7 +56,10 @@ export const roles: Role[] = [
     title: "Graphic Designer",
     company: "OMS: Open Mind School",
     location: "Ranchi, India",
-    tags: ["Graphic design"],
+    // EDIT: replace with what you actually made (social posts, brochures, etc.)
+    description:
+      "Designed visual and print material for the school's communication and outreach.",
+    tags: ["Visual design", "Print & social"],
   },
   {
     period: "Apr 2023 — Jun 2023",
@@ -59,7 +67,10 @@ export const roles: Role[] = [
     title: "Graphic Designer",
     company: "Penger Advertising",
     location: "Chennai, India",
-    tags: ["Graphic design"],
+    // EDIT: replace with what you actually made (ad creatives, branding, etc.)
+    description:
+      "Designed creatives for client advertising campaigns at an agency.",
+    tags: ["Visual design", "Ad creatives"],
   },
 ];
 
@@ -70,10 +81,14 @@ export const education = {
   location: "Bengaluru, India",
 };
 
+/**
+ * Issuer first — "Google" is the part recruiters scan for.
+ * Fix any issuer that's wrong.
+ */
 export const certifications = [
-  "Foundations of User Experience (UX) Design",
-  "Build Wireframes and Low-Fidelity Prototypes",
+  "Google — Foundations of User Experience (UX) Design",
+  "Google — Build Wireframes and Low-Fidelity Prototypes",
   "Introduction to Design",
   "Learn and Build a Career in UI-UX Design",
-  "Postman API Fundamentals Student Expert",
+  "Postman — API Fundamentals Student Expert",
 ];

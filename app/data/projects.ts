@@ -1,6 +1,6 @@
 /**
  * WorkType is the single source of truth for how a piece of work is labelled.
- * - client:       done for an external client
+ * - client:       done for an external client (incl. freelance)
  * - professional: done as part of a full-time / employed role
  * - personal:     self-initiated concept or practice project
  */
@@ -31,23 +31,23 @@ export type ProjectCard = {
   caseStudy: boolean; // keep in sync with case-studies.ts (see helper below)
 };
 
+/**
+ * Order = display order on the homepage.
+ * Real work (client / professional) first, personal concepts after —
+ * that's what recruiters weigh most.
+ */
 export const projects: ProjectCard[] = [
   {
     slug: "sportsea",
     title: "SportSea",
     description:
-      "A sports experience booking platform designed to make discovering and booking sports facilities simpler.",
+      "Designed the end-to-end experience for a sports facility booking platform — from discovering a venue to confirming a booking — across mobile and web.",
     type: "client",
     category: "Sports / Booking",
     role: "UI/UX Designer",
     year: "2025",
     platform: "Mobile + Web",
-    contribution: [
-      "User research",
-      "User flows",
-      "UI design",
-      "Prototyping",
-    ],
+    contribution: ["User research", "User flows", "UI design", "Prototyping"],
     image: "/projects/sportsea1.png",
     featured: true,
     caseStudy: true,
@@ -57,21 +57,40 @@ export const projects: ProjectCard[] = [
     slug: "studycrux-cms",
     title: "Studycrux CMS",
     description:
-      "Designing clearer workflows and scalable interfaces for a complex SaaS content management experience.",
+      "Redesigning a complex content management system — simplifying editorial workflows, restructuring dashboards and building a shared design system for the product team.",
     type: "professional",
     category: "SaaS / CMS",
     role: "UI/UX Designer",
     year: "2026 — Present",
     platform: "Web",
-    contribution: [
-      "UX flows",
-      "UI redesign",
-      "Dashboards",
-      "Design systems",
-    ],
+    contribution: ["UX flows", "UI redesign", "Dashboards", "Design systems"],
     image: "/projects/studycrux-cms.png",
-    featured: true, // professional work is your strongest recruiter signal
+    featured: true,
     caseStudy: false,
+  },
+
+  {
+    slug: "parity-b2b",
+    title: "Parity B2B",
+    description:
+      "A cross-border B2B invoicing platform. Designed how finance teams create invoices, handle currency conversion and resolve compliance holds in a single workflow.",
+    // Freelance-era work (2025) → "client", not "professional".
+    // If this was a self-initiated concept, change to "personal".
+    type: "client",
+    category: "FinTech / B2B",
+    role: "Product Designer",
+    year: "2025",
+    platform: "Web App",
+    contribution: [
+      "Invoicing flows",
+      "FX conversion UI",
+      "Payment status states",
+      "Compliance flows",
+      "Data-table system",
+    ],
+    image: "/projects/parity-b2b.png",
+    featured: true,
+    caseStudy: true, // live site links to /case-studies/parity-b2b
   },
 
   {
@@ -94,24 +113,20 @@ export const projects: ProjectCard[] = [
     caseStudy: true,
   },
 
-    {
+  {
     slug: "lattice-design-system",
     title: "Lattice",
     description:
-      "A personal design system built in Figma: foundations, components and guidelines for designing consistent product interfaces.",
+      "A personal design system built in Figma — tokens, components and usage guidelines for building consistent product interfaces across web and mobile.",
     type: "personal",
     category: "Design System",
     role: "UI/UX Designer",
     year: "2026",
     platform: "Web + Mobile",
-    contribution: [
-      "Design tokens",
-      "Component library",
-      "Documentation",
-    ],
+    contribution: ["Design tokens", "Component library", "Documentation"],
     image: "/projects/lattice.png",
     featured: true,
-    caseStudy: false,
+    caseStudy: true, // live site links to /case-studies/lattice-design-system
   },
 
   {
@@ -155,34 +170,11 @@ export const projects: ProjectCard[] = [
     featured: false,
     caseStudy: false,
   },
-
-  {
-    slug: "parity-b2b",
-    title: "Parity B2B",
-    category: "FinTech & Cross-Border B2B",
-    type: "professional", // or "client"
-    featured: true,
-    platform: "Web Application",
-    year: "2025",
-    role: "Lead Product Designer",
-    image: "/projects/parity-b2b.png",
-    description:
-      "Operational cross-border B2B invoicing platform pairing smart virtual bank rails with semi-automated FX hedging and rapid compliance escrow resolution.",
-    contribution: [
-      "FX Hedging UI",
-      "Financial State Machine",
-      "Slide-Over Invoicing",
-      "Compliance Resolution Engine",
-      "Tabular Design System",
-    ],
-    caseStudy: false
-  },
 ];
 
 /* ---------- helpers ---------- */
 
-export const getFeaturedProjects = () =>
-  projects.filter((p) => p.featured);
+export const getFeaturedProjects = () => projects.filter((p) => p.featured);
 
 export const getProjectsByType = (type: WorkType) =>
   projects.filter((p) => p.type === type);

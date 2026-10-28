@@ -11,7 +11,6 @@ import Experience from "./components/Experience";
 export default function Home() {
   return (
     <main className="bg-paper text-ink">
-      
       <Navbar />
 
       {/* 01 / Hero */}
@@ -57,15 +56,34 @@ export default function Home() {
                 are clear for users and useful for the teams building them.
               </p>
 
-              <a
-                href="/about"
-                className="group mt-10 inline-flex items-center gap-3 border-b border-hairline-strong pb-2 text-sm"
-              >
-                <span>More about me</span>
-                <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </a>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+                Currently designing CMS and dashboard experiences at Studycrux,
+                and open to full-time product design roles.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-8">
+                <a
+                  href="/about"
+                  className="group inline-flex items-center gap-3 border-b border-hairline-strong pb-2 text-sm"
+                >
+                  <span>More about me</span>
+                  <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </a>
+
+                <a
+                  href="/Ruthvikresume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 border-b border-hairline-strong pb-2 text-sm"
+                >
+                  <span>Download résumé</span>
+                  <span className="text-accent transition-transform duration-300 group-hover:-translate-y-0.5">
+                    ↗
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

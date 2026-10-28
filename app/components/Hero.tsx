@@ -15,7 +15,7 @@ import KineticText from "./KineticText";
 import { useIsMac } from "@/app/lib/use-is-mac";
 
 /* =========================================================
-   INTERACTIVE MULTIPLAYER CURSORS (Recruiter & Founder)
+   INTERACTIVE MULTIPLAYER CURSORS (Recruiter & Hiring Manager)
 ========================================================= */
 
 function MultiplayerCursor({
@@ -158,7 +158,7 @@ function CharacterShowcase() {
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-sunken">
             <Image
               src="/avatar-3d.jpg"
-              alt="Ruthvik 3D Explorer Character"
+              alt="3D avatar of Ruthvik P. Thimmoji"
               fill
               priority
               sizes="(max-width: 768px) 340px, 390px"
@@ -188,7 +188,7 @@ function CharacterShowcase() {
                 </p>
               </div>
               <span className="rounded-full border border-white/25 bg-black/50 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-emerald-300 backdrop-blur-md">
-                Lvl · 2026
+                Since 2023
               </span>
             </div>
           </div>
@@ -255,7 +255,7 @@ export default function Hero() {
         className="pointer-events-none absolute -right-32 top-1/4 h-[520px] w-[520px] rounded-full bg-accent/15 blur-[130px]"
       />
 
-      {/* Interactive Figma Multiplayer Cursors */}
+      {/* Interactive Figma Multiplayer Cursors (both point at hiring-relevant actions) */}
       <MultiplayerCursor
         name="Recruiter"
         hint="View Résumé ↗"
@@ -267,8 +267,8 @@ export default function Hero() {
         onClick={() => window.dispatchEvent(new Event("open-resume"))}
       />
       <MultiplayerCursor
-        name="Founder"
-        hint="See SaaS Work ↓"
+        name="Hiring Manager"
+        hint="See Case Studies ↓"
         color="#2FA37A"
         left={["10%", "24%", "16%", "10%"]}
         top={["76%", "68%", "82%", "76%"]}
@@ -312,7 +312,7 @@ export default function Hero() {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em]">
-                  Available for new projects
+                  Open to full-time roles
                 </span>
               </span>
               <span className="frame-label">SaaS · Web · Mobile · Systems</span>
@@ -367,19 +367,19 @@ export default function Hero() {
               </motion.span>
             </h1>
 
-            {/* Verbatim Subheadline Copy */}
+            {/* Subheadline: who I am + what I do, written for hiring teams */}
             <motion.p
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="mt-8 max-w-[560px] text-base leading-relaxed text-muted md:mt-9 md:text-lg"
             >
-              I redesign the parts of SaaS products that quietly lose users —
-              confusing onboarding, cluttered dashboards, hesitant checkouts —
-              from first wireframe to dev-ready Figma.
+              UI/UX designer with a Computer Science background, designing SaaS
+              dashboards, CMS workflows and mobile apps since 2023 — from user
+              flows to dev-ready Figma and design systems.
             </motion.p>
 
-            {/* Primary CTA Pair */}
+            {/* Primary CTA Pair: work first, résumé one click away */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -391,7 +391,7 @@ export default function Hero() {
                 data-cursor="Scroll"
                 className="group flex items-center gap-3 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-85 md:text-base"
               >
-                Explore Selected Work
+                View Case Studies
                 <span
                   aria-hidden="true"
                   className="transition-transform duration-300 group-hover:translate-y-0.5"
@@ -403,7 +403,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("open-resume"))}
-                className="group flex items-center gap-1.5 px-2 py-3 text-sm text-muted transition-colors hover:text-ink md:text-base"
+                className="group flex items-center gap-2 rounded-full border border-hairline-strong px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink md:text-base"
               >
                 View Résumé
                 <span
@@ -430,7 +430,7 @@ export default function Hero() {
           <div className="flex flex-col gap-2 border-b border-hairline py-5 md:border-b-0 md:border-r md:pr-8">
             <span className="frame-label">Currently</span>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm md:text-base">
-              <span className="font-medium">UX/UI Designer</span>
+              <span className="font-medium">UI/UX Designer</span>
               <span className="text-muted">@</span>
               <span className="font-medium">Studycrux</span>
               <span className="font-mono text-[10px] text-muted">
