@@ -15,19 +15,12 @@ import {
   Briefcase,
   Code2,
   Compass,
-  Cpu,
   GraduationCap,
-  Layers,
-  MapPin,
   Radio,
-  Sparkles,
-  Terminal,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
-import KineticText from "../../Archieve/KineticText";
-import Navbar from "../../Archieve/Navbar";
 import { education, roles } from "../data/experience";
 
 /* =========================================================
