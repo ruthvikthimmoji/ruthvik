@@ -51,8 +51,8 @@ export default function Contact() {
         />
 
         <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted">
-          Hiring a product designer, or have a messy product that needs untangling? I usually reply
-          within a day.
+          Hiring a product designer, or have a messy product that needs
+          untangling? I usually reply within a day.
         </p>
 
         {/* Email + copy */}
@@ -122,7 +122,8 @@ export default function Contact() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="inline-flex items-center gap-1.5 self-start transition-colors hover:text-ink md:self-auto"
           >
-            Back to top <ArrowUp size={14} strokeWidth={1.5} aria-hidden="true" />
+            Back to top{" "}
+            <ArrowUp size={14} strokeWidth={1.5} aria-hidden="true" />
           </button>
         </div>
       </div>

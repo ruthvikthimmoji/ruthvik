@@ -45,9 +45,10 @@ export default function About() {
               ]}
             />
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-              I studied computer science, started out building front-ends, and moved into design to
-              shape <em>what</em> gets built — not just how. I design in Figma, think in React, and
-              I’m learning 3D on the side.
+              I studied computer science, started out building front-ends, and
+              moved into design to shape <em>what</em> gets built — not just
+              how. I design in Figma, think in React, and I’m learning 3D on the
+              side.
             </p>
             <a
               href="/Ruthvikresume.pdf"

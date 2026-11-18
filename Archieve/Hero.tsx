@@ -35,14 +35,20 @@ export default function Hero() {
   ];
 
   return (
-    <section aria-labelledby="hero-title" className="relative bg-paper pt-[72px] text-ink md:pt-[88px]">
+    <section
+      aria-labelledby="hero-title"
+      className="relative bg-paper pt-[72px] text-ink md:pt-[88px]"
+    >
       <div className="mx-auto max-w-[1440px] px-5 md:px-12">
         <div className="pb-16 pt-12 md:pb-24 md:pt-20">
           <motion.p
             {...fade(0)}
             className="inline-flex items-center gap-2.5 rounded-full border border-hairline-strong px-3.5 py-2 text-[13px] font-normal"
           >
-            <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full bg-accent" />
+            <span
+              aria-hidden="true"
+              className="h-[7px] w-[7px] rounded-full bg-accent"
+            />
             Available for full-time product roles
           </motion.p>
 
@@ -69,8 +75,8 @@ export default function Hero() {
             className="mt-10 flex flex-col gap-8 md:mt-14 md:flex-row md:items-end md:justify-between"
           >
             <p className="max-w-[560px] text-lg leading-relaxed text-muted md:text-xl">
-              Product designer for SaaS, fintech and admin tools. I design in Figma and build in
-              React — so what you see is what gets shipped.
+              Product designer for SaaS, fintech and admin tools. I design in
+              Figma and build in React — so what you see is what gets shipped.
             </p>
 
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
@@ -103,7 +109,9 @@ export default function Hero() {
           {facts.map((f) => (
             <div key={f.label}>
               <dt className="label-caps">{f.label}</dt>
-              <dd className="mt-2 text-[15px] font-normal text-ink md:text-base">{f.value}</dd>
+              <dd className="mt-2 text-[15px] font-normal text-ink md:text-base">
+                {f.value}
+              </dd>
             </div>
           ))}
         </motion.dl>

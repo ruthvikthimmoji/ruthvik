@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SOCIAL_LINKS } from "@/app/data/socials";
-import KineticText from "./KineticText";
+import KineticText from "../../Archieve/KineticText";
 
 const EMAIL = "thimmojiruthvik@gmail.com";
 const PHONE_DISPLAY = "+91 63619 06550";
@@ -24,7 +24,7 @@ const STATUS = "Open to full-time roles";
 
 // Email already has its own row + buttons, so drop it from the socials list
 const SOCIALS = SOCIAL_LINKS.filter(
-  (link) => link.name.toLowerCase() !== "email"
+  (link) => link.name.toLowerCase() !== "email",
 );
 
 type SpecRow = {
@@ -48,7 +48,7 @@ export default function Contact() {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
-        })
+        }),
       );
     update();
     const interval = setInterval(update, 60000);
@@ -321,9 +321,7 @@ export default function Contact() {
 
           {/* ================= COPYRIGHT BOTTOM BAR ================= */}
           <div className="mt-12 flex flex-col gap-4 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <span className="frame-label">
-              © 2026 Ruthvik Thimmoji
-            </span>
+            <span className="frame-label">© 2026 Ruthvik Thimmoji</span>
 
             <button
               type="button"

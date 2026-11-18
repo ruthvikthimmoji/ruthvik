@@ -17,7 +17,7 @@ import {
   ListFragment,
   StatFragment,
   ToggleFragment,
-} from "./Fragments";
+} from "../app/components/Fragments";
 
 /* =========================================================
    CHAPTER 03 — HOW A MESS BECOMES CLEAR
@@ -38,16 +38,34 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 function NotesArt({ compact = false }: { compact?: boolean }) {
   const notes = [
-    { text: "“I can’t see how much FX ate.”", tone: "bg-warning", r: "-rotate-3" },
-    { text: "Compliance holds feel like a punishment", tone: "bg-sunken", r: "rotate-2" },
-    { text: "Too much jargon: collar? forward?", tone: "bg-warning", r: "-rotate-2" },
-    { text: "“Where is my money right now?”", tone: "bg-sunken", r: "rotate-3" },
+    {
+      text: "“I can’t see how much FX ate.”",
+      tone: "bg-warning",
+      r: "-rotate-3",
+    },
+    {
+      text: "Compliance holds feel like a punishment",
+      tone: "bg-sunken",
+      r: "rotate-2",
+    },
+    {
+      text: "Too much jargon: collar? forward?",
+      tone: "bg-warning",
+      r: "-rotate-2",
+    },
+    {
+      text: "“Where is my money right now?”",
+      tone: "bg-sunken",
+      r: "rotate-3",
+    },
     { text: "SWIFT fees at every leg", tone: "bg-warning", r: "-rotate-1" },
     { text: "Founders fear auto-hedging", tone: "bg-sunken", r: "rotate-1" },
   ];
   const shown = compact ? notes.slice(0, 4) : notes;
   return (
-    <div className={`grid h-full content-center gap-4 p-6 md:gap-6 md:p-10 ${compact ? "grid-cols-2" : "grid-cols-2 lg:grid-cols-3"}`}>
+    <div
+      className={`grid h-full content-center gap-4 p-6 md:gap-6 md:p-10 ${compact ? "grid-cols-2" : "grid-cols-2 lg:grid-cols-3"}`}
+    >
       {shown.map((n) => (
         <div
           key={n.text}
@@ -64,12 +82,19 @@ function FlowArt({ compact = false }: { compact?: boolean }) {
   const nodes = ["Raise invoice", "Choose protection", "Review payout", "Send"];
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 p-6 md:p-10">
-      <div className={`flex items-center gap-2 md:gap-3 ${compact ? "flex-col" : "flex-col lg:flex-row"}`}>
+      <div
+        className={`flex items-center gap-2 md:gap-3 ${compact ? "flex-col" : "flex-col lg:flex-row"}`}
+      >
         {nodes.map((n, i) => (
-          <div key={n} className={`flex items-center gap-2 md:gap-3 ${compact ? "flex-col" : "flex-col lg:flex-row"}`}>
+          <div
+            key={n}
+            className={`flex items-center gap-2 md:gap-3 ${compact ? "flex-col" : "flex-col lg:flex-row"}`}
+          >
             <span
               className={`border px-4 py-3 text-sm text-ink ${
-                i === 1 ? "border-accent bg-paper" : "border-hairline-strong bg-paper"
+                i === 1
+                  ? "border-accent bg-paper"
+                  : "border-hairline-strong bg-paper"
               }`}
             >
               {n}
@@ -106,12 +131,19 @@ function WireframeArt() {
         <span className={`h-5 w-1/3 ${block}`} />
         <div className="grid grid-cols-3 gap-3">
           {[0, 1, 2].map((i) => (
-            <span key={i} className="aspect-[4/3] border border-hairline-strong" />
+            <span
+              key={i}
+              className="aspect-[4/3] border border-hairline-strong"
+            />
           ))}
         </div>
         <div className="flex flex-col gap-2.5">
           {[0, 1, 2, 3].map((i) => (
-            <span key={i} className={`h-3 ${block}`} style={{ width: `${90 - i * 12}%` }} />
+            <span
+              key={i}
+              className={`h-3 ${block}`}
+              style={{ width: `${90 - i * 12}%` }}
+            />
           ))}
         </div>
         <span className="mt-auto h-9 w-32 self-end border border-hairline-strong" />
@@ -169,7 +201,8 @@ const steps: Step[] = [
   {
     number: "01",
     title: "Understand",
-    description: "Understand users, business goals and context before touching visual design.",
+    description:
+      "Understand users, business goals and context before touching visual design.",
     ask: "What is quietly losing users today?",
     outputs: ["UX audit", "Friction mapping", "Problem framing"],
     caption: "What founders actually said",
@@ -178,7 +211,8 @@ const steps: Step[] = [
   {
     number: "02",
     title: "Structure",
-    description: "Map flows, information architecture and interactions before visual execution.",
+    description:
+      "Map flows, information architecture and interactions before visual execution.",
     ask: "What should the user do next, at every step?",
     outputs: ["User flows", "IA mapping", "Lo-fi wireframes"],
     caption: "The invoice flow, including the unhappy path",
@@ -187,7 +221,8 @@ const steps: Step[] = [
   {
     number: "03",
     title: "Design",
-    description: "Turn wireframes into responsive systems, design tokens and dev-ready UI.",
+    description:
+      "Turn wireframes into responsive systems, design tokens and dev-ready UI.",
     ask: "What can engineers build without guessing?",
     outputs: ["Design systems", "Component variants", "Hi-fi UI"],
     caption: "Structure first, pixels second",
@@ -196,7 +231,8 @@ const steps: Step[] = [
   {
     number: "04",
     title: "Iterate",
-    description: "Prototype, test with real users and refine based on feedback and engineering handoff.",
+    description:
+      "Prototype, test with real users and refine based on feedback and engineering handoff.",
     ask: "What did we get wrong in version one?",
     outputs: ["Interactive prototypes", "Usability rounds", "Dev specs"],
     caption: "Tested, refined, handed off",
@@ -209,13 +245,20 @@ const steps: Step[] = [
 function StepText({ step }: { step: Step }) {
   return (
     <div className="flex flex-col gap-5">
-      <span className="font-display text-6xl leading-none text-accent">{step.number}</span>
+      <span className="font-display text-6xl leading-none text-accent">
+        {step.number}
+      </span>
       <h3 className="font-display text-4xl leading-none">{step.title}</h3>
-      <p className="font-display text-2xl italic leading-snug text-accent">“{step.ask}”</p>
+      <p className="font-display text-2xl italic leading-snug text-accent">
+        “{step.ask}”
+      </p>
       <p className="max-w-sm leading-relaxed text-muted">{step.description}</p>
       <ul className="flex flex-wrap gap-2" aria-label="Outputs">
         {step.outputs.map((o) => (
-          <li key={o} className="rounded-full border border-hairline-strong px-3 py-1 text-xs text-muted">
+          <li
+            key={o}
+            className="rounded-full border border-hairline-strong px-3 py-1 text-xs text-muted"
+          >
             {o}
           </li>
         ))}
@@ -240,7 +283,10 @@ function Header() {
 function PinnedProcess() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
   const lineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -253,7 +299,10 @@ function PinnedProcess() {
     if (!el) return;
     const top = el.getBoundingClientRect().top + window.scrollY;
     const travel = el.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: top + travel * ((i + 0.5) / steps.length), behavior: "smooth" });
+    window.scrollTo({
+      top: top + travel * ((i + 0.5) / steps.length),
+      behavior: "smooth",
+    });
   };
 
   const step = steps[active];
@@ -263,7 +312,11 @@ function PinnedProcess() {
       <div className="sticky top-[88px] flex h-[calc(100vh-88px)] flex-col justify-center gap-8 pb-8">
         {/* Tabs + progress */}
         <div>
-          <div role="tablist" aria-label="Process steps" className="flex gap-10">
+          <div
+            role="tablist"
+            aria-label="Process steps"
+            className="flex gap-10"
+          >
             {steps.map((s, i) => (
               <button
                 key={s.number}
@@ -280,7 +333,10 @@ function PinnedProcess() {
             ))}
           </div>
           <div className="mt-3 h-px w-full bg-hairline">
-            <motion.div style={{ width: lineWidth }} className="h-px bg-accent" />
+            <motion.div
+              style={{ width: lineWidth }}
+              className="h-px bg-accent"
+            />
           </div>
         </div>
 
@@ -351,7 +407,10 @@ function CarouselProcess() {
         aria-label="Process steps — swipe"
       >
         {steps.map((s) => (
-          <article key={s.number} className="flex w-full shrink-0 snap-center flex-col gap-6 px-5">
+          <article
+            key={s.number}
+            className="flex w-full shrink-0 snap-center flex-col gap-6 px-5"
+          >
             <div className="relative aspect-[4/5] overflow-hidden border border-hairline-strong bg-paper">
               {s.art(true)}
             </div>
@@ -383,7 +442,10 @@ function StaticProcess() {
   return (
     <div className="grid gap-16 pb-24">
       {steps.map((s) => (
-        <div key={s.number} className="grid grid-cols-[0.75fr_1.25fr] items-center gap-12">
+        <div
+          key={s.number}
+          className="grid grid-cols-[0.75fr_1.25fr] items-center gap-12"
+        >
           <StepText step={s} />
           <div className="relative aspect-[16/11] overflow-hidden border border-hairline-strong bg-paper">
             {s.art()}
@@ -400,10 +462,15 @@ export default function Process() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="process" className="relative border-t border-hairline bg-paper text-ink">
+    <section
+      id="process"
+      className="relative border-t border-hairline bg-paper text-ink"
+    >
       <div className="mx-auto max-w-[1440px] px-5 md:px-12">
         <Header />
-        <div className="hidden md:block">{reduced ? <StaticProcess /> : <PinnedProcess />}</div>
+        <div className="hidden md:block">
+          {reduced ? <StaticProcess /> : <PinnedProcess />}
+        </div>
         <div className="md:hidden">
           <CarouselProcess />
         </div>

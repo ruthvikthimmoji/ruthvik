@@ -26,8 +26,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
-import KineticText from "../components/KineticText";
-import Navbar from "../components/Navbar";
+import KineticText from "../../Archieve/KineticText";
+import Navbar from "../../Archieve/Navbar";
 import { education, roles } from "../data/experience";
 
 /* =========================================================
@@ -137,7 +137,7 @@ function TiltPortrait() {
               background: useTransform(
                 [glareX, glareY],
                 ([gx, gy]) =>
-                  `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.22) 0%, transparent 60%)`
+                  `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.22) 0%, transparent 60%)`,
               ),
             }}
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -270,7 +270,9 @@ function DualMindset() {
             type="button"
             onClick={() => setMode("engineering")}
             className={`relative rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${
-              mode === "engineering" ? "text-paper" : "text-muted hover:text-ink"
+              mode === "engineering"
+                ? "text-paper"
+                : "text-muted hover:text-ink"
             }`}
           >
             {mode === "engineering" && (
@@ -299,14 +301,35 @@ function DualMindset() {
               className="grid gap-6 sm:grid-cols-3"
             >
               {[
-                { label: "Goal", value: "Cognitive Ease", desc: "Shortest route from user intent to task completion." },
-                { label: "Medium", value: "Figma & Design Tokens", desc: "Scalable component libraries, auto-layout, atomic variants." },
-                { label: "Priority", value: "Hierarchy & Rhythm", desc: "Clarity through typography, scannability and calm negative space." },
+                {
+                  label: "Goal",
+                  value: "Cognitive Ease",
+                  desc: "Shortest route from user intent to task completion.",
+                },
+                {
+                  label: "Medium",
+                  value: "Figma & Design Tokens",
+                  desc: "Scalable component libraries, auto-layout, atomic variants.",
+                },
+                {
+                  label: "Priority",
+                  value: "Hierarchy & Rhythm",
+                  desc: "Clarity through typography, scannability and calm negative space.",
+                },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-hairline bg-paper/60 p-4">
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">{item.label}</span>
-                  <p className="mt-1 font-display text-lg font-semibold text-ink">{item.value}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">{item.desc}</p>
+                <div
+                  key={item.label}
+                  className="rounded-xl border border-hairline bg-paper/60 p-4"
+                >
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">
+                    {item.label}
+                  </span>
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">
+                    {item.value}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    {item.desc}
+                  </p>
                 </div>
               ))}
             </motion.div>
@@ -320,14 +343,35 @@ function DualMindset() {
               className="grid gap-6 sm:grid-cols-3"
             >
               {[
-                { label: "Goal", value: "Build Feasibility", desc: "Zero guesswork handoff: responsive bounds and edge cases accounted for." },
-                { label: "Medium", value: "Next.js / CSS Grid", desc: "Deep empathy for DOM rendering, component props, and API boundaries." },
-                { label: "Priority", value: "Deterministic State", desc: "Explicit loading, error, empty and disabled conditions." },
+                {
+                  label: "Goal",
+                  value: "Build Feasibility",
+                  desc: "Zero guesswork handoff: responsive bounds and edge cases accounted for.",
+                },
+                {
+                  label: "Medium",
+                  value: "Next.js / CSS Grid",
+                  desc: "Deep empathy for DOM rendering, component props, and API boundaries.",
+                },
+                {
+                  label: "Priority",
+                  value: "Deterministic State",
+                  desc: "Explicit loading, error, empty and disabled conditions.",
+                },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-hairline bg-paper/60 p-4">
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">{item.label}</span>
-                  <p className="mt-1 font-display text-lg font-semibold text-ink">{item.value}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">{item.desc}</p>
+                <div
+                  key={item.label}
+                  className="rounded-xl border border-hairline bg-paper/60 p-4"
+                >
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">
+                    {item.label}
+                  </span>
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">
+                    {item.value}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    {item.desc}
+                  </p>
                 </div>
               ))}
             </motion.div>
@@ -416,7 +460,8 @@ function JourneyTrajectory() {
                     </span>
                     {isCurrent && (
                       <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-accent">
-                        <Radio size={10} className="animate-pulse" /> Live Station
+                        <Radio size={10} className="animate-pulse" /> Live
+                        Station
                       </span>
                     )}
                   </div>
@@ -490,7 +535,8 @@ function JourneyTrajectory() {
             </div>
 
             <p className="mt-3 text-xs leading-relaxed text-muted sm:text-sm">
-              Theoretical foundation in computation, system models, algorithmic logic, and modern software design patterns.
+              Theoretical foundation in computation, system models, algorithmic
+              logic, and modern software design patterns.
             </p>
           </motion.div>
         </motion.div>
@@ -558,16 +604,32 @@ export default function AboutClient() {
               className="mt-6 text-5xl leading-[0.94] tracking-[-0.05em] sm:text-7xl md:mt-10 md:text-8xl"
             >
               <span className="block">
-                <KineticText text="Design is" base={520} peak={800} className="font-display font-medium" />
+                <KineticText
+                  text="Design is"
+                  base={520}
+                  peak={800}
+                  className="font-display font-medium"
+                />
               </span>
               <span className="block">
-                <KineticText text="how it" base={520} peak={800} className="font-display font-medium" />{" "}
-                <KineticText text="works." base={400} peak={800} className="font-serif italic text-accent" />
+                <KineticText
+                  text="how it"
+                  base={520}
+                  peak={800}
+                  className="font-display font-medium"
+                />{" "}
+                <KineticText
+                  text="works."
+                  base={400}
+                  peak={800}
+                  className="font-serif italic text-accent"
+                />
               </span>
             </h1>
 
             <p className="mt-8 max-w-2xl font-serif text-xl italic leading-relaxed text-muted md:text-2xl">
-              An inquiry into product craft, cognitive simplicity, and the space between software engineering and interface architecture.
+              An inquiry into product craft, cognitive simplicity, and the space
+              between software engineering and interface architecture.
             </p>
           </header>
 
@@ -576,9 +638,13 @@ export default function AboutClient() {
             <div className="md:col-span-5">
               <TiltPortrait />
               <div className="mt-4 border-l-2 border-hairline pl-4 text-xs text-muted">
-                <p className="font-mono uppercase tracking-wider text-ink">Ruthvik P. Thimmoji</p>
+                <p className="font-mono uppercase tracking-wider text-ink">
+                  Ruthvik P. Thimmoji
+                </p>
                 <p className="mt-0.5">Product Designer · Bengaluru, India</p>
-                <p className="mt-0.5 font-mono text-[10px] text-accent">Currently: Studycrux · Studio: Designuru</p>
+                <p className="mt-0.5 font-mono text-[10px] text-accent">
+                  Currently: Studycrux · Studio: Designuru
+                </p>
               </div>
             </div>
 
@@ -593,15 +659,24 @@ export default function AboutClient() {
                 <span className="float-left mr-3 font-serif text-5xl font-normal leading-none text-ink">
                   I
                 </span>
-                began inside the world of algorithms and system constraints. With a background in Computer Science, my early discipline was grounded in how systems execute: data structures, relational schemas, and compilation speed.
+                began inside the world of algorithms and system constraints.
+                With a background in Computer Science, my early discipline was
+                grounded in how systems execute: data structures, relational
+                schemas, and compilation speed.
               </p>
 
               <p className="text-base leading-relaxed text-muted md:text-lg">
-                Yet I consistently noticed that digital platforms almost never fail because of technical execution. They fail because of cognitive friction. Software loses users when it forces people to parse internal engineering logic rather than helping them complete a goal.
+                Yet I consistently noticed that digital platforms almost never
+                fail because of technical execution. They fail because of
+                cognitive friction. Software loses users when it forces people
+                to parse internal engineering logic rather than helping them
+                complete a goal.
               </p>
 
               <p className="text-base leading-relaxed text-muted md:text-lg">
-                That realization shifted my entire craft. I moved to the front lines of interaction design to ensure that complex business engines are translated into calm, obvious, and human interfaces.
+                That realization shifted my entire craft. I moved to the front
+                lines of interaction design to ensure that complex business
+                engines are translated into calm, obvious, and human interfaces.
               </p>
             </div>
           </section>
@@ -653,7 +728,8 @@ export default function AboutClient() {
                 Field Notes &amp; Trajectory
               </h2>
               <p className="mt-2 text-sm text-muted">
-                Follow the live expedition path below — tracing roles, engagements, and academic grounding.
+                Follow the live expedition path below — tracing roles,
+                engagements, and academic grounding.
               </p>
             </div>
 
@@ -666,8 +742,12 @@ export default function AboutClient() {
                 { label: "Origin", value: "Computer Science" },
               ].map((m) => (
                 <div key={m.label} className="text-center sm:text-left">
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">{m.label}</span>
-                  <p className="mt-1 font-display text-lg font-semibold text-ink">{m.value}</p>
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-accent">
+                    {m.label}
+                  </span>
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">
+                    {m.value}
+                  </p>
                 </div>
               ))}
             </div>
@@ -691,7 +771,8 @@ export default function AboutClient() {
               </h3>
 
               <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted">
-                Currently open for senior product design roles, SaaS architectures, and high-stakes freelance contracts.
+                Currently open for senior product design roles, SaaS
+                architectures, and high-stakes freelance contracts.
               </p>
 
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
