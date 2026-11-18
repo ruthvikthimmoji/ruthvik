@@ -12,6 +12,17 @@ export const workTypeLabels: Record<WorkType, string> = {
   personal: "Personal concept",
 };
 
+/**
+ * Only put a number here if you can defend it in an interview.
+ * - measured: you actually observed it (testing, analytics)
+ * - target:   what the design aims for / would be tracked after launch
+ */
+export type EpisodeResult = {
+  value: string; // e.g. "5/5", "<24h", "40%" — the number part counts up
+  label: string;
+  status: "measured" | "target";
+};
+
 export type ProjectCard = {
   slug: string;
   title: string;
@@ -25,30 +36,58 @@ export type ProjectCard = {
 
   contribution: string[];
 
-  image: string;
+  image: string; // the "after" / final UI
+  beforeImage?: string; // optional "before" screen — if missing, the after image de-blurs instead
 
-  featured: boolean;
-  caseStudy: boolean; // keep in sync with case-studies.ts (see helper below)
+  /* Story fields used by the homepage episodes */
+  problem?: string; // the mess, one sentence
+  resolution?: string; // what changed, one sentence
+  result?: EpisodeResult;
+
+  /* Optional walkthrough — shows a "Watch walkthrough" button on the canvas card
+     and the case study. kind:
+       "video" → YouTube / Loom link, or an .mp4 in /public
+       "figma" → a Figma prototype link (Share → Copy prototype link)
+       "live"  → a live site / app URL (opens in a new tab)          */
+  walkthrough?: { kind: "video" | "figma" | "live"; url: string; duration?: string; note?: string };
+
+  featured: boolean; // featured = shown as a homepage episode (keep it to 3)
+  caseStudy: boolean; // keep in sync with case-studies.ts
 };
 
 /**
- * Order = display order on the homepage.
- * Real work (client / professional) first, personal concepts after —
- * that's what recruiters weigh most.
+ * Order = episode order on the homepage. Strongest story first.
  */
 export const projects: ProjectCard[] = [
   {
-    slug: "sportsea",
-    title: "SportSea",
+    slug: "parity-b2b",
+    title: "Parity B2B",
     description:
-      "Designed the end-to-end experience for a sports facility booking platform — from discovering a venue to confirming a booking — across mobile and web.",
+      "A cross-border B2B invoicing platform. Designed how finance teams create invoices, handle currency conversion and resolve compliance holds in a single workflow.",
+    // Freelance-era work (2025) → "client". If this was self-initiated, change to "personal".
     type: "client",
-    category: "Sports / Booking",
-    role: "UI/UX Designer",
+    category: "FinTech / B2B",
+    role: "Product Designer",
     year: "2025",
-    platform: "Mobile + Web",
-    contribution: ["User research", "User flows", "UI design", "Prototyping"],
-    image: "/projects/sportsea1.png",
+    platform: "Web App",
+    contribution: [
+      "Invoicing flows",
+      "FX conversion UI",
+      "Payment status states",
+      "Compliance flows",
+      "Data-table system",
+    ],
+    image: "/projects/parity-b2b.png",
+    // beforeImage: "/projects/parity-before.png",
+    problem:
+      "Agencies billing abroad were losing 4–7% of every invoice to currency swings they couldn’t see.",
+    resolution:
+      "Now founders pick an outcome in plain language — and know exactly what will land.",
+    result: {
+      value: "<24h",
+      label: "target time to resolve a compliance hold (was ~96h)",
+      status: "target",
+    },
     featured: true,
     caseStudy: true,
   },
@@ -65,32 +104,33 @@ export const projects: ProjectCard[] = [
     platform: "Web",
     contribution: ["UX flows", "UI redesign", "Dashboards", "Design systems"],
     image: "/projects/studycrux-cms.png",
+    problem:
+      "Editors were fighting their own CMS — scattered navigation, inconsistent screens, too many steps to publish.",
+    resolution:
+      "One clear structure and reusable patterns the whole product team now builds from.",
+    // result: { value: "3", label: "fewer steps to publish an article", status: "measured" },
     featured: true,
     caseStudy: false,
   },
 
   {
-    slug: "parity-b2b",
-    title: "Parity B2B",
+    slug: "sportsea",
+    title: "SportSea",
     description:
-      "A cross-border B2B invoicing platform. Designed how finance teams create invoices, handle currency conversion and resolve compliance holds in a single workflow.",
-    // Freelance-era work (2025) → "client", not "professional".
-    // If this was a self-initiated concept, change to "personal".
+      "Designed the end-to-end experience for a sports facility booking platform — from discovering a venue to confirming a booking — across mobile and web.",
     type: "client",
-    category: "FinTech / B2B",
-    role: "Product Designer",
+    category: "Sports / Booking",
+    role: "UI/UX Designer",
     year: "2025",
-    platform: "Web App",
-    contribution: [
-      "Invoicing flows",
-      "FX conversion UI",
-      "Payment status states",
-      "Compliance flows",
-      "Data-table system",
-    ],
-    image: "/projects/parity-b2b.png",
+    platform: "Mobile + Web",
+    contribution: ["User research", "User flows", "UI design", "Prototyping"],
+    image: "/projects/sportsea1.png",
+    problem:
+      "Players, venue owners and admins all used the same booking system — and needed completely different answers from it.",
+    resolution:
+      "One system with a clear view for each role, from finding a court to settling the payment.",
     featured: true,
-    caseStudy: true, // live site links to /case-studies/parity-b2b
+    caseStudy: true,
   },
 
   {
@@ -103,19 +143,17 @@ export const projects: ProjectCard[] = [
     role: "UI Designer",
     year: "2025",
     platform: "Web",
-    contribution: [
-      "Information hierarchy",
-      "Dashboard UI",
-      "Data visualization",
-    ],
+    contribution: ["Information hierarchy", "Dashboard UI", "Data visualization"],
     image: "/projects/juzzpay.png",
-    featured: true,
+    featured: false,
     caseStudy: true,
   },
 
   {
     slug: "lattice-design-system",
     title: "Lattice",
+    // NOTE: these numbers don't match the Lattice case study page (40+ components,
+    // 4 weeks, 2025). Make them match before featuring this anywhere.
     description:
       "A themeable design system built solo in Figma — 25 components and 150 variables that work in Light, Dark, Default and Compact through variable modes, cutting variants by 75% and passing WCAG AA in both themes.",
     type: "personal",
@@ -123,15 +161,10 @@ export const projects: ProjectCard[] = [
     role: "Solo Designer",
     year: "2026",
     platform: "Figma",
-    contribution: [
-      "Token architecture",
-      "Component library",
-      "Accessibility (WCAG AA)",
-      "Documentation",
-    ],
+    contribution: ["Token architecture", "Component library", "Accessibility (WCAG AA)", "Documentation"],
     image: "/projects/lattice.png",
-    featured: true,
-    caseStudy: true, // live site links to /case-studies/lattice-design-system
+    featured: false, // candidate for the Lab later
+    caseStudy: true,
   },
 
   {
@@ -144,14 +177,9 @@ export const projects: ProjectCard[] = [
     role: "UI/UX Designer",
     year: "2025",
     platform: "Mobile",
-    contribution: [
-      "User flows",
-      "Mobile UI",
-      "Claims experience",
-      "Information architecture",
-    ],
+    contribution: ["User flows", "Mobile UI", "Claims experience", "Information architecture"],
     image: "/projects/insurance.png",
-    featured: false, // flip to true once the case study is built (Phase 3)
+    featured: false,
     caseStudy: false,
   },
 
@@ -165,12 +193,7 @@ export const projects: ProjectCard[] = [
     role: "UI/UX Designer",
     year: "2025",
     platform: "Mobile",
-    contribution: [
-      "Mobile UI",
-      "User flows",
-      "Booking experience",
-      "Prototyping",
-    ],
+    contribution: ["Mobile UI", "User flows", "Booking experience", "Prototyping"],
     image: "/projects/tripmate.png",
     featured: false,
     caseStudy: false,
@@ -181,5 +204,11 @@ export const projects: ProjectCard[] = [
 
 export const getFeaturedProjects = () => projects.filter((p) => p.featured);
 
+/** Homepage episodes: featured projects that have a story written. */
+export const getEpisodes = () =>
+  projects.filter((p) => p.featured && p.problem && p.resolution);
+
 export const getProjectsByType = (type: WorkType) =>
   projects.filter((p) => p.type === type);
+
+export const getWalkthrough = (slug: string) => projects.find((p) => p.slug === slug)?.walkthrough;

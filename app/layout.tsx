@@ -1,54 +1,46 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import {
-  Bricolage_Grotesque,
-  Fraunces,
-  Geist_Mono,
-  Inter,
-} from "next/font/google";
+import { Caveat, Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import CommandPalette from "./components/CommandPalette";
-import SignatureCursor from "./components/SignatureCursor";
-import SplashScreen from "./components/SplashScreen";
 
-const inter = Inter({
+/* Body + labels */
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-geist",
 });
 
-/* Display font: variable weight, used for big kinetic headlines */
-const bricolage = Bricolage_Grotesque({
+/* Headlines (normal + italic for the orange emphasis words) */
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-bricolage",
-});
-
-/* Legacy: still used by sections that haven't been migrated yet.
-   Remove once nothing uses `font-serif`. */
-const fraunces = Fraunces({
-  subsets: ["latin"],
+  weight: "400",
   style: ["normal", "italic"],
-  variable: "--font-fraunces",
+  variable: "--font-instrument-serif",
 });
 
+/* Handwriting for sticky notes on the canvas */
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-caveat",
+});
+
+/* Kept for any old component that still uses font-mono */
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
 
-/* Absolute URL base for OpenGraph images.
-   Priority: your own NEXT_PUBLIC_SITE_URL, then the Vercel production URL
-   (set automatically on Vercel), then localhost for local dev. This is what
-   fixes the localhost:3000 links in your social previews. */
+/* Absolute URL base for OpenGraph images. */
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000");
 
-const title = "Ruthvik P Thimmoji | UI/UX Designer | SaaS & Mobile Apps";
+const title = "Ruthvik P Thimmoji — Product Designer";
 
 const description =
-  "UI/UX designer helping startups and SaaS teams design clean, conversion-focused digital products.";
+  "Product designer for SaaS, fintech and admin tools. I turn complex products into obvious ones.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -66,36 +58,28 @@ export const metadata: Metadata = {
     title,
     description,
     url: "/",
-    images: [
-      {
-        url: "/og.png", // add a 1200x630 image to /public
-        width: 1200,
-        height: 630,
-        alt: "Ruthvik P Thimmoji — UI/UX Designer",
-      },
-    ],
+    // preview image comes from app/opengraph-image.tsx
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary_large_image", // uses app/opengraph-image.tsx
     title,
     description,
-    images: ["/og.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0D0D0E",
+  themeColor: "#FCF5E3",
 };
 
-/* Runs before first paint so there is no light-to-dark flash.
-   Dark is the default; a saved choice in localStorage wins. */
+/* Runs before first paint so there is no flash.
+   Light (cream) is the default; a saved "dark" choice wins. */
 const themeScript = `
 (function () {
   try {
     var t = localStorage.getItem("theme");
-    document.documentElement.dataset.theme = t === "light" ? "light" : "dark";
+    document.documentElement.dataset.theme = t === "dark" ? "dark" : "light";
   } catch (e) {
-    document.documentElement.dataset.theme = "dark";
+    document.documentElement.dataset.theme = "light";
   }
 })();
 `;
@@ -108,20 +92,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
+      data-theme="light"
       suppressHydrationWarning
-      className={`${inter.variable} ${bricolage.variable} ${fraunces.variable} ${geistMono.variable}`}
+      className={`${geist.variable} ${instrumentSerif.variable} ${caveat.variable} ${geistMono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="relative overflow-x-hidden bg-paper font-sans text-ink">
-              <SplashScreen />
-        <SignatureCursor />
-        <CommandPalette />
-
+      <body className="relative overflow-x-clip bg-paper font-sans text-ink">
         {children}
-
         <Analytics />
       </body>
     </html>

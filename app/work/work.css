@@ -1,0 +1,35 @@
+/* /work — library page. Reuses canvas tokens from canvas.css (.cv). */
+.wk { min-height: 100vh; padding: 16px 24px 80px; background-color: var(--cv-canvas); background-image: radial-gradient(var(--cv-dot) 1.2px, transparent 1.2px); background-size: 24px 24px; }
+.wk-top { position: sticky; top: 14px; z-index: 50; max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 10px; }
+.wk-back { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
+.wk-back small { display: block; font-size: 12px; font-weight: 400; color: var(--cv-muted); }
+.wk-back .logo { width: 30px; height: 30px; border-radius: 8px; background: var(--cv-ink); color: #fff; display: flex; align-items: center; justify-content: center; font: 400 20px var(--cv-serif); }
+.wk-head { position: relative; max-width: 1240px; margin: 90px auto 0; }
+.wk-head .cv-label { position: static; margin-bottom: 8px; }
+.wk-head .cv-h1 { font-size: clamp(48px, 8vw, 96px); margin-top: 10px; }
+.wk-head .cv-h1 em { font-style: italic; color: var(--cv-accent); }
+.wk-filters { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 8px; }
+.wk-filters button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: #fff; border: 1px solid var(--cv-line); font-size: 14px; font-weight: 500; transition: background .15s, color .15s, border-color .15s; }
+.wk-filters button span { min-width: 20px; padding: 1px 6px; border-radius: 999px; background: #f2f1ec; font-size: 12px; color: var(--cv-muted); }
+.wk-filters button.on { background: var(--cv-ink); border-color: var(--cv-ink); color: #fff; }
+.wk-filters button.on span { background: rgba(255,255,255,.16); color: #fff; }
+.wk-grid { list-style: none; padding: 0; max-width: 1240px; margin: 34px auto 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+.wk-card { display: block; height: 100%; padding: 12px 12px 18px; background: #fff; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 30px rgba(0,0,0,.05); transition: transform .4s var(--cv-ease), box-shadow .3s; }
+.wk-card.linked:hover { transform: translateY(-4px); box-shadow: 0 0 0 2px var(--cv-sel), 0 18px 40px rgba(0,0,0,.08); }
+.wk-img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px; background: #eceae4; }
+.wk-img img { object-fit: cover; transition: scale .6s var(--cv-ease); }
+.wk-card.linked:hover .wk-img img { scale: 1.04; }
+.wk-flag { position: absolute; left: 10px; top: 10px; padding: 5px 9px; border-radius: 999px; background: rgba(255,255,255,.92); font-size: 11.5px; font-weight: 500; color: var(--cv-muted); }
+.wk-meta { display: flex; justify-content: space-between; margin: 16px 6px 0; font: 500 11px var(--cv-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--cv-muted); }
+.wk-card h2 { margin: 8px 6px 0; font: 400 30px/1.05 var(--cv-serif); letter-spacing: -.01em; }
+.wk-card p { margin: 8px 6px 0; font-size: 14.5px; line-height: 1.55; color: var(--cv-muted); }
+.wk-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 16px 6px 0; font-size: 13px; color: var(--cv-muted); }
+.wk-foot b { font-weight: 500; color: var(--cv-accent); white-space: nowrap; }
+.wk-end { max-width: 1240px; margin: 70px auto 0; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+@media (max-width: 700px) {
+  .wk { padding: 12px 14px 60px; }
+  .wk-head { margin-top: 56px; }
+  .wk-grid { grid-template-columns: 1fr; gap: 18px; }
+}
+.lab-toplink { padding: 9px 14px; font-size: 13px; font-weight: 500; border-radius: 9px; }
+.lab-toplink:hover { background: #f4f3ef; }

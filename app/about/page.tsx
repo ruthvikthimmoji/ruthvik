@@ -1,11 +1,7 @@
-import AboutClient from "./AboutClient";
+import { redirect } from "next/navigation";
 
-
-export const metadata = {
-  title: "About | Ruthvik — UI/UX Designer",
-  description: "A designer’s journey, values, and approach — told like a book.",
-};
-
+/* About now lives on the canvas homepage (02 — About me).
+   Old links to /about land there instead of an outdated page. */
 export default function AboutPage() {
-  return <AboutClient />;
+  redirect("/");
 }

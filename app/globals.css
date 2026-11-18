@@ -1,55 +1,64 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   DESIGN TOKENS: "The Workspace"
+   DESIGN TOKENS — "Noise → Clarity" (navy · orange · cream)
    Token NAMES are unchanged (bg-paper, text-ink, text-muted,
-   border-hairline, text-accent ...) so every existing component keeps
-   working. Only the VALUES swap between dark (default) and light.
+   border-hairline, text-accent ...) so existing components keep
+   working. Only the VALUES changed. Light (cream) is now the default;
+   dark = navy.
    ================================================================== */
 
-/* LIGHT values live in @theme. `static` makes Tailwind always emit them,
-   so the dark override below can never be tree-shaken away. */
+/* LIGHT values live in @theme. `static` makes Tailwind always emit them. */
 @theme static {
-  --color-ink: #111111;
-  --color-paper: #f7f6f2;
-  --color-sunken: #eceae5;
-  --color-muted: #6f6d68;
-  --color-accent: #c86b3c;
-  --color-accent-hover: #b25a2e;
-  --color-hairline: rgba(17, 17, 17, 0.14);
-  --color-hairline-strong: rgba(17, 17, 17, 0.28);
-  --color-danger: #c0392b;
+  --color-ink: #023341;
+  --color-paper: #fcf5e3;
+  --color-sunken: #f4ead3;
+  --color-muted: #4d6b74;
+  --color-accent: #fd5e02;
+  --color-accent-hover: #e05200;
+  --color-hairline: rgba(2, 51, 65, 0.16);
+  --color-hairline-strong: rgba(2, 51, 65, 0.32);
+  --color-danger: #e5484d;
+  --color-warning: #f2b705;
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* DARK values (default theme, set before paint by the script in layout.tsx) */
+/* 1. LIGHT (default) */
 :root,
 :root[data-theme="light"],
 html.light {
-  --color-ink: #111111;
-  --color-paper: #f7f6f2;
-  --color-sunken: #eceae5;
-  --color-muted: #6f6d68;
-  --color-accent: #c86b3c;
-  --color-accent-hover: #b25a2e;
-  --color-hairline: rgba(17, 17, 17, 0.14);
-  --color-hairline-strong: rgba(17, 17, 17, 0.28);
-  --color-danger: #c0392b;
+  --color-ink: #023341;
+  --color-paper: #fcf5e3;
+  --color-sunken: #f4ead3;
+  --color-muted: #4d6b74;
+  --color-accent: #fd5e02;
+  --color-accent-hover: #e05200;
+  --color-hairline: rgba(2, 51, 65, 0.16);
+  --color-hairline-strong: rgba(2, 51, 65, 0.32);
+  --color-danger: #e5484d;
+  --color-warning: #f2b705;
   color-scheme: light;
 }
 
-/* 2. DARK MODE VALUES */
+/* 2. DARK (navy) — also used for the Lab + Contact sections via .theme-navy */
 :root[data-theme="dark"],
-html.dark {
-  --color-ink: #f1efe9;
-  --color-paper: #0d0d0e;
-  --color-sunken: #161618;
-  --color-muted: #8d8b86;
-  --color-accent: #e2804a;
-  --color-accent-hover: #ee9461;
-  --color-hairline: rgba(241, 239, 233, 0.1);
-  --color-hairline-strong: rgba(241, 239, 233, 0.22);
+html.dark,
+.theme-navy {
+  --color-ink: #fcf5e3;
+  --color-paper: #023341;
+  --color-sunken: #063b4a;
+  --color-muted: #9db3b5;
+  --color-accent: #fd5e02;
+  --color-accent-hover: #ff7a2e;
+  --color-hairline: rgba(252, 245, 227, 0.12);
+  --color-hairline-strong: rgba(252, 245, 227, 0.26);
   --color-danger: #ef6b5b;
+  --color-warning: #f2b705;
   color-scheme: dark;
+}
+.theme-navy {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 /* Legacy aliases: older components that use these names follow the theme */
@@ -62,25 +71,18 @@ html.dark {
   --color-border: var(--color-hairline);
 }
 
-/* Fonts come from next/font in layout.tsx. Each var() has a fallback so a
-   missing font can never invalidate the rule. */
+/* Fonts come from next/font in layout.tsx.
+   Headlines: Instrument Serif. Body + labels: Geist. */
 @theme inline {
-  --font-sans: var(--font-inter, system-ui), system-ui, sans-serif;
-  --font-display: var(--font-bricolage, system-ui), system-ui, sans-serif;
-  --font-serif: var(--font-fraunces, Georgia), Georgia, serif; /* legacy, removed once all sections are migrated */
+  --font-sans: var(--font-geist, system-ui), system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif, Georgia), Georgia, serif;
+  --font-serif: var(--font-instrument-serif, Georgia), Georgia, serif;
   --font-mono: var(--font-geist-mono, ui-monospace), ui-monospace, monospace;
 }
 
 /* ==================================================================
    BASE
    ================================================================== */
-:root[data-theme="dark"] {
-  color-scheme: dark;
-}
-:root[data-theme="light"] {
-  color-scheme: light;
-}
-
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px; /* clears the fixed navbar on #anchor jumps */
@@ -91,14 +93,17 @@ html {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-inter, system-ui), system-ui, sans-serif;
+  font-family: var(--font-geist, system-ui), system-ui, sans-serif;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
+  /* Instrument Serif has one weight — never fake-bold it */
+  font-synthesis-weight: none;
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 ::selection {
   background: var(--color-accent);
-  color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 /* Scrollbar (WebKit) */
@@ -129,13 +134,46 @@ body {
 }
 
 /* ==================================================================
-   CANVAS UTILITIES (used by the hero and case study pages)
+   TYPE UTILITIES (match the Figma text styles)
+   ================================================================== */
+@utility display-xxl {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.25rem, 9.5vw, 9.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+}
+@utility display-l {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5.5vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+/* Orange italic emphasis word: <em className="emph">obvious</em> */
+@utility emph {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent);
+}
+
+/* Small spaced-capital labels (was mono — now Geist, quieter) */
+.frame-label,
+.label-caps {
+  font-family: var(--font-geist, system-ui), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ==================================================================
+   CANVAS UTILITIES
    ================================================================== */
 .bg-dots {
-  background-image: radial-gradient(
-    var(--color-hairline-strong) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(var(--color-hairline-strong) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -144,15 +182,6 @@ body {
     linear-gradient(to right, var(--color-hairline) 1px, transparent 1px),
     linear-gradient(to bottom, var(--color-hairline) 1px, transparent 1px);
   background-size: 80px 80px;
-}
-
-/* Figma-style frame label that sits above a "frame" */
-.frame-label {
-  font-family: var(--font-geist-mono, ui-monospace), ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-muted);
 }
 
 /* Legacy text utility (kept for older components) */
