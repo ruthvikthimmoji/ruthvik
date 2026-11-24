@@ -119,7 +119,7 @@ export const caseStudies: CaseStudy[] = [
     headline: "TODO: outcome-led line, e.g. 'Reworked the CMS so editors publish in fewer steps.'",
     image: "/projects/studycrux-cms.png",
 
-    year: "May 2026 — Present",
+    year: "2026 — Present",
     duration: "Ongoing",
     role: "UI/UX Design Intern",
     team: "TODO: e.g. 'Embedded with 3 developers and a product lead'",
@@ -842,8 +842,8 @@ export const caseStudies: CaseStudy[] = [
 
   // =====================================================
   // PARITY B2B: self-initiated concept (FX-protected cross-border invoicing)
-  // Source: Parity B2B Figma file (pages 01–07). Testing figures come from
-  // the early sessions logged on page 04 — keep only what you can defend.
+  // Source: Parity B2B Figma file (pages 01–07). No user testing was run:
+  // the iterations below are design self-review, and all numbers are targets.
   // =====================================================
   {
     slug: "parity-b2b",
@@ -869,7 +869,7 @@ export const caseStudies: CaseStudy[] = [
       solution:
         "An invoicing product where the founder picks a protection outcome in plain language, the client pays through their own domestic bank rail, and a compliance hold becomes one guided upload instead of days of email.",
       result:
-        "A complete concept: a hedging model, a 5-state invoice lifecycle, 6 high-fidelity screens, a documented design system, and 3 pivots that came out of early feedback sessions. Not built or launched.",
+        "A complete concept: a hedging model, a 5-state invoice lifecycle, 6 high-fidelity screens, a documented design system, and 3 iterations from reviewing my own first version. Not built, launched or user-tested yet.",
     },
 
     context:
@@ -894,7 +894,7 @@ export const caseStudies: CaseStudy[] = [
     metrics: [
       { value: "5", label: "invoice states, plus one exception path" },
       { value: "6", label: "hi-fi screens following one invoice end to end" },
-      { value: "3", label: "pivots from early feedback sessions" },
+      { value: "3", label: "design iterations from v1 to v2" },
       { value: "<24h", label: "target time to clear a compliance hold (vs ~96h)" },
     ],
 
@@ -918,7 +918,7 @@ export const caseStudies: CaseStudy[] = [
         label: "03 / Who it's for",
         title: "Rohan needs certainty, not a trading terminal.",
         description:
-          "The primary persona is a co-founder of an 18-person engineering agency in Bengaluru: 90% of revenue in USD, 100% of costs in INR. Three jobs shaped everything after this.",
+          "I worked from a proto-persona, built from desk research on how agencies get paid: a co-founder of an 18-person engineering agency in Bengaluru: 90% of revenue in USD, 100% of costs in INR. Three jobs shaped everything after this.",
         insightLabels: { from: "Today", to: "With Parity" },
         insights: [
           {
@@ -994,25 +994,25 @@ export const caseStudies: CaseStudy[] = [
       {
         id: "pivots",
         label: "06 / Iteration",
-        title: "Three pivots that changed the structure, not just the polish.",
+        title: "Three iterations that changed the structure, not just the polish.",
         description:
-          "I put the first low-fidelity prototype in front of 5 studio founders. Each problem they hit changed the architecture.",
+          "I reviewed my first low-fidelity version against Rohan's three jobs and walked each flow as him. Three problems stood out, and each one changed the architecture.",
         insightLabels: { from: "What broke", to: "What changed" },
         insights: [
           {
             finding:
-              "“30-Day FX Forward Swap” and “Downside Slippage Boundary” made founders feel they needed forex training.",
+              "v1 used “30-Day FX Forward Swap” and “Downside Slippage Boundary”. Rohan runs an agency, not a trading desk — this language assumes forex training he doesn't have.",
             decision:
-              "Renamed to Guaranteed Shield, Protection Fee and Minimum Safety Floor, with the rupee payout on every option. All 5 participants could then explain the choices (2 of 5 before).",
+              "Renamed to Guaranteed Shield, Protection Fee and Minimum Safety Floor, and put the rupee payout on every option, so each choice reads as an outcome.",
           },
           {
-            finding: "A full-page invoice form cut people off from recent invoices and client records they wanted to check.",
+            finding: "A full-page invoice form cut the user off from recent invoices and client records — exactly what you check while deciding how to bill.",
             decision: "Moved creation into an 800px drawer with a light scrim. The dashboard stays in view and form state is kept.",
           },
           {
-            finding: "Compliance flags hidden in the notification bell were missed, so funds stayed frozen for days.",
+            finding: "Compliance flags lived in the notification bell, next to routine updates. The most expensive event in the product had the quietest UI.",
             decision:
-              "Reserved the loudest component in the system for this: a sticky escrow banner with one direct upload action. Response time to a hold dropped by 75% in the next round.",
+              "Reserved the loudest component in the system for this: a sticky escrow banner with one direct upload action. Nothing else in the product uses it.",
           },
         ],
         compare: {
@@ -1078,18 +1078,18 @@ export const caseStudies: CaseStudy[] = [
       {
         id: "proven",
         label: "10 / What's proven",
-        title: "What's validated, and what's still a target.",
+        title: "What's designed, and what still needs proving.",
         items: [
-          "Validated in early sessions — hedging options understood by all 5 founders after the copy pivot (40% → 100%); the drawer kept context; response to a compliance hold 75% faster with the banner.",
+          "Designed — the full lifecycle from draft to settlement, the compliance exception path, the payer checkout and a documented design system.",
           "Targets, not results — ≥45% protection opt-in on invoices over $10,000; holds cleared in under 24 hours; 100% payout certainty on protected invoices.",
-          "Next — round 2 testing of the payer checkout, micro-interactions for the rate countdown and upload feedback, and edge-case specs for handoff.",
+          "Next — test with 5 agency founders: can they explain the three protection options, and do they notice and act on a compliance hold? Then micro-interactions and handoff specs.",
         ],
-        callout: "This is a concept. Nothing here was built or launched, and no target above is a measured result.",
+        callout: "This is a concept. Nothing here has been built, launched or tested with users, and no target above is a measured result.",
       },
     ],
 
     outcome:
-      "A complete, testable concept for FX-protected cross-border invoicing: research, a state model, 6 high-fidelity screens and a documented design system, shaped by three pivots from early feedback.",
+      "A complete, testable concept for FX-protected cross-border invoicing: research, a state model, 6 high-fidelity screens and a documented design system, refined through three design iterations. The next step is testing it with real agency founders.",
     reflection: [
       "Language is part of the interface. Renaming three terms did more for comprehension than any layout change.",
       "Context beats focus. Hiding the dashboard to ‘focus’ on a form took away the information people needed to decide.",
