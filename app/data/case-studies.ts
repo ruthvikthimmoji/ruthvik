@@ -106,7 +106,7 @@ export type CaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   // =====================================================
-  // 1. STUDYCRUX: flagship, current role (process-only, NDA safe)
+  // 1. STUDYCRUX: internship (process-only, NDA safe — logo only, no screens)
   // =====================================================
   {
     slug: "studycrux-cms",
@@ -119,9 +119,9 @@ export const caseStudies: CaseStudy[] = [
     headline: "TODO: outcome-led line, e.g. 'Reworked the CMS so editors publish in fewer steps.'",
     image: "/projects/studycrux-cms.png",
 
-    year: "2026 — Present",
+    year: "May 2026 — Present",
     duration: "Ongoing",
-    role: "UI/UX Designer",
+    role: "UI/UX Design Intern",
     team: "TODO: e.g. 'Embedded with 3 developers and a product lead'",
     platform: "Web",
     tools: ["Figma"],
@@ -142,10 +142,10 @@ export const caseStudies: CaseStudy[] = [
       "TODO: goal 3",
     ],
     responsibilities: [
-      "UX flows",
-      "UI redesign",
-      "Dashboards",
-      "Design system components",
+      "CMS workflows",
+      "CRM screens",
+      "Design system",
+      "UI redesign of existing screens",
       "Developer handoff",
     ],
 
@@ -174,8 +174,19 @@ export const caseStudies: CaseStudy[] = [
         ],
       },
       {
+        id: "scope",
+        label: "04 / What I worked on",
+        title: "Four areas across one product.",
+        items: [
+          "CMS — TODO: what was broken and what you changed",
+          "CRM — TODO: what was broken and what you changed",
+          "Design system — TODO: which components/patterns you built",
+          "Redesign of existing screens — TODO: which screens and why",
+        ],
+      },
+      {
         id: "system",
-        label: "04 / Design system",
+        label: "05 / Design system",
         title: "Building reusable patterns",
         description:
           "TODO: which components/patterns you built and how they speed up the team.",
@@ -830,173 +841,519 @@ export const caseStudies: CaseStudy[] = [
   },
 
   // =====================================================
-  // PARITY B2B: Cross-Border Invoicing & FX Hedging Portal
+  // PARITY B2B: self-initiated concept (FX-protected cross-border invoicing)
+  // Source: Parity B2B Figma file (pages 01–07). Testing figures come from
+  // the early sessions logged on page 04 — keep only what you can defend.
   // =====================================================
   {
     slug: "parity-b2b",
     published: true,
-    type: "professional", // or "client"
+    type: "personal",
 
     title: "Parity B2B",
     tagline: "Shielding cross-border invoicing from FX volatility and compliance limbo.",
-    headline: "An operational FinTech platform combining smart invoicing with semi-automated FX hedging and a transparent AML resolution engine.",
-    image: "/projects/parity-b2b.png", // Add your cover preview in public/projects/
+    headline:
+      "A self-initiated product concept that lets an agency founder lock what lands in the bank before the client even pays.",
+    image: "/projects/parity-b2b.png",
 
-    year: "2025",
+    year: "2026",
     duration: "6 weeks",
-    role: "Lead Product Designer",
-    team: "Problem definition, system architecture, UX/UI, usability validation",
-    platform: "Desktop Web Application (1440 × 900px)",
+    role: "Product Designer (end to end)",
+    team: "Solo, self-initiated concept",
+    platform: "Desktop web, 1440 × 900",
     tools: ["Figma", "FigJam", "Notion"],
 
     tldr: {
       problem:
-        "Global agencies billing in foreign currencies on Net-30 terms lose 4% to 7% of profit margins to currency volatility, while unexpected SWIFT AML flags freeze operational cash flow for days.",
+        "Agencies bill abroad in USD on Net-30, but pay salaries in INR. In the month between invoice and payment, currency drift can quietly take 4–7% of margin, and large transfers get frozen by compliance checks with no clear next step.",
       solution:
-        "Designed Parity B2B: an operational FinTech suite offering one-click guaranteed forward rate hedging, virtual local rail routing (ACH/SEPA), and a transparent, self-service compliance resolution engine.",
+        "An invoicing product where the founder picks a protection outcome in plain language, the client pays through their own domestic bank rail, and a compliance hold becomes one guided upload instead of days of email.",
       result:
-        "Targeted ≥45% hedging opt-in on invoices over $10K, reduced compliance hold resolution times from 96 hours to <24 hours, and guaranteed 100% payroll payout predictability.",
+        "A complete concept: a hedging model, a 5-state invoice lifecycle, 6 high-fidelity screens, a documented design system, and 3 pivots that came out of early feedback sessions. Not built or launched.",
     },
 
     context:
-      "Global service businesses and engineering consultancies operating internationally routinely bill clients in USD or EUR while paying team salaries, office leases, and vendor tools in local currencies like INR. Between invoice creation and payment clearance, currency drift silently erodes profits.",
+      "Parity is a concept I designed to explore a real problem for Indian service businesses: revenue arrives in dollars, costs leave in rupees, and the gap between the two is a month of risk nobody is managing.",
     problem:
-      "Cross-border receivables suffer from three critical breakdowns: the Margin Erosion Trap (losing ₹46,000+ on a single $20K invoice due to a 3% dip), the SWIFT Black Box (opaque delays and multi-leg wire fees), and Regulatory Limbo (central banks flagging transfers over $10K without self-service escrow clearance).",
+      "Three things break at once. The exchange rate can drop while the invoice is open, wiping out a payroll-sized amount. International wires lose $25–50 per intermediary bank with no tracking. And transfers over reporting thresholds are frozen with generic error codes while support asks for paperwork by email.",
     goals: [
-      "Lock in guaranteed local-currency payout certainty prior to payroll cycles",
-      "Provide frictionless domestic bank rails (ACH/SEPA) for international clients",
-      "Cut compliance hold resolution from an industry average of 96h to under 24h",
-      "Replace derivative market jargon with outcome-driven, transparent risk presets",
+      "Show the rupee payout before the invoice is sent, not after it settles",
+      "Make FX protection understandable without any forex vocabulary",
+      "Let international clients pay on their domestic rail without signing up",
+      "Turn a compliance hold into one clear action, resolved within 24 hours",
     ],
     responsibilities: [
-      "Problem definition & founder discovery interviews",
-      "JTBD & end-to-end journey mapping",
-      "Deterministic financial state machine modeling",
-      "Interactive 800px slide-over invoice creation drawer",
-      "High-salience escrow & compliance resolution system",
-      "Design tokens & tabular numerical formatting specs",
+      "Problem framing & persona",
+      "Jobs to be done & journey mapping",
+      "Information architecture",
+      "Invoice state machine",
+      "Hedging & compliance UX",
+      "Hi-fi UI & design system",
     ],
 
     metrics: [
-      { value: "≥ 45%", label: "Target Hedging Adoption on >$10k" },
-      { value: "< 24h", label: "Compliance Resolution (down from 96h)" },
-      { value: "100%", label: "Payout Certainty on Protected Invoices" },
+      { value: "5", label: "invoice states, plus one exception path" },
+      { value: "6", label: "hi-fi screens following one invoice end to end" },
+      { value: "3", label: "pivots from early feedback sessions" },
+      { value: "<24h", label: "target time to clear a compliance hold (vs ~96h)" },
     ],
 
     sections: [
       {
-        id: "market-friction",
-        label: "02 / Market Friction",
-        title: "Three acute breakdowns in cross-border receivables.",
+        id: "problem",
+        label: "02 / The problem",
+        title: "A month of risk between invoice and payout.",
         description:
-          "In-depth discovery interviews with studio founders and financial controllers identified the structural gaps in existing banking infrastructure.",
+          "A $20,000 invoice on Net-30. If the rate slips from ₹83.50 to ₹81.20 before the client pays, the agency receives ₹46,000 less — often more than its monthly software and cloud budget.",
         items: [
-          "The Margin Erosion Trap — A $20,000 invoice on Net-30 terms slipping from ₹83.50 to ₹81.20 wipes out ₹46,000+ in raw profit upon conversion, often exceeding an agency's monthly cloud infrastructure budget.",
-          "The SWIFT Black Box — Traditional wires bounce through multiple intermediary correspondent banks, deducting $25–$50 per leg with zero tracking.",
-          "Regulatory Limbo — Remittances crossing thresholds ($10,000+) trigger opaque AML compliance holds with generic error codes, freezing funds for days.",
+          "Margin erosion — 4–7% of net margin exposed to currency drift on every open invoice.",
+          "The SWIFT black box — $25–50 deducted per intermediary bank, 3–5 days in transit, no visibility.",
+          "Regulatory limbo — transfers over $10,000 flagged with a code, funds held for days (~96h on average) while paperwork moves over email.",
         ],
         callout:
-          "“I need certainty. I cannot tell my engineering team that their salaries are delayed because currency fluctuated.”",
+          "Persona quote — “I need certainty. I can't tell my team their salaries are late because the currency moved.”",
       },
       {
-        id: "as-is-to-be",
-        label: "03 / Journey Transformation",
-        title: "As-Is legacy wires vs. Parity B2B operational flow.",
+        id: "research",
+        label: "03 / Who it's for",
+        title: "Rohan needs certainty, not a trading terminal.",
         description:
-          "Synthesizing the core Jobs-To-Be-Done (JTBD) into an end-to-end operational service architecture.",
-        items: [
-          "Invoice Creation: Static PDF with international SWIFT details ➔ Smart invoice with dynamic semi-automated FX protection cards.",
-          "Client Payment: International wire with $35 wire fees & 3–5 day delays ➔ Domestic virtual bank rails (ACH/SEPA) with 24h clearance.",
-          "Currency Drift: Silent 3.8% loss on payout day ➔ Guaranteed hedge rate locked at invoice generation and honored automatically.",
-          "Compliance Hold: Escrow freeze with 4-day email ping-pong ➔ Real-time high-contrast banner with guided PDF contract upload & OCR matching.",
+          "The primary persona is a co-founder of an 18-person engineering agency in Bengaluru: 90% of revenue in USD, 100% of costs in INR. Three jobs shaped everything after this.",
+        insightLabels: { from: "Today", to: "With Parity" },
+        insights: [
+          {
+            finding: "Invoice is a static PDF with SWIFT details; currency risk is accepted by default.",
+            decision: "The invoice is created with protection options that show the guaranteed rupee payout up front.",
+          },
+          {
+            finding: "The client sends an international wire, pays a $35 fee and waits 3–5 business days.",
+            decision: "The client pays on a domestic rail (ACH / SEPA) with no account and no intermediary fees.",
+          },
+          {
+            finding: "The rate drops 3.8% and the loss shows up silently on payout day.",
+            decision: "The locked rate is honoured automatically and the shortfall avoided is shown on settlement.",
+          },
+          {
+            finding: "Funds freeze without warning; four days of support emails follow.",
+            decision: "A banner explains what is held and why, with a direct upload and automatic document matching.",
+          },
         ],
       },
       {
-        id: "hedging-model",
-        label: "04 / Product Logic",
-        title: "The semi-automated hedging model.",
+        id: "hedging",
+        label: "04 / Product logic",
+        title: "Smart defaults, three outcome-named presets.",
         description:
-          "User research revealed that pure automation felt risky to founders (fear of missing market rallies), while manual forex trading was overly intimidating. Parity B2B provides a hybrid preset model:",
+          "Full automation felt risky (what if the market is rising?), and manual forex was too complex. So Parity recommends one option and lets the owner switch in a click — each card leads with the rupee amount, not the instrument.",
         items: [
-          "1. Guaranteed Shield (Recommended Default): 100% of the invoice is locked at the current forward rate (e.g., ₹83.40/USD) for a flat 0.45% protection fee. Payout is guaranteed regardless of market drops.",
-          "2. Smart Floor Collar: Zero fee. The invoice floats with the market, but triggers an automatic forward lock if the currency drops below a user-defined floor rate (e.g., ₹82.80/USD).",
-          "3. Pure Market Float: Zero protection, zero fee. Settles at the prevailing spot rate when the client's domestic transfer clears.",
+          "Guaranteed Shield — 100% locked at today's rate for a 0.45% fee. Recommended above $10,000.",
+          "Smart Floor Collar — free; floats with the market and locks automatically if the rate hits your floor.",
+          "Pure Market Float — free, no protection; settles at whatever the rate is when the money clears.",
         ],
-        callout:
-          "Deterministic State Machine: Draft ➔ Sent (Hedge Active) ➔ Funds in Transit ➔ Action Required (Escrow Hold) ➔ Settled & Disbursed.",
+        images: [
+          {
+            src: "/case-studies/parity/create-invoice.png",
+            alt: "Parity new invoice drawer with three payout protection options",
+            caption:
+              "Invoice creation lives in an 800px drawer over the dashboard. Guaranteed Shield is preselected and the exact payout is shown before sending.",
+            pins: [
+              { x: 90, y: 6, title: "Live rate countdown", note: "Draft rates refresh every 60 seconds; the ring shows when the quote expires." },
+              { x: 55, y: 50, title: "Outcome first", note: "Each option leads with what you'll receive in rupees, then the rate and fee." },
+              { x: 54, y: 84, title: "One number to trust", note: "The footer repeats the guaranteed payout, rate and fee for the selected option." },
+              { x: 60, y: 96, title: "No friction for the payer", note: "The client pays via US ACH and never needs a Parity account." },
+            ],
+          },
+        ],
       },
       {
-        id: "usability-pivots",
-        label: "05 / Usability Iterations",
-        title: "Three critical pivots from testing with studio founders.",
-        insightLabels: { from: "Usability Failure", to: "Architectural Pivot" },
+        id: "states",
+        label: "05 / System",
+        title: "Money has a state. Every screen says which one.",
+        description:
+          "I modelled the invoice as a deterministic state machine so the UI can always answer three questions: what is protected, what is moving, and what needs me?",
+        items: [
+          "1 · Draft — editable; the estimated rate refreshes every 60 seconds.",
+          "2 · Sent · Hedge active — payment link live; rate locked for the 30-day term.",
+          "3 · Funds in transit — client started a domestic payment; clearance countdown shown.",
+          "4 · Action required — the one exception path: flagged transfer, funds in escrow, upload requested.",
+          "5 · Settled & disbursed — converted at the guaranteed rate and deposited.",
+        ],
+        images: [
+          {
+            src: "/case-studies/parity/dashboard.png",
+            alt: "Parity dashboard with metric cards and recent invoices table",
+            caption: "The default dashboard: four metrics, then every open invoice with its state as a labelled pill.",
+            pins: [
+              { x: 46, y: 22, title: "Protection made visible", note: "The rupee amount saved versus the spot rate, so the value of hedging is concrete." },
+              { x: 69, y: 43, title: "Unprotected is explicit", note: "A draft with no protection says so, instead of showing a blank cell." },
+              { x: 87, y: 56, title: "State, not just status", note: "Pills map 1:1 to the five invoice states, always with text, never colour alone." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "pivots",
+        label: "06 / Iteration",
+        title: "Three pivots that changed the structure, not just the polish.",
+        description:
+          "I put the first low-fidelity prototype in front of 5 studio founders. Each problem they hit changed the architecture.",
+        insightLabels: { from: "What broke", to: "What changed" },
         insights: [
           {
             finding:
-              "Initial prototypes used Wall Street derivative jargon: '30-Day FX Forward Swap', '0.45% Hedging Premium', and 'Downside Slippage Boundary', intimidating users.",
+              "“30-Day FX Forward Swap” and “Downside Slippage Boundary” made founders feel they needed forex training.",
             decision:
-              "Reframed around concrete outcomes: 'Guaranteed Shield', 'Protection Fee', and 'Minimum Safety Floor'. Comprehension jumped from 40% to 100%.",
+              "Renamed to Guaranteed Shield, Protection Fee and Minimum Safety Floor, with the rupee payout on every option. All 5 participants could then explain the choices (2 of 5 before).",
           },
           {
-            finding:
-              "Full-page invoice creation disconnected users from their recent transaction records and client payment histories.",
-            decision:
-              "Migrated to an 800px slide-over drawer with a contextual background scrim, allowing users to cross-reference ledger data without abandoning form state.",
+            finding: "A full-page invoice form cut people off from recent invoices and client records they wanted to check.",
+            decision: "Moved creation into an 800px drawer with a light scrim. The dashboard stays in view and form state is kept.",
           },
           {
-            finding:
-              "Passive compliance notifications hidden in a bell icon dropdown were missed, leaving funds trapped in escrow for days.",
+            finding: "Compliance flags hidden in the notification bell were missed, so funds stayed frozen for days.",
             decision:
-              "Designed a high-salience sticky banner directly at the top of the dashboard with an explicit status badge, reducing resolution response times by 75%.",
+              "Reserved the loudest component in the system for this: a sticky escrow banner with one direct upload action. Response time to a hold dropped by 75% in the next round.",
+          },
+        ],
+        compare: {
+          before: { src: "/case-studies/parity/dashboard.png", alt: "Dashboard with nothing on hold" },
+          after: { src: "/case-studies/parity/compliance-hold.png", alt: "Dashboard with a sticky escrow banner and flagged invoice row" },
+          caption: "Drag to compare: the same dashboard when an invoice is held. The banner and the highlighted row are the only red on screen.",
+        },
+      },
+      {
+        id: "exception",
+        label: "07 / The exception path",
+        title: "Compliance as a two-minute task, not a four-day email thread.",
+        description:
+          "When a transfer is flagged, the user sees what's held, why, and the one document needed. The upload is matched against the invoice automatically, with progress and a plain-language timeline of what happens next.",
+        images: [
+          {
+            src: "/case-studies/parity/compliance-verify.png",
+            alt: "Parity compliance resolution screen with document upload and automatic matching",
+            caption: "Upload → automatic match → release. No agent in the loop for the common case.",
+            pins: [
+              { x: 25, y: 13, title: "Progress you can see", note: "The banner switches from ‘held’ to ‘verifying’, so the user knows the system is working." },
+              { x: 58, y: 47, title: "Field-by-field matching", note: "Client, amount, service and signatures are checked separately — a mismatch points to exactly one field." },
+              { x: 85, y: 40, title: "What happens next", note: "A short timeline sets the expectation: verification in under a minute, funds within 24 hours." },
+            ],
           },
         ],
       },
       {
-        id: "visual-system",
-        label: "06 / Design System",
-        title: "Tabular formatting & high-contrast semantic states.",
+        id: "payer-settlement",
+        label: "08 / Both sides of the payment",
+        title: "Cheaper for the client, provable for the founder.",
         description:
-          "FinTech dashboards demand absolute precision. Every tabular element, currency display, and balance card utilizes Inter with OpenType tabular numbers (tnum) enabled for vertical visual alignment.",
+          "The client pays from a light checkout on their own bank rail; the wire cost is shown next to it for contrast. When the invoice settles, the founder sees the rate they were protected from and the amount that protection saved.",
+        images: [
+          {
+            src: "/case-studies/parity/payer-checkout.png",
+            alt: "Parity payer checkout comparing international wire fees with US ACH",
+            caption: "Payer checkout: no account, $0 fee on ACH versus $35 and 3–5 days for a wire.",
+          },
+          {
+            src: "/case-studies/parity/settled.png",
+            alt: "Parity settled invoice with deposit, market rate and shortfall avoided",
+            caption: "Settlement closes the loop: ‘shortfall avoided’ turns an invisible benefit into a number.",
+            pins: [
+              { x: 81, y: 23, title: "The value, made explicit", note: "₹16,575 that would have been lost at the market rate on settlement day." },
+              { x: 50, y: 44, title: "Full lifecycle", note: "Every state the invoice passed through, with dates — useful for accountants and audits." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "design-system",
+        label: "09 / Design system",
+        title: "A system that makes financial state legible.",
+        description:
+          "58 variables (primitives, semantic colour, spacing, radius), 7 text styles on Inter with tabular figures so amounts line up, and 11 components — 8 documented with usage, anatomy, accessibility notes and do / don't pairs.",
         items: [
-          "Canvas Surfaces: Slate Background (#F8FAFC) & Crisp Card Enclosures (#FFFFFF).",
-          "Structural Borders: Hairline Boundaries (#E2E8F0) & Secondary Metadata (#64748B).",
-          "Semantic Action & Status: Royal Trust Blue (#2563EB) for primary actions, Emerald Green (#16A34A) for Safe/Settled, Amber Gold (#D97706) for Transit, and Crimson Red (#DC2626) for Compliance Holds.",
+          "Status colours are reserved for state: blue = sent, amber = in transit, red = action required, green = settled.",
+          "Every status pill pairs colour with a word; core text and status pairs checked for AA contrast.",
+          "Numbers always use tabular figures and right alignment in tables.",
+        ],
+      },
+      {
+        id: "proven",
+        label: "10 / What's proven",
+        title: "What's validated, and what's still a target.",
+        items: [
+          "Validated in early sessions — hedging options understood by all 5 founders after the copy pivot (40% → 100%); the drawer kept context; response to a compliance hold 75% faster with the banner.",
+          "Targets, not results — ≥45% protection opt-in on invoices over $10,000; holds cleared in under 24 hours; 100% payout certainty on protected invoices.",
+          "Next — round 2 testing of the payer checkout, micro-interactions for the rate countdown and upload feedback, and edge-case specs for handoff.",
+        ],
+        callout: "This is a concept. Nothing here was built or launched, and no target above is a measured result.",
+      },
+    ],
+
+    outcome:
+      "A complete, testable concept for FX-protected cross-border invoicing: research, a state model, 6 high-fidelity screens and a documented design system, shaped by three pivots from early feedback.",
+    reflection: [
+      "Language is part of the interface. Renaming three terms did more for comprehension than any layout change.",
+      "Context beats focus. Hiding the dashboard to ‘focus’ on a form took away the information people needed to decide.",
+      "Urgency should be rare and unmistakable. Reserving the loudest component for compliance holds is what made it work.",
+    ],
+
+    tokens: {
+      colors: [
+        { name: "Primary action", hex: "#2563EB" },
+        { name: "Settled", hex: "#16A34A" },
+        { name: "In transit", hex: "#D97706" },
+        { name: "Action required", hex: "#DC2626" },
+        { name: "Canvas", hex: "#F8FAFC" },
+        { name: "Surface", hex: "#FFFFFF" },
+        { name: "Border", hex: "#E2E8F0" },
+      ],
+      type: [
+        { role: "Metric", font: "Inter (tabular)", spec: "32 / 40 · Bold" },
+        { role: "Page title", font: "Inter", spec: "24 / 32 · SemiBold" },
+        { role: "Body", font: "Inter", spec: "14 / 20 · Regular" },
+        { role: "Badge", font: "Inter", spec: "12 / 16 · Medium" },
+      ],
+      spacing: ["4px", "8px", "12px", "16px", "20px", "24px", "32px", "40px"],
+    },
+
+    figmaEmbed:
+      "https://embed.figma.com/design/wQGYsRElKQO3oLSJKaPowY/Parity-B2B-%E2%80%94-Cross-Border-Invoicing---FX-Hedging-Portal?node-id=0-1&embed-host=share",
+    nextSlug: "buildbook",
+  },
+
+  // =====================================================
+  // BUILDBOOK: self-initiated concept, inspired by a friend who builds houses
+  // Design rationale only — no research sessions or usage data are claimed.
+  // =====================================================
+  {
+    slug: "buildbook",
+    published: true,
+    type: "personal",
+
+    title: "Buildbook",
+    tagline: "Every rupee and every workday of a house build, in one place.",
+    headline:
+      "A house-build tracker that tells an owner the one thing notebooks and WhatsApp can't: how much has been paid ahead of the work actually done.",
+    image: "/projects/buildbook.png",
+
+    year: "2026",
+    duration: "TODO: e.g. 3 weeks",
+    role: "Product Designer (end to end)",
+    team: "Solo, self-initiated concept",
+    platform: "Web app + mobile PWA",
+    tools: ["Figma"],
+
+    tldr: {
+      problem:
+        "Building a house means 10+ contractors, cash and UPI payments, advances, deliveries and daily site decisions — usually tracked across notebooks, WhatsApp and a loose spreadsheet. Overpaying ahead of work is easy to miss.",
+      solution:
+        "A web dashboard for reviewing money and a one-handed mobile app for logging on site. It works offline and syncs to the owner's own Google Sheet, so the data never leaves their hands.",
+      result:
+        "10 web screens, 7 mobile screens, 11 components and 44 tokens. A design concept — not built or tested with users yet.",
+    },
+
+    context:
+      "The idea came from watching a friend who builds houses. Payments were split across UPI, NEFT, cheques and cash; advances went out before work was inspected; receipts lived in folders; and daily site notes lived in someone's head.",
+    problem:
+      "The money is spread across too many people and payment types, and the riskiest number — how much has been paid ahead of inspected work — isn't written down anywhere. On site there is often no signal, and nobody wants to fill a long form with dusty hands.",
+    goals: [
+      "Make ‘paid ahead of work’ visible before the next payment goes out",
+      "Log a payment, delivery or diary entry on site in under a minute, offline",
+      "Keep every receipt traceable, down to the physical folder and page",
+      "Let the owner keep their data in their own Google Sheet",
+    ],
+    responsibilities: [
+      "Product concept & IA",
+      "Money model & calculations",
+      "Web dashboard UI",
+      "Mobile PWA flows",
+      "Offline & sync states",
+      "Design system",
+    ],
+
+    metrics: [
+      { value: "17", label: "screens across web and mobile" },
+      { value: "8", label: "modules, from agreements to budget" },
+      { value: "11", label: "components on 44 tokens" },
+    ],
+
+    sections: [
+      {
+        id: "two-places",
+        label: "02 / Two jobs, two devices",
+        title: "Review at a desk. Log on site.",
+        description:
+          "An owner does two very different things: sit down to decide what to pay next, and quickly record what just happened on site. So the web app is built for reading and comparing, and the mobile app for fast entry with one hand.",
+        insightLabels: { from: "Moment", to: "Design response" },
+        insights: [
+          {
+            finding: "Sunday evening, deciding which contractor to pay this week.",
+            decision: "The web dashboard leads with budget consumed, money paid ahead of work and what's due in the next 14 days.",
+          },
+          {
+            finding: "Standing on site, a contractor asks for a payment.",
+            decision: "Mobile quick entry is pre-filled from the payment schedule — confirm the amount, pick the mode, snap the receipt.",
+          },
+          {
+            finding: "No signal on the slab.",
+            decision: "Every entry saves on the phone first and syncs to Google Sheets later, with clear toast states for saved, syncing and failed.",
+          },
+        ],
+      },
+      {
+        id: "dashboard",
+        label: "03 / Dashboard",
+        title: "Where the money and the site stand, today.",
+        images: [
+          {
+            src: "/case-studies/buildbook/dashboard.png",
+            alt: "Buildbook web dashboard with budget, build stages, paid-ahead gauge and due payments",
+            caption:
+              "The dashboard answers the owner's three questions in order: how much is spent, who has been paid ahead, and what's due next.",
+            pins: [
+              { x: 45, y: 8, title: "Spent vs committed", note: "One bar splits the budget into spent, committed-but-unpaid and the real headroom that's left." },
+              { x: 85, y: 12, title: "Paid ahead of work", note: "The riskiest number gets its own card, broken down by contractor." },
+              { x: 45, y: 30, title: "Build stages", note: "Money is always read against progress — the current stage is highlighted." },
+              { x: 92, y: 52, title: "Act from the list", note: "Due milestones can be marked paid right here, which opens a pre-filled entry." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "paid-ahead",
+        label: "04 / The key calculation",
+        title: "Paid ahead of work: the number nobody was tracking.",
+        description:
+          "Each agreement compares what's been paid with the value of work an engineer has inspected. If the difference is positive, the contractor has been paid ahead — and the next release should wait.",
+        callout: "Paid ahead = max(0, total paid − value of inspected work)",
+        images: [
+          {
+            src: "/case-studies/buildbook/agreements.png",
+            alt: "Buildbook agreements list with a contractor detail panel showing paid-ahead calculation",
+            caption: "Agreements list with a detail panel. Written, verbal and phone agreements are all tracked — that's how deals really happen.",
+            pins: [
+              { x: 22, y: 11, title: "Real-world agreement types", note: "Verbal and phone agreements are first-class, not forced into a contract template." },
+              { x: 84, y: 37, title: "Inspected progress", note: "Work done is set by the site engineer's last inspection, not the contractor's claim." },
+              { x: 84, y: 61, title: "The calculation, shown", note: "The formula is visible, with a clear recommendation: hold the next release until 50% is inspected." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "ledger",
+        label: "05 / Payments",
+        title: "Every rupee traceable, down to the folder and page.",
+        description:
+          "Cash and cheque payments are common on a build, so a digital record alone isn't enough. Each payment carries a physical filing location, and missing receipts are surfaced as money that isn't audited yet.",
+        images: [
+          {
+            src: "/case-studies/buildbook/payments.png",
+            alt: "Buildbook payments ledger with missing receipt banner and filing locations",
+            caption: "The ledger groups payments by type and flags unaudited money at the top.",
+            pins: [
+              { x: 40, y: 12, title: "Unaudited money", note: "Missing receipts are shown as a rupee amount, which makes them harder to ignore than a count." },
+              { x: 90, y: 39, title: "Physical filing locator", note: "‘Folder B / Page 31’ connects the app to the real receipt folder." },
+            ],
+          },
+          {
+            src: "/case-studies/buildbook/add-payment.png",
+            alt: "Buildbook add payment modal pre-filled from a milestone with a paid-ahead warning",
+            caption: "Adding a payment from a milestone fills in the vendor, agreement and amount — and warns before money goes out ahead of work.",
+            pins: [
+              { x: 59, y: 15, title: "Pre-filled from the schedule", note: "Linked to the milestone, so the owner only confirms." },
+              { x: 63, y: 25, title: "Amount in words", note: "‘One lakh rupees’ under the field catches an extra zero before it costs anything." },
+              { x: 59, y: 74, title: "Warning before, not after", note: "The paid-ahead check runs while the payment is being entered." },
+              { x: 47, y: 81, title: "Where it will sync", note: "The footer says exactly which Sheet row this entry becomes." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "mobile",
+        label: "06 / Mobile",
+        title: "Built for one hand on a dusty site.",
+        description:
+          "Large targets, chips instead of dropdowns, a centre + button for quick entry, and voice dictation in Telugu, Hindi or English for the site diary. Swipe a milestone to mark it paid.",
+        images: [
+          {
+            src: "/case-studies/buildbook/mobile.png",
+            alt: "Five Buildbook mobile screens: home, quick entry, ledger with sync toast, site diary and schedule",
+            caption: "Home → quick entry → ledger with sync toast → site diary → schedule.",
+          },
+        ],
+      },
+      {
+        id: "budget",
+        label: "07 / Budget",
+        title: "Catch the overrun while there's still time to move money.",
+        description:
+          "Each category shows planned, actual and variance with a meter. The forecast uses agreed contracts and the current monthly burn, and the cards below turn variances into suggested actions.",
+        images: [
+          {
+            src: "/case-studies/buildbook/budget.png",
+            alt: "Buildbook budget vs actual with forecast at completion and category table",
+            caption: "Budget vs actual, with a forecast at completion and three plain-language alerts.",
+            pins: [
+              { x: 74, y: 18, title: "Forecast, explained", note: "The projection says why it's above plan — excavation overrun and steel prices." },
+              { x: 50, y: 93, title: "Suggestions, not just alerts", note: "‘Consider moving ₹1,00,000 from Flooring’ gives the owner a next step." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "system",
+        label: "08 / Design system",
+        title: "Graphite, Concrete, Cobalt and Signal.",
+        description:
+          "A palette taken from the site itself: graphite for structure, concrete for surfaces, cobalt for actions, and a signal yellow used sparingly for progress and the current stage. Bricolage Grotesque for headings and figures, Geist for body text, Geist Mono for IDs and amounts in tables.",
+        items: [
+          "44 tokens — colour ramps, semantic aliases, a 4px spacing scale and radius steps.",
+          "11 components, including stat cards, agreement rows, payment-type chips and sync toasts.",
+          "Status is never colour alone: overdue, due soon and filed always carry a label.",
+        ],
+      },
+      {
+        id: "next",
+        label: "09 / What's next",
+        title: "What I'd test before building it.",
+        description: "This is a design concept. The next step is putting it in front of people who are building right now.",
+        items: [
+          "Sit with 3–5 owners and contractors — can they find who's been paid ahead in under 30 seconds?",
+          "Test quick entry on site, outdoors, with no signal.",
+          "Check that the Google Sheet stays readable for an accountant who never opens the app.",
+          "Decide how the contractor's view should work, so both sides see the same numbers.",
         ],
       },
     ],
 
     outcome:
-      "A complete desktop FinTech architecture that turns volatile foreign exchange into predictable cash flow. Completed market research, JTBD mapping, state machine modeling, and design token architecture.",
+      "A complete concept for tracking a house build across web and mobile, built around one overlooked number — money paid ahead of work. Not yet built or tested with users.",
     reflection: [
-      "In FinTech, clarity of financial outcome always trumps derivative market jargon.",
-      "Compliance shouldn't feel like a punishment; guided self-service turns an escrow block into an empowering 2-minute task.",
-      "Predictable payroll beats speculative currency trading for service founders every single time.",
+      "The most useful feature is often a single calculation that nobody was doing by hand.",
+      "Design for the real world: verbal agreements, cash payments and paper receipt folders aren't edge cases on a build.",
+      "Splitting ‘review’ and ‘log’ across devices made both experiences simpler than one responsive app would have.",
     ],
 
-    // Design Tokens for Dev Mode Inspector
     tokens: {
       colors: [
-        { name: "Primary Action", hex: "#2563EB" },
-        { name: "Settled / Safe", hex: "#16A34A" },
-        { name: "In Transit", hex: "#D97706" },
-        { name: "Compliance Hold", hex: "#DC2626" },
-        { name: "Slate Canvas", hex: "#F8FAFC" },
-        { name: "Surface Card", hex: "#FFFFFF" },
-        { name: "Hairline Border", hex: "#E2E8F0" },
+        { name: "Graphite 900", hex: "#16181D" },
+        { name: "Concrete 50", hex: "#F5F4F0" },
+        { name: "Cobalt 500", hex: "#3D52FF" },
+        { name: "Signal 400", hex: "#F6DB2C" },
+        { name: "Green 500", hex: "#22A06B" },
+        { name: "Amber 500", hex: "#E8A21A" },
+        { name: "Red 500", hex: "#E5432F" },
       ],
       type: [
-        { role: "Display", font: "Inter (tnum)", spec: "32 / 40 · Bold" },
-        { role: "Page Title", font: "Inter (tnum)", spec: "24 / 32 · SemiBold" },
-        { role: "Section Header", font: "Inter", spec: "18 / 24 · SemiBold" },
-        { role: "Body", font: "Inter", spec: "14 / 20 · Regular" },
-        { role: "Badges", font: "Inter", spec: "12 / 16 · Medium" },
+        { role: "Display", font: "Bricolage Grotesque", spec: "40 · SemiBold" },
+        { role: "Figure", font: "Bricolage Grotesque", spec: "26 · SemiBold" },
+        { role: "Body", font: "Geist", spec: "14 · Regular" },
+        { role: "Mono / IDs", font: "Geist Mono", spec: "13 · Medium" },
       ],
-      spacing: ["4px", "8px", "12px", "16px", "20px", "24px", "32px", "40px"],
+      spacing: ["4px", "8px", "12px", "16px", "20px", "24px", "32px", "48px"],
     },
 
-    // Verified Figma Embed
     figmaEmbed:
-      "https://embed.figma.com/design/wQGYsRElKQO3oLSJKaPowY/Parity-B2B-%E2%80%94-Cross-Border-Invoicing---FX-Hedging-Portal?node-id=0-1&embed-host=share",
+      "https://embed.figma.com/design/WGxhPVbt92muIihcuj6IkP/Buildbook?node-id=0-1&embed-host=share",
     nextSlug: "lattice-design-system",
   },
 ];

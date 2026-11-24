@@ -64,11 +64,10 @@ export const projects: ProjectCard[] = [
     title: "Parity B2B",
     description:
       "A cross-border B2B invoicing platform. Designed how finance teams create invoices, handle currency conversion and resolve compliance holds in a single workflow.",
-    // Freelance-era work (2025) → "client". If this was self-initiated, change to "personal".
-    type: "client",
+    type: "personal",
     category: "FinTech / B2B",
     role: "Product Designer",
-    year: "2025",
+    year: "Nov 2026",
     platform: "Web App",
     contribution: [
       "Invoicing flows",
@@ -99,10 +98,10 @@ export const projects: ProjectCard[] = [
       "Redesigning a complex content management system — simplifying editorial workflows, restructuring dashboards and building a shared design system for the product team.",
     type: "professional",
     category: "SaaS / CMS",
-    role: "UI/UX Designer",
-    year: "2026 — Present",
+    role: "UI/UX Design Intern",
+    year: "May 2026 — Present",
     platform: "Web",
-    contribution: ["UX flows", "UI redesign", "Dashboards", "Design systems"],
+    contribution: ["CMS", "CRM", "Design system", "UI redesign"],
     image: "/projects/studycrux-cms.png",
     problem:
       "Editors were fighting their own CMS — scattered navigation, inconsistent screens, too many steps to publish.",
@@ -121,12 +120,12 @@ export const projects: ProjectCard[] = [
     type: "personal",
     category: "PropTech / Web + Mobile PWA",
     role: "Product designer",
-    year: "2026", // CHECK
+    year: "Oct 2026",
     platform: "Web + Mobile PWA",
     contribution: ["Product strategy", "Web + mobile UI", "Design system", "Offline-first flows"],
     image: "/projects/buildbook.png", // Figma: Buildbook → Cover (node 27:2)
     featured: true,
-    caseStudy: false,
+    caseStudy: true,
   },
 
   {
@@ -212,7 +211,7 @@ export const projects: ProjectCard[] = [
     type: "personal",
     category: "Mobility / Mobile",
     role: "UX/UI Designer (solo)",
-    year: "2026", // CHECK
+    year: "2026",
     platform: "iOS & Android",
     contribution: ["Research plan", "IA & flows", "Mobile UI", "Edge cases & accessibility"],
     image: "/projects/yaana.png", // Figma: Public Transport App → Cover (node 16:2)

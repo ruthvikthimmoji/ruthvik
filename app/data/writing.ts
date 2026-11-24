@@ -38,7 +38,7 @@ export const POSTS: Post[] = [
     dek: "What writing code taught me about designing what gets built.",
     date: "2026-11-24",
     tags: ["Career", "Story"],
-    status: "drafting",
+    status: "published",
     body: `I didn't start in design. I started in computer science, learning how software is built one system at a time. For a while I was the person turning other people's designs into HTML, CSS and React.
 
 That's where the switch began. I kept noticing that the hard part of a screen was rarely the code. It was the decisions behind it: what the screen was for, what someone needed to see first, what happened when things went wrong.
@@ -76,7 +76,7 @@ I still write code. I just write a lot less of it before I've talked to someone.
     dek: "A design decision about trust in a group expense app.",
     date: "2026-11-24",
     tags: ["Case notes", "FinTech"],
-    status: "drafting",
+    status: "published",
     body: `Hisaab is a group expense app I designed: track who paid what, then settle up. Early on I made one decision that shaped everything after it. Hisaab never holds the money.
 
 ## The problem with holding money
@@ -110,7 +110,7 @@ Sometimes the strongest design decision is what you choose not to build. Leaving
     dek: "Notes from Buildbook, a house-build tracker that works without signal.",
     date: "2026-11-24",
     tags: ["Case notes", "Product"],
-    status: "drafting",
+    status: "published",
     body: `Buildbook started from a real problem: tracking every rupee and every workday of a house build. Agreements, payments, materials, the site diary, milestones, vendors and budget, all in one place.
 
 The first constraint was the one that shaped the rest: a building site often has poor or no signal.
@@ -148,7 +148,7 @@ Start with the hardest real-world constraint and let it lead. Offline-first forc
     dek: "What building Lattice taught me about Figma variables.",
     date: "2026-11-24",
     tags: ["Design systems", "Figma"],
-    status: "drafting",
+    status: "published",
     body: `Lattice is a themeable design system I built solo in Figma. The goal was simple to say and hard to do: one set of components that works in Light, Dark, Default and Compact, without a separate variant for every combination.
 
 ## The variant explosion problem
