@@ -177,6 +177,11 @@ export const projects: ProjectCard[] = [
     platform: "Web",
     contribution: ["Information hierarchy", "Dashboard UI", "Data visualization"],
     image: "/projects/juzzpay.png",
+    walkthrough: {
+      kind: "figma",
+      url: "https://www.figma.com/proto/wLEfNQmsMZ7k9LerHRdP42/Juzzpay?node-id=8-435&starting-point-node-id=8%3A435&scaling=scale-down-width",
+      note: "Click through the dashboard, wallet and send-money flow",
+    },
     featured: false,
     caseStudy: true,
   },

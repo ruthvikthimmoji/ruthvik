@@ -9,7 +9,7 @@ import { LabMedia } from "../components/canvas/LabBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
 import "./lab.css";
-import Logo from "../components/Logo";
+import Logo from "../components/canvas/Logo";
 
 /* /lab — every UI shot, motion study and 3D piece, with a lightbox. */
 

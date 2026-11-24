@@ -6,7 +6,7 @@ import Markdown from "../../components/Markdown";
 import "../../components/canvas/canvas.css";
 import "../../work/work.css";
 import "../writing.css";
-import Logo from "../../components/Logo";
+import Logo from "../../components/canvas/Logo";
 
 type Props = { params: Promise<{ slug: string }> };
 

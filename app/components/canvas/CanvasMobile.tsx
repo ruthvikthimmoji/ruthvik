@@ -20,7 +20,7 @@ import BriefPanel from "./BriefPanel";
 import ResumeViewer from "./ResumeViewer";
 import Walkthrough from "./Walkthrough";
 import StoryMap from "./StoryMap";
-import Logo from "../Logo";
+import Logo from "./Logo";
 
 /* =========================================================
    MOBILE — the same board, stacked into a normal scrolling

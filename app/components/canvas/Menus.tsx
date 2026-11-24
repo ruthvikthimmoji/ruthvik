@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { activeSocials, PROFILE } from "./content";
 import { openResume } from "./Pieces";
-import Logo from "../Logo";
+import Logo from "./Logo";
 
 /* Small FigJam-style dropdowns: file menu (top-left), hire menu (top-right),
    frames menu (toolbar). Close on outside click and Esc. */

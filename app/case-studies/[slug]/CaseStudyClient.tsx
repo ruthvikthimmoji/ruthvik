@@ -24,7 +24,7 @@ import ResumeViewer from "@/app/components/canvas/ResumeViewer";
 import Walkthrough from "@/app/components/canvas/Walkthrough";
 import "@/app/components/canvas/canvas.css";
 import "./case-study.css";
-import Logo from "@/app/components/Logo";
+import Logo from "@/app/components/canvas/Logo";
 
 /* =========================================================
    CASE STUDY — canvas style, normal scrolling.

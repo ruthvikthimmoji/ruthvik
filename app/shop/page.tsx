@@ -3,7 +3,7 @@ import Link from "next/link";
 import ShopBoard from "../components/canvas/ShopBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
-import Logo from "../components/Logo";
+import Logo from "../components/canvas/Logo";
 
 export const metadata: Metadata = {
   title: "Shop — Ruthvik Thimmoji",

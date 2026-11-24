@@ -5,7 +5,7 @@ import { PostRow } from "../components/canvas/WritingBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
 import "./writing.css";
-import Logo from "../components/Logo";
+import Logo from "../components/canvas/Logo";
 
 export const metadata: Metadata = {
   title: "Writing — Ruthvik Thimmoji",
