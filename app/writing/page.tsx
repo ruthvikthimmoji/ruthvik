@@ -5,11 +5,12 @@ import { PostRow } from "../components/canvas/WritingBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
 import "./writing.css";
-import Logo from "../components/canvas/Logo";
+import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Writing — Ruthvik Thimmoji",
-  description: "Notes on product design, code and learning in public by Ruthvik Thimmoji.",
+  description:
+    "Notes on product design, code and learning in public by Ruthvik Thimmoji.",
 };
 
 export default function WritingPage() {
@@ -39,7 +40,10 @@ export default function WritingPage() {
           <h1 className="cv-h1">
             Notes on design, code <em>&amp; learning.</em>
           </h1>
-          <p className="cv-lead">Short essays on how I work, what my projects taught me and what I’m picking up along the way.</p>
+          <p className="cv-lead">
+            Short essays on how I work, what my projects taught me and what I’m
+            picking up along the way.
+          </p>
         </section>
 
         <section className="wr-page">
@@ -50,7 +54,9 @@ export default function WritingPage() {
               ))}
             </div>
           ) : (
-            <p className="wr-empty">Nothing published yet. The first essay is close.</p>
+            <p className="wr-empty">
+              Nothing published yet. The first essay is close.
+            </p>
           )}
 
           {drafts.length > 0 && (

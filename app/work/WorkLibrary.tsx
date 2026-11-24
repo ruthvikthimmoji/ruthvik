@@ -9,7 +9,7 @@ import { projects, workTypeLabels, type WorkType } from "@/app/data/projects";
 import { PROFILE } from "../components/canvas/content";
 import "../components/canvas/canvas.css";
 import "./work.css";
-import Logo from "../components/canvas/Logo";
+import Logo from "../components/Logo";
 
 /* /work — the whole library, laid out like a FigJam page of frames. */
 
@@ -23,7 +23,8 @@ export default function WorkLibrary() {
     projects.forEach((p) => (c[p.type] = (c[p.type] ?? 0) + 1));
     return c;
   }, []);
-  const list = filter === "all" ? projects : projects.filter((p) => p.type === filter);
+  const list =
+    filter === "all" ? projects : projects.filter((p) => p.type === filter);
 
   return (
     <div className="cv is-ready">
@@ -49,11 +50,21 @@ export default function WorkLibrary() {
           <h1 className="cv-h1">
             Everything I’ve <em>shaped.</em>
           </h1>
-          <p className="cv-lead">Client work, in-house product work and the concepts I build to learn. Open any card with a case study for the full story.</p>
+          <p className="cv-lead">
+            Client work, in-house product work and the concepts I build to
+            learn. Open any card with a case study for the full story.
+          </p>
 
           <div className="wk-filters" role="tablist" aria-label="Filter work">
             {FILTERS.map((f) => (
-              <button key={f} type="button" role="tab" aria-selected={filter === f} className={filter === f ? "on" : ""} onClick={() => setFilter(f)}>
+              <button
+                key={f}
+                type="button"
+                role="tab"
+                aria-selected={filter === f}
+                className={filter === f ? "on" : ""}
+                onClick={() => setFilter(f)}
+              >
                 {f === "all" ? "All" : workTypeLabels[f]}
                 <span>{counts[f] ?? 0}</span>
               </button>
@@ -68,8 +79,20 @@ export default function WorkLibrary() {
               const body = (
                 <>
                   <div className="wk-img">
-                    <Image src={p.image} alt={`${p.title} preview`} fill sizes="(max-width: 700px) 100vw, 420px" priority={i < 2} />
-                    {!linked && <span className="wk-flag">{p.type === "professional" ? "NDA · on request" : "Case study soon"}</span>}
+                    <Image
+                      src={p.image}
+                      alt={`${p.title} preview`}
+                      fill
+                      sizes="(max-width: 700px) 100vw, 420px"
+                      priority={i < 2}
+                    />
+                    {!linked && (
+                      <span className="wk-flag">
+                        {p.type === "professional"
+                          ? "NDA · on request"
+                          : "Case study soon"}
+                      </span>
+                    )}
                   </div>
                   <div className="wk-meta">
                     <span>{workTypeLabels[p.type]}</span>
@@ -90,10 +113,17 @@ export default function WorkLibrary() {
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.4, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    duration: 0.4,
+                    delay: i * 0.04,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                 >
                   {linked ? (
-                    <Link href={`/case-studies/${p.slug}`} className="wk-card linked">
+                    <Link
+                      href={`/case-studies/${p.slug}`}
+                      className="wk-card linked"
+                    >
                       {body}
                     </Link>
                   ) : (

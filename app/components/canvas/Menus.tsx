@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { activeSocials, PROFILE } from "./content";
 import { openResume } from "./Pieces";
-import Logo from "./Logo";
+import Logo from "../Logo";
 
 /* Small FigJam-style dropdowns: file menu (top-left), hire menu (top-right),
    frames menu (toolbar). Close on outside click and Esc. */
@@ -26,7 +26,8 @@ export function Dropdown({
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: PointerEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const onDown = (e: PointerEvent) =>
+      !ref.current?.contains(e.target as Node) && setOpen(false);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("keydown", onKey);
@@ -37,7 +38,14 @@ export function Dropdown({
   }, [open]);
   return (
     <div ref={ref} className={`cv-dd ${className ?? ""}`}>
-      <button type="button" className="cv-dd-trigger" aria-haspopup="menu" aria-expanded={open} aria-label={label} onClick={() => setOpen((o) => !o)}>
+      <button
+        type="button"
+        className="cv-dd-trigger"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={label}
+        onClick={() => setOpen((o) => !o)}
+      >
         {trigger}
       </button>
       {open && (
@@ -91,7 +99,14 @@ export function FileMenu() {
           </Link>
           {socials.length > 0 && <div className="sep" role="separator" />}
           {socials.map((s) => (
-            <a key={s.label} role="menuitem" href={s.href} target="_blank" rel="noopener noreferrer" onClick={close}>
+            <a
+              key={s.label}
+              role="menuitem"
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
+            >
               {s.label} ↗
             </a>
           ))}

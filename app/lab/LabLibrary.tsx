@@ -9,7 +9,7 @@ import { LabMedia } from "../components/canvas/LabBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
 import "./lab.css";
-import Logo from "../components/canvas/Logo";
+import Logo from "../components/Logo";
 
 /* /lab — every UI shot, motion study and 3D piece, with a lightbox. */
 
@@ -99,11 +99,25 @@ export default function LabLibrary() {
           <h1 className="cv-h1">
             Things I’m <em>trying.</em>
           </h1>
-          <p className="cv-lead">UI explorations, motion studies in Figma and my first steps in 3D. Unpolished on purpose: this is where I learn in public.</p>
+          <p className="cv-lead">
+            UI explorations, motion studies in Figma and my first steps in 3D.
+            Unpolished on purpose: this is where I learn in public.
+          </p>
 
-          <div className="wk-filters" role="tablist" aria-label="Filter the lab">
+          <div
+            className="wk-filters"
+            role="tablist"
+            aria-label="Filter the lab"
+          >
             {FILTERS.map((f) => (
-              <button key={f} type="button" role="tab" aria-selected={filter === f} className={filter === f ? "on" : ""} onClick={() => setFilter(f)}>
+              <button
+                key={f}
+                type="button"
+                role="tab"
+                aria-selected={filter === f}
+                className={filter === f ? "on" : ""}
+                onClick={() => setFilter(f)}
+              >
                 {f === "all" ? "Everything" : LAB_KINDS[f].label}
                 <span>{counts[f] ?? 0}</span>
               </button>
@@ -115,7 +129,11 @@ export default function LabLibrary() {
           const items = LAB.filter((i) => i.kind === k);
           const shown = items.filter((i) => i.src);
           return (
-            <section key={k} className="lab-sec" aria-label={LAB_KINDS[k].label}>
+            <section
+              key={k}
+              className="lab-sec"
+              aria-label={LAB_KINDS[k].label}
+            >
               <div className="lab-sec-head">
                 <h2>{LAB_KINDS[k].label}</h2>
                 <span className="lab-status">
@@ -133,12 +151,23 @@ export default function LabLibrary() {
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.5, delay: (i % 3) * 0.06, ease: EASE }}
+                    transition={{
+                      duration: 0.5,
+                      delay: (i % 3) * 0.06,
+                      ease: EASE,
+                    }}
                   >
                     {it.src ? (
-                      <button type="button" className="lab-card" onClick={() => setOpenId(it.id)}>
+                      <button
+                        type="button"
+                        className="lab-card"
+                        onClick={() => setOpenId(it.id)}
+                      >
                         <div className="lab-media">
-                          <LabMedia item={it} sizes="(max-width: 700px) 100vw, 420px" />
+                          <LabMedia
+                            item={it}
+                            sizes="(max-width: 700px) 100vw, 420px"
+                          />
                         </div>
                         <div className="lab-card-meta">
                           <b>{it.title}</b>
@@ -157,7 +186,9 @@ export default function LabLibrary() {
                   </motion.li>
                 ))}
               </ul>
-              {!shown.length && <p className="cv-hand lab-soon">first pieces landing soon ✦</p>}
+              {!shown.length && (
+                <p className="cv-hand lab-soon">first pieces landing soon ✦</p>
+              )}
             </section>
           );
         })}
@@ -172,8 +203,19 @@ export default function LabLibrary() {
 
       <AnimatePresence>
         {current && (
-          <motion.div className="lab-lb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
-            <button type="button" className="lab-lb-scrim" aria-label="Close" onClick={() => setOpenId(null)} />
+          <motion.div
+            className="lab-lb"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              type="button"
+              className="lab-lb-scrim"
+              aria-label="Close"
+              onClick={() => setOpenId(null)}
+            />
             <motion.figure
               key={current.id}
               role="dialog"
@@ -192,11 +234,17 @@ export default function LabLibrary() {
                   <b>{current.title}</b>
                   {current.note && <p>{current.note}</p>}
                   <span>
-                    {LAB_KINDS[current.kind].label} · {current.tool} · {current.date}
+                    {LAB_KINDS[current.kind].label} · {current.tool} ·{" "}
+                    {current.date}
                   </span>
                 </div>
                 {current.href && (
-                  <a href={current.href} target="_blank" rel="noopener noreferrer" className="cv-btn line">
+                  <a
+                    href={current.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cv-btn line"
+                  >
                     View original ↗
                   </a>
                 )}
@@ -204,15 +252,30 @@ export default function LabLibrary() {
             </motion.figure>
             {viewable.length > 1 && (
               <>
-                <button type="button" className="lab-lb-nav prev" aria-label="Previous" onClick={() => step(-1)}>
+                <button
+                  type="button"
+                  className="lab-lb-nav prev"
+                  aria-label="Previous"
+                  onClick={() => step(-1)}
+                >
                   ←
                 </button>
-                <button type="button" className="lab-lb-nav next" aria-label="Next" onClick={() => step(1)}>
+                <button
+                  type="button"
+                  className="lab-lb-nav next"
+                  aria-label="Next"
+                  onClick={() => step(1)}
+                >
                   →
                 </button>
               </>
             )}
-            <button type="button" className="lab-lb-x" aria-label="Close" onClick={() => setOpenId(null)}>
+            <button
+              type="button"
+              className="lab-lb-x"
+              aria-label="Close"
+              onClick={() => setOpenId(null)}
+            >
               ✕
             </button>
           </motion.div>

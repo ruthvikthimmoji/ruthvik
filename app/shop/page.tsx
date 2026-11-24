@@ -3,11 +3,12 @@ import Link from "next/link";
 import ShopBoard from "../components/canvas/ShopBoard";
 import "../components/canvas/canvas.css";
 import "../work/work.css";
-import Logo from "../components/canvas/Logo";
+import Logo from "../components/Logo";
 
 export const metadata: Metadata = {
   title: "Shop — Ruthvik Thimmoji",
-  description: "Figma templates and UI kits by Ruthvik Thimmoji. Opening soon — join the waitlist.",
+  description:
+    "Figma templates and UI kits by Ruthvik Thimmoji. Opening soon — join the waitlist.",
 };
 
 export default function ShopPage() {
@@ -31,7 +32,10 @@ export default function ShopPage() {
           <h1 className="cv-h1">
             Tools I wish <em>I’d had.</em>
           </h1>
-          <p className="cv-lead">Figma templates and kits built from real client work. The first one is in progress.</p>
+          <p className="cv-lead">
+            Figma templates and kits built from real client work. The first one
+            is in progress.
+          </p>
         </section>
         <section className="wk-head" style={{ marginTop: 40 }}>
           <ShopBoard />

@@ -6,7 +6,7 @@ import Markdown from "../../components/Markdown";
 import "../../components/canvas/canvas.css";
 import "../../work/work.css";
 import "../writing.css";
-import Logo from "../../components/canvas/Logo";
+import Logo from "../../components/Logo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,7 +26,9 @@ export default async function PostPage({ params }: Props) {
   const post = getPost((await params).slug);
   if (!post || !post.body) notFound();
 
-  const others = publishedPosts().filter((p) => p.slug !== post.slug).slice(0, 2);
+  const others = publishedPosts()
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, 2);
 
   return (
     <div className="cv is-ready">
@@ -64,7 +66,10 @@ export default async function PostPage({ params }: Props) {
         <footer className="wr-post-end">
           <div className="wr-sign">
             <span className="cv-hand">— Ruthvik</span>
-            <p>Product designer in Bengaluru. If this was useful, I’d love to hear from you.</p>
+            <p>
+              Product designer in Bengaluru. If this was useful, I’d love to
+              hear from you.
+            </p>
             <div className="cv-btns" style={{ marginTop: 16 }}>
               <Link href="/#contact" className="cv-btn dark">
                 Say hello
@@ -78,7 +83,13 @@ export default async function PostPage({ params }: Props) {
             <div className="wr-more">
               <p className="cv-lbl">Read next</p>
               {others.map((o) => (
-                <Link key={o.slug} href={o.href ?? `/writing/${o.slug}`} {...(o.href ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                <Link
+                  key={o.slug}
+                  href={o.href ?? `/writing/${o.slug}`}
+                  {...(o.href
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
                   <b>{o.title}</b>
                   <span>{o.dek}</span>
                 </Link>

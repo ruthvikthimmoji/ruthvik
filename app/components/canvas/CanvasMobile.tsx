@@ -6,19 +6,31 @@ import { activeSocials, PROFILE } from "./content";
 import Guestbook from "./Guestbook";
 import LabBoard, { LabLink } from "./LabBoard";
 import WritingBoard, { WritingLink } from "./WritingBoard";
-import { AllWorkLink, ContactBody, FrameLabel, HeroBody, openBrief, openResume, ProcessFlow, ProjectCards } from "./Pieces";
+import {
+  AllWorkLink,
+  ContactBody,
+  FrameLabel,
+  HeroBody,
+  openBrief,
+  openResume,
+  ProcessFlow,
+  ProjectCards,
+} from "./Pieces";
 import BriefPanel from "./BriefPanel";
 import ResumeViewer from "./ResumeViewer";
 import Walkthrough from "./Walkthrough";
 import StoryMap from "./StoryMap";
-import Logo from "./Logo";
+import Logo from "../Logo";
 
 /* =========================================================
    MOBILE — the same board, stacked into a normal scrolling
    page (an infinite canvas is awkward on a phone).
 ========================================================= */
 
-const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+const go = (id: string) =>
+  document
+    .getElementById(id)
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
 
 export default function CanvasMobile() {
   const [menu, setMenu] = useState(false);
@@ -40,7 +52,13 @@ export default function CanvasMobile() {
             <Logo />
             {PROFILE.name} — Portfolio
           </span>
-          <button type="button" className="cv-hire cv-mbtn" aria-expanded={menu} aria-label={menu ? "Close menu" : "Open menu"} onClick={() => setMenu((m) => !m)}>
+          <button
+            type="button"
+            className="cv-hire cv-mbtn"
+            aria-expanded={menu}
+            aria-label={menu ? "Close menu" : "Open menu"}
+            onClick={() => setMenu((m) => !m)}
+          >
             <span className={`burger${menu ? " x" : ""}`} aria-hidden="true">
               <i />
               <i />
@@ -49,18 +67,67 @@ export default function CanvasMobile() {
           </button>
           {menu && (
             <div className="cv-mmenu cv-panel" role="menu">
-              <button type="button" role="menuitem" onClick={pick(() => go("m-story"))}>My story</button>
-              <button type="button" role="menuitem" onClick={pick(() => go("m-work"))}>Selected work</button>
-              <Link role="menuitem" href="/work" onClick={() => setMenu(false)}>All work →</Link>
-              <button type="button" role="menuitem" onClick={pick(openResume)}>View résumé</button>
-              <Link role="menuitem" href="/lab" onClick={() => setMenu(false)}>The lab — UI, motion, 3D</Link>
-              <Link role="menuitem" href="/writing" onClick={() => setMenu(false)}>Writing</Link>
-              <button type="button" role="menuitem" onClick={pick(() => go("m-guestbook"))}>Leave a note</button>
-              <button type="button" role="menuitem" onClick={pick(() => go("m-contact"))}>Say hello</button>
-              <button type="button" role="menuitem" className="quiet" onClick={pick(openBrief)}>Freelance project? Send a brief</button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={pick(() => go("m-story"))}
+              >
+                My story
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={pick(() => go("m-work"))}
+              >
+                Selected work
+              </button>
+              <Link role="menuitem" href="/work" onClick={() => setMenu(false)}>
+                All work →
+              </Link>
+              <button type="button" role="menuitem" onClick={pick(openResume)}>
+                View résumé
+              </button>
+              <Link role="menuitem" href="/lab" onClick={() => setMenu(false)}>
+                The lab — UI, motion, 3D
+              </Link>
+              <Link
+                role="menuitem"
+                href="/writing"
+                onClick={() => setMenu(false)}
+              >
+                Writing
+              </Link>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={pick(() => go("m-guestbook"))}
+              >
+                Leave a note
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={pick(() => go("m-contact"))}
+              >
+                Say hello
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="quiet"
+                onClick={pick(openBrief)}
+              >
+                Freelance project? Send a brief
+              </button>
               {socials.length > 0 && <div className="sep" />}
               {socials.map((s) => (
-                <a key={s.label} role="menuitem" href={s.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  key={s.label}
+                  role="menuitem"
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {s.label} ↗
                 </a>
               ))}

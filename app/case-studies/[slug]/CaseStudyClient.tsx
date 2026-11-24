@@ -15,12 +15,16 @@ import {
 import { getWalkthrough, workTypeLabels } from "@/app/data/projects";
 import BriefPanel from "@/app/components/canvas/BriefPanel";
 import { Dropdown } from "@/app/components/canvas/Menus";
-import { openBrief, openResume, openWalkthrough } from "@/app/components/canvas/Pieces";
+import {
+  openBrief,
+  openResume,
+  openWalkthrough,
+} from "@/app/components/canvas/Pieces";
 import ResumeViewer from "@/app/components/canvas/ResumeViewer";
 import Walkthrough from "@/app/components/canvas/Walkthrough";
 import "@/app/components/canvas/canvas.css";
 import "./case-study.css";
-import Logo from "@/app/components/canvas/Logo";
+import Logo from "@/app/components/Logo";
 
 /* =========================================================
    CASE STUDY — canvas style, normal scrolling.
@@ -33,11 +37,14 @@ const EMAIL = "thimmojiruthvik@gmail.com";
 const STICKY_COLORS = ["cs-y", "cs-p", "cs-g", "cs-b", "cs-v"];
 
 const ok = (s?: string) => Boolean(clean(s));
-const list = (arr?: string[]) => (arr ?? []).map((s) => clean(s)).filter(Boolean) as string[];
+const list = (arr?: string[]) =>
+  (arr ?? []).map((s) => clean(s)).filter(Boolean) as string[];
 
 /* "Title — rest" or "Title: rest" → bold title + rest */
 function Item({ text }: { text: string }) {
-  const m = text.match(/^(.{2,60}?)\s(?:—|–)\s(.+)$/) ?? text.match(/^(.{2,48}?):\s(.+)$/);
+  const m =
+    text.match(/^(.{2,60}?)\s(?:—|–)\s(.+)$/) ??
+    text.match(/^(.{2,48}?):\s(.+)$/);
   return m ? (
     <span>
       <strong>{m[1]}</strong> — {m[2]}
@@ -48,7 +55,15 @@ function Item({ text }: { text: string }) {
 }
 
 /* Fade-up wrapper for each block */
-function Block({ id, label, children }: { id: string; label?: ReactNode; children: ReactNode }) {
+function Block({
+  id,
+  label,
+  children,
+}: {
+  id: string;
+  label?: ReactNode;
+  children: ReactNode;
+}) {
   const reduced = useReducedMotion();
   return (
     <motion.section
@@ -71,7 +86,13 @@ function Block({ id, label, children }: { id: string; label?: ReactNode; childre
 }
 
 /* Screenshot with numbered comment pins */
-function Shot({ image, priority }: { image: CaseStudyImage; priority?: boolean }) {
+function Shot({
+  image,
+  priority,
+}: {
+  image: CaseStudyImage;
+  priority?: boolean;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   const caption = clean(image.caption);
   return (
@@ -87,8 +108,16 @@ function Shot({ image, priority }: { image: CaseStudyImage; priority?: boolean }
           style={{ width: "100%", height: "auto" }}
         />
         {image.pins?.map((p, i) => (
-          <div key={i} className={`cs-pin${open === i ? " open" : ""}`} style={{ left: `${p.x}%`, top: `${p.y}%` }}>
-            <button type="button" aria-label={`Note ${i + 1}: ${p.title}`} onClick={() => setOpen(open === i ? null : i)}>
+          <div
+            key={i}
+            className={`cs-pin${open === i ? " open" : ""}`}
+            style={{ left: `${p.x}%`, top: `${p.y}%` }}
+          >
+            <button
+              type="button"
+              aria-label={`Note ${i + 1}: ${p.title}`}
+              onClick={() => setOpen(open === i ? null : i)}
+            >
               {i + 1}
             </button>
             <div className="tip" role="note">
@@ -110,7 +139,8 @@ function Compare({ compare }: { compare: CompareImages }) {
   const dragging = useRef(false);
   const move = (clientX: number) => {
     const r = ref.current?.getBoundingClientRect();
-    if (r) setPos(Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100)));
+    if (r)
+      setPos(Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100)));
   };
   const caption = clean(compare.caption);
   return (
@@ -126,12 +156,30 @@ function Compare({ compare }: { compare: CompareImages }) {
         onPointerMove={(e) => dragging.current && move(e.clientX)}
         onPointerUp={() => (dragging.current = false)}
       >
-        <Image src={compare.before.src} alt={compare.before.alt} width={1600} height={1000} sizes="960px" style={{ width: "100%", height: "auto" }} />
+        <Image
+          src={compare.before.src}
+          alt={compare.before.alt}
+          width={1600}
+          height={1000}
+          sizes="960px"
+          style={{ width: "100%", height: "auto" }}
+        />
         <div className="after" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
-          <Image src={compare.after.src} alt={compare.after.alt} width={1600} height={1000} sizes="960px" style={{ width: "100%" }} />
+          <Image
+            src={compare.after.src}
+            alt={compare.after.alt}
+            width={1600}
+            height={1000}
+            sizes="960px"
+            style={{ width: "100%" }}
+          />
         </div>
-        <span className="tag" style={{ left: 12 }}>Before</span>
-        <span className="tag" style={{ right: 12 }}>After</span>
+        <span className="tag" style={{ left: 12 }}>
+          Before
+        </span>
+        <span className="tag" style={{ right: 12 }}>
+          After
+        </span>
         <div className="handle" style={{ left: `${pos}%` }}>
           <span
             className="knob"
@@ -158,29 +206,67 @@ function Compare({ compare }: { compare: CompareImages }) {
 function Callout({ text }: { text: string }) {
   return (
     <div className="cs-callout">
-      <svg width="36" height="28" viewBox="0 0 36 28" fill="none" aria-hidden="true">
-        <path d="M2 4c8 0 18 2 24 14" stroke="#fd5e02" strokeWidth="2" strokeLinecap="round" />
-        <path d="M20 16l6 4 3-7" stroke="#fd5e02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <svg
+        width="36"
+        height="28"
+        viewBox="0 0 36 28"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 4c8 0 18 2 24 14"
+          stroke="#fd5e02"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M20 16l6 4 3-7"
+          stroke="#fd5e02"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
       <p>{text}</p>
     </div>
   );
 }
 
-function Section({ s, isPrivate, first }: { s: CaseStudySection; isPrivate?: boolean; first: boolean }) {
+function Section({
+  s,
+  isPrivate,
+  first,
+}: {
+  s: CaseStudySection;
+  isPrivate?: boolean;
+  first: boolean;
+}) {
   const title = clean(s.title);
   const desc = clean(s.description);
   const items = list(s.items);
-  const insights = (s.insights ?? []).filter((x) => ok(x.finding) && ok(x.decision));
+  const insights = (s.insights ?? []).filter(
+    (x) => ok(x.finding) && ok(x.decision),
+  );
   const images = (s.images ?? []).filter((im) => im.src);
   const callout = clean(s.callout);
   const from = s.insightLabels?.from ?? "Finding";
   const to = s.insightLabels?.to ?? "Decision";
 
-  if (!title && !desc && !items.length && !insights.length && !images.length && !s.compare) return null;
+  if (
+    !title &&
+    !desc &&
+    !items.length &&
+    !insights.length &&
+    !images.length &&
+    !s.compare
+  )
+    return null;
 
   return (
-    <Block id={s.id} label={s.label.replace(/^\d+\s*\/\s*/, (m) => m.replace("/", "—"))}>
+    <Block
+      id={s.id}
+      label={s.label.replace(/^\d+\s*\/\s*/, (m) => m.replace("/", "—"))}
+    >
       <div className="cs-frame">
         {title && <h2 className="cs-title">{title}</h2>}
         {desc && <p className="cs-desc">{desc}</p>}
@@ -205,7 +291,13 @@ function Section({ s, isPrivate, first }: { s: CaseStudySection; isPrivate?: boo
                 </div>
                 <div className="arrow" aria-hidden="true">
                   <svg width="26" height="14" viewBox="0 0 26 14" fill="none">
-                    <path d="M1 7h22M17 1l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M1 7h22M17 1l6 6-6 6"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
                 <div className="d">
@@ -218,7 +310,10 @@ function Section({ s, isPrivate, first }: { s: CaseStudySection; isPrivate?: boo
         )}
 
         {isPrivate && (images.length > 0 || s.compare) ? (
-          <p className="cs-private">Screens from this project are under NDA — happy to walk through them in a call.</p>
+          <p className="cs-private">
+            Screens from this project are under NDA — happy to walk through them
+            in a call.
+          </p>
         ) : (
           <>
             {s.compare && <Compare compare={s.compare} />}
@@ -236,9 +331,17 @@ function Section({ s, isPrivate, first }: { s: CaseStudySection; isPrivate?: boo
 
 /* ---------- page ---------- */
 
-export default function CaseStudyClient({ project: p }: { project: CaseStudy }) {
+export default function CaseStudyClient({
+  project: p,
+}: {
+  project: CaseStudy;
+}) {
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, mass: 0.3 });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 30,
+    mass: 0.3,
+  });
   const next = getNextCaseStudy(p.slug);
 
   const tldr = [
@@ -255,7 +358,11 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
   const context = clean(p.context);
   const problem = clean(p.problem);
   const outcome = clean(p.outcome);
-  const hasTokens = Boolean(p.tokens?.colors?.length || p.tokens?.type?.length || p.tokens?.spacing?.length);
+  const hasTokens = Boolean(
+    p.tokens?.colors?.length ||
+    p.tokens?.type?.length ||
+    p.tokens?.spacing?.length,
+  );
   const sections = p.sections.filter((s) => ok(s.title) || ok(s.description));
 
   /* layers panel */
@@ -263,16 +370,22 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
     { id: "overview", label: "Overview" },
     ...(tldr.length ? [{ id: "tldr", label: "TL;DR" }] : []),
     ...(context || problem ? [{ id: "context", label: "Context" }] : []),
-    ...sections.map((s) => ({ id: s.id, label: s.label.replace(/^\d+\s*\/\s*/, "") })),
+    ...sections.map((s) => ({
+      id: s.id,
+      label: s.label.replace(/^\d+\s*\/\s*/, ""),
+    })),
     ...(outcome || metrics.length ? [{ id: "outcome", label: "Outcome" }] : []),
     ...(hasTokens ? [{ id: "specs", label: "Specs" }] : []),
     ...(p.figmaEmbed ? [{ id: "figma", label: "Figma file" }] : []),
   ];
   const [active, setActive] = useState("overview");
   useEffect(() => {
-    const els = layers.map((l) => document.getElementById(l.id)).filter(Boolean) as HTMLElement[];
+    const els = layers
+      .map((l) => document.getElementById(l.id))
+      .filter(Boolean) as HTMLElement[];
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      (entries) =>
+        entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
       { rootMargin: "-35% 0px -60% 0px" },
     );
     els.forEach((el) => io.observe(el));
@@ -282,7 +395,11 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
 
   return (
     <div className="cs">
-      <motion.div className="cs-progress" style={{ scaleX: progress }} aria-hidden="true" />
+      <motion.div
+        className="cs-progress"
+        style={{ scaleX: progress }}
+        aria-hidden="true"
+      />
 
       {/* top bar */}
       <header className="cs-top">
@@ -295,12 +412,25 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
             ← Back to canvas
           </Link>
           {getWalkthrough(p.slug) && (
-            <button type="button" className="cs-wt" onClick={() => openWalkthrough(p.slug)}>
-              ▶ {getWalkthrough(p.slug)?.kind === "figma" ? "Prototype" : getWalkthrough(p.slug)?.kind === "live" ? "Live demo" : "Walkthrough"}
+            <button
+              type="button"
+              className="cs-wt"
+              onClick={() => openWalkthrough(p.slug)}
+            >
+              ▶{" "}
+              {getWalkthrough(p.slug)?.kind === "figma"
+                ? "Prototype"
+                : getWalkthrough(p.slug)?.kind === "live"
+                  ? "Live demo"
+                  : "Walkthrough"}
             </button>
           )}
           <span className="cv cs-hire-wrap">
-            <Dropdown label="Hire me" menuClass="right" trigger={<span className="cv-hire">Hire me ▾</span>}>
+            <Dropdown
+              label="Hire me"
+              menuClass="right"
+              trigger={<span className="cv-hire">Hire me ▾</span>}
+            >
               {(close) => (
                 <>
                   <button
@@ -349,7 +479,11 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
         <aside className="cs-panel cs-layers" aria-label="On this page">
           <p>Layers</p>
           {layers.map((l) => (
-            <a key={l.id} href={`#${l.id}`} className={active === l.id ? "on" : ""}>
+            <a
+              key={l.id}
+              href={`#${l.id}`}
+              className={active === l.id ? "on" : ""}
+            >
               <i aria-hidden="true" />
               {l.label}
             </a>
@@ -369,7 +503,10 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
               <dl className="cs-meta">
                 {[
                   ["Role", p.role],
-                  ["Timeline", [p.year, p.duration].filter(Boolean).join(" · ")],
+                  [
+                    "Timeline",
+                    [p.year, p.duration].filter(Boolean).join(" · "),
+                  ],
                   ["Team", team],
                   ["Platform", p.platform],
                   ["Tools", p.tools.join(", ")],
@@ -384,7 +521,14 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
               </dl>
               {!p.isPrivate && p.image && (
                 <div className="cs-cover">
-                  <Image src={p.image} alt={`${p.title} cover`} fill priority sizes="(max-width: 1024px) 100vw, 960px" style={{ objectFit: "cover", objectPosition: "top" }} />
+                  <Image
+                    src={p.image}
+                    alt={`${p.title} cover`}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 960px"
+                    style={{ objectFit: "cover", objectPosition: "top" }}
+                  />
                 </div>
               )}
             </div>
@@ -399,7 +543,11 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
                     key={t.k}
                     className={`cs-sticky ${t.c}`}
                     initial={{ opacity: 0, y: 20, rotate: 0 }}
-                    whileInView={{ opacity: 1, y: 0, rotate: [-1.5, 1, -0.5][i] }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                      rotate: [-1.5, 1, -0.5][i],
+                    }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1, duration: 0.6, ease: EASE }}
                   >
@@ -492,9 +640,17 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
                         key={r}
                         className={`cs-sticky ${STICKY_COLORS[(i + 3) % STICKY_COLORS.length]}`}
                         initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0, rotate: [1, -1.5, 0.8][i % 3] }}
+                        whileInView={{
+                          opacity: 1,
+                          y: 0,
+                          rotate: [1, -1.5, 0.8][i % 3],
+                        }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
+                        transition={{
+                          delay: i * 0.08,
+                          duration: 0.6,
+                          ease: EASE,
+                        }}
                       >
                         <p style={{ marginTop: 0 }}>{r}</p>
                       </motion.div>
@@ -513,7 +669,10 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
                 <div className="cs-specs">
                   {p.tokens?.colors?.length ? (
                     <div>
-                      <p className="cs-sub" style={{ color: "#a3a097", marginBottom: 12 }}>
+                      <p
+                        className="cs-sub"
+                        style={{ color: "#a3a097", marginBottom: 12 }}
+                      >
                         Colour — click to copy
                       </p>
                       <div className="cs-swatches">
@@ -543,7 +702,10 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
                     ) : null}
                     {p.tokens?.spacing?.length ? (
                       <>
-                        <p className="cs-sub" style={{ color: "#a3a097", marginTop: 24 }}>
+                        <p
+                          className="cs-sub"
+                          style={{ color: "#a3a097", marginTop: 24 }}
+                        >
                           Spacing
                         </p>
                         <div className="cs-spacing">
@@ -551,7 +713,12 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
                             const n = parseInt(s, 10) || 4;
                             return (
                               <span key={s}>
-                                <i style={{ width: Math.min(n, 64), height: Math.min(n, 64) }} />
+                                <i
+                                  style={{
+                                    width: Math.min(n, 64),
+                                    height: Math.min(n, 64),
+                                  }}
+                                />
                                 {s}
                               </span>
                             );
@@ -571,7 +738,12 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
               <div className="cs-frame">
                 <h2 className="cs-title">Poke around the real file.</h2>
                 <div className="cs-embed">
-                  <iframe src={p.figmaEmbed} title={`${p.title} — Figma file`} loading="lazy" allowFullScreen />
+                  <iframe
+                    src={p.figmaEmbed}
+                    title={`${p.title} — Figma file`}
+                    loading="lazy"
+                    allowFullScreen
+                  />
                 </div>
               </div>
             </Block>
@@ -582,7 +754,13 @@ export default function CaseStudyClient({ project: p }: { project: CaseStudy }) 
             <Block id="next" label="Next case study">
               <Link href={`/case-studies/${next.slug}`} className="cs-next">
                 <div className="img">
-                  <Image src={next.image} alt={`${next.title} cover`} fill sizes="480px" style={{ objectFit: "cover", objectPosition: "top" }} />
+                  <Image
+                    src={next.image}
+                    alt={`${next.title} cover`}
+                    fill
+                    sizes="480px"
+                    style={{ objectFit: "cover", objectPosition: "top" }}
+                  />
                 </div>
                 <div>
                   <span className="cs-sub">{workTypeLabels[next.type]}</span>

@@ -101,6 +101,13 @@ export default function ResumeViewer() {
     } else setAsking(true);
   };
 
+  const forget = () => {
+    try {
+      localStorage.removeItem(OK_KEY);
+    } catch {}
+    setAsking(true);
+  };
+
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -149,6 +156,11 @@ export default function ResumeViewer() {
                 <a href={PROFILE.resume} target="_blank" rel="noopener noreferrer" className="ghost">
                   Open full size ↗
                 </a>
+                {open && known() && !asking && (
+                  <button type="button" className="ghost" onClick={forget}>
+                    Not {known()?.name.split(" ")[0]}?
+                  </button>
+                )}
                 <button type="button" className="cv-btn dark" onClick={onDownload}>
                   {done ? "Downloaded ✓" : "Download"}
                 </button>
@@ -159,19 +171,12 @@ export default function ResumeViewer() {
             </div>
 
             <div className="cv-rv-body">
-              {/* Some browsers (Safari) paint embedded PDFs above everything — hide it while the form is open. */}
-              <iframe
-                src={`${PROFILE.resume}#toolbar=0&view=FitH`}
-                title={`${PROFILE.fullName} résumé`}
-                style={{ visibility: asking ? "hidden" : "visible" }}
-              />
-              {asking && <div className="cv-rv-behind" aria-hidden="true" />}
+              <iframe src={`${PROFILE.resume}#toolbar=0&view=FitH`} title={`${PROFILE.fullName} résumé`} />
 
               <AnimatePresence>
                 {asking && (
                   <motion.form
                     className="cv-rv-ask cv-y"
-                    style={{ zIndex: 5 }}
                     onSubmit={submit}
                     noValidate
                     initial={{ opacity: 0, x: 40, rotate: 3 }}
