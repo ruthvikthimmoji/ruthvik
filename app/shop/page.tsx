@@ -7,8 +7,7 @@ import Logo from "../components/canvas/Logo";
 
 export const metadata: Metadata = {
   title: "Shop — Ruthvik Thimmoji",
-  description:
-    "Figma templates and UI kits by Ruthvik Thimmoji. Opening soon — join the waitlist.",
+  description: "Free Figma resources and design kits by Ruthvik Thimmoji.",
 };
 
 export default function ShopPage() {
@@ -27,15 +26,12 @@ export default function ShopPage() {
         <section className="wk-head">
           <div className="cv-label">
             <i aria-hidden="true" />
-            Page — Shop · opening soon
+            Page — Shop
           </div>
           <h1 className="cv-h1">
             Tools I wish <em>I’d had.</em>
           </h1>
-          <p className="cv-lead">
-            Figma templates and kits built from real client work. The first one
-            is in progress.
-          </p>
+          <p className="cv-lead">Free resources to take today, and Figma kits built from real client work. Join the list to hear when the kits launch.</p>
         </section>
         <section className="wk-head" style={{ marginTop: 40 }}>
           <ShopBoard />

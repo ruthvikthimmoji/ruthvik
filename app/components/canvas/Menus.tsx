@@ -26,8 +26,7 @@ export function Dropdown({
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: PointerEvent) =>
-      !ref.current?.contains(e.target as Node) && setOpen(false);
+    const onDown = (e: PointerEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("keydown", onKey);
@@ -38,14 +37,7 @@ export function Dropdown({
   }, [open]);
   return (
     <div ref={ref} className={`cv-dd ${className ?? ""}`}>
-      <button
-        type="button"
-        className="cv-dd-trigger"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-label={label}
-        onClick={() => setOpen((o) => !o)}
-      >
+      <button type="button" className="cv-dd-trigger" aria-haspopup="menu" aria-expanded={open} aria-label={label} onClick={() => setOpen((o) => !o)}>
         {trigger}
       </button>
       {open && (
@@ -99,14 +91,7 @@ export function FileMenu() {
           </Link>
           {socials.length > 0 && <div className="sep" role="separator" />}
           {socials.map((s) => (
-            <a
-              key={s.label}
-              role="menuitem"
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={close}
-            >
+            <a key={s.label} role="menuitem" href={s.href} target="_blank" rel="noopener noreferrer" onClick={close}>
               {s.label} ↗
             </a>
           ))}
@@ -126,7 +111,7 @@ export function FileMenu() {
           </button>
           <div className="sep" role="separator" />
           <Link role="menuitem" href="/shop" onClick={close} className="quiet">
-            Shop · digital products, soon
+            Shop · free resources
           </Link>
         </>
       )}

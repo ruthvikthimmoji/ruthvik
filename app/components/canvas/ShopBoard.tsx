@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
-import { PRODUCTS, STATUS_LABEL } from "@/app/data/shop";
+import { isFree, PRODUCTS, STATUS_LABEL, type Product } from "@/app/data/shop";
 
 /* 10 — SHOP: digital products, coming soon, with a waitlist. */
 
@@ -38,37 +38,61 @@ export default function ShopBoard({ compact = false }: { compact?: boolean }) {
     }
   };
 
+  const free = PRODUCTS.filter(isFree);
+  const paid = PRODUCTS.filter((p) => p.status === "live" && !isFree(p));
+  const soon = PRODUCTS.filter((p) => p.status !== "live");
+
+  const card = (p: Product) => {
+    const live = p.status === "live" && p.href;
+    const body = (
+      <>
+        <div className={`sh-thumb cv-${p.color}`}>
+          <span className="sh-kind">{p.kind}</span>
+          <span className="sh-name">{p.name}</span>
+        </div>
+        <div className="sh-meta">
+          <span className={`sh-status ${p.status}`}>
+            <b aria-hidden="true" />
+            {STATUS_LABEL[p.status]}
+          </span>
+          {p.price && <span className="sh-price">{p.price}</span>}
+        </div>
+        <p>{p.pitch}</p>
+        {live && <span className="sh-cta">{isFree(p) ? "Get it free →" : "Buy now →"}</span>}
+      </>
+    );
+    return live ? (
+      <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="sh-card live">
+        {body}
+      </a>
+    ) : (
+      <article key={p.id} className="sh-card">
+        {body}
+      </article>
+    );
+  };
+
   return (
     <div className={`sh-board${compact ? " compact" : ""}`}>
-      <div className="sh-products">
-        {PRODUCTS.map((p) => {
-          const live = p.status === "live" && p.href;
-          const body = (
-            <>
-              <div className={`sh-thumb cv-${p.color}`}>
-                <span className="sh-kind">{p.kind}</span>
-                <span className="sh-name">{p.name}</span>
-              </div>
-              <div className="sh-meta">
-                <span className={`sh-status ${p.status}`}>
-                  <b aria-hidden="true" />
-                  {STATUS_LABEL[p.status]}
-                </span>
-                {p.price && <span className="sh-price">{p.price}</span>}
-              </div>
-              <p>{p.pitch}</p>
-            </>
-          );
-          return live ? (
-            <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="sh-card live">
-              {body}
-            </a>
-          ) : (
-            <article key={p.id} className="sh-card">
-              {body}
-            </article>
-          );
-        })}
+      <div className="sh-lists">
+        {free.length > 0 && (
+          <section className="sh-group">
+            <p className="sh-group-title">Free — take them</p>
+            <div className="sh-products">{free.map(card)}</div>
+          </section>
+        )}
+        {paid.length > 0 && (
+          <section className="sh-group">
+            <p className="sh-group-title">Kits</p>
+            <div className="sh-products">{paid.map(card)}</div>
+          </section>
+        )}
+        {soon.length > 0 && (
+          <section className="sh-group">
+            <p className="sh-group-title">Coming soon</p>
+            <div className="sh-products">{soon.map(card)}</div>
+          </section>
+        )}
       </div>
 
       <div className="sh-wait">

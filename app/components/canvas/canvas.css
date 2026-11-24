@@ -657,3 +657,10 @@
 .cv-rv-behind { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 23px, rgba(0,0,0,.045) 23px 24px), #ecebe6; }
 .cv-rv-ask { left: 50%; right: auto; margin-left: -165px; top: 40px; }
 @media (max-width: 899px), (pointer: coarse) { .cv-rv-ask { left: 0; margin-left: 0; top: auto; } }
+
+/* store: free / kits / coming soon groups */
+.sh-lists { display: flex; flex-direction: column; gap: 34px; min-width: 0; }
+.sh-group-title { margin-bottom: 14px; font: 500 11px var(--cv-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--cv-muted); }
+.sh-cta { display: inline-block; margin: 12px 4px 0; font-size: 13.5px; font-weight: 600; color: var(--cv-accent); }
+.sh-card.live:hover .sh-cta { text-decoration: underline; }
+.wk .sh-board { align-items: start; }
