@@ -45,8 +45,8 @@ export const PRODUCTS: Product[] = [
 
   // ---- Paid · coming soon ----
   { id: "case-study-kit", name: "Case Study Kit", pitch: "The full Figma template: 10-section case study, 11 components, Light + Dark.", kind: "Figma kit", status: "building", color: "p" },
-  { id: "design-system-starter", name: "Design System Starter", pitch: "Tokens, variables and core components to start a system right.", kind: "Figma file", status: "idea", color: "v" },
-  { id: "dashboard-ui-kit", name: "Dashboard UI Kit", pitch: "Tables, filters and charts for B2B and fintech products.", kind: "Figma UI kit", status: "idea", color: "g" },
+  { id: "design-system-starter", name: "Design System Starter", pitch: "Tokens with Light/Dark + Default/Compact modes and 12 core components wired to them.", kind: "Figma kit", status: "building", color: "v" },
+  { id: "dashboard-ui-kit", name: "Dashboard UI Kit", pitch: "Tables, filters, KPI cards and 5 chart types for B2B & fintech — Light/Dark + Compact.", kind: "Figma UI kit", status: "building", color: "g" },
 ];
 
 export const STATUS_LABEL: Record<Product["status"], string> = { idea: "Sketching", building: "Building now", live: "Available" };

@@ -1,13 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from "react";
-import { AREAS, NAV, type Area } from "./content";
+import { AREAS, type Area } from "./content";
 import Guestbook from "./Guestbook";
 import LabBoard, { LabLink } from "./LabBoard";
 import WritingBoard, { WritingLink } from "./WritingBoard";
-import { Dropdown, FileMenu } from "./Menus";
+import { Dropdown, FileMenu, SocialIcons } from "./Menus";
 import { AllWorkLink, ContactBody, FrameLabel, HeroBody, openBrief, openResume, ProcessFlow, ProjectCards } from "./Pieces";
-import { activeSocials } from "./content";
 import BriefPanel from "./BriefPanel";
 import ResumeViewer from "./ResumeViewer";
 import Walkthrough from "./Walkthrough";
@@ -111,6 +110,7 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
   const [stamps, setStamps] = useState<Stamp[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const spaceDown = useRef(false);
+
 
   const setTool = useCallback((t: Tool) => {
     toolRef.current = t;
@@ -450,11 +450,14 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
         </div>
       </div>
 
-      {/* top-left: file menu */}
-      <FileMenu />
+      {/* top-left: name menu + always-visible section links */}
+      <div className="cv-ui cv-panel cv-topbar">
+        <FileMenu active={active} onFly={flyTo} />
+      </div>
 
       {/* top-right */}
       <div className="cv-ui cv-panel cv-tr">
+        <SocialIcons />
         <div className="cv-avs" aria-hidden="true">
           <span style={{ background: "#fd5e02" }}>You</span>
           <span style={{ background: "#7b61ff" }}>R</span>
@@ -515,7 +518,7 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
       </div>
 
       {/* toolbar */}
-      <nav className="cv-ui cv-panel cv-toolbar" aria-label="Canvas tools and frames">
+      <nav className="cv-ui cv-panel cv-toolbar" aria-label="Canvas tools">
         {tools.map(([t, tip, icon]) => (
           <button key={t} type="button" className={`cv-tool${tool === t ? " on" : ""}`} aria-label={tip} aria-pressed={tool === t} onClick={() => (t === "sticky" ? openGuestbook() : setTool(t))}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
@@ -524,44 +527,6 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
             <span className="tip">{tip}</span>
           </button>
         ))}
-        <div className="cv-sep" aria-hidden="true" />
-        <Dropdown label="Jump to a frame" className="cv-frames-dd" menuClass="up" trigger={<span className="cv-frames-btn">Frames ▾</span>}>
-          {(close) => (
-            <>
-              {NAV.map((n) => (
-                <button
-                  key={n.area}
-                  type="button"
-                  role="menuitem"
-                  className={active === n.area ? "on" : ""}
-                  onClick={() => {
-                    close();
-                    flyTo(n.area);
-                  }}
-                >
-                  {n.label}
-                </button>
-              ))}
-              <div className="sep" role="separator" />
-              <button
-                type="button"
-                role="menuitem"
-                onClick={() => {
-                  close();
-                  flyTo("All");
-                }}
-              >
-                Fit all <kbd>⇧1</kbd>
-              </button>
-            </>
-          )}
-        </Dropdown>
-        <button type="button" className="cv-quick" onClick={() => flyTo("Work")}>
-          Work
-        </button>
-        <button type="button" className="cv-quick" onClick={openResume}>
-          Résumé
-        </button>
       </nav>
 
       {/* zoom */}
@@ -575,15 +540,6 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
         <button type="button" aria-label="Zoom in" onClick={() => zoomAt(1.2)}>
           +
         </button>
-      </div>
-
-      <div className="cv-ui cv-panel cv-dock" aria-label="Social links">
-        <span className="lbl">Find me</span>
-        {activeSocials().map((l) => (
-          <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer">
-            {l.label}
-          </a>
-        ))}
         <span className="cv-keys" tabIndex={0} aria-label="Keyboard shortcuts">
           ?
           <span className="pop" role="tooltip">
@@ -593,6 +549,7 @@ export default function CanvasBoard({ reduced }: { reduced: boolean }) {
           </span>
         </span>
       </div>
+
 
       <div ref={youRef} className="cv-you" aria-hidden="true">
         You
