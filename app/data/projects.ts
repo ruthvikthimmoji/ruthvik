@@ -114,6 +114,38 @@ export const projects: ProjectCard[] = [
   },
 
   {
+    slug: "buildbook",
+    title: "Buildbook",
+    description:
+      "A house-build tracker for agreements, payments, materials, site diary, milestones, vendors and budget — offline-first on site, synced to your own Google Sheet.",
+    type: "personal",
+    category: "PropTech / Web + Mobile PWA",
+    role: "Product designer",
+    year: "2026", // CHECK
+    platform: "Web + Mobile PWA",
+    contribution: ["Product strategy", "Web + mobile UI", "Design system", "Offline-first flows"],
+    image: "/projects/buildbook.png", // Figma: Buildbook → Cover (node 27:2)
+    featured: true,
+    caseStudy: false,
+  },
+
+  {
+    slug: "hisaab",
+    title: "Hisaab",
+    description:
+      "A UPI-based group expense app. Track who paid what, then settle in one tap through your own UPI app — Hisaab never holds the money.",
+    type: "personal",
+    category: "FinTech / Mobile + Web",
+    role: "Product designer",
+    year: "2026",
+    platform: "Android, guest web, desktop",
+    contribution: ["Wireframes → hi-fi (86 screens)", "Light + dark design system", "Brand & logo", "Developer handoff & accessibility"],
+    image: "/projects/hisaab.png", // Figma: Hisaab — Wireframes → page "00 · Cover"
+    featured: false,
+    caseStudy: false,
+  },
+
+  {
     slug: "sportsea",
     title: "SportSea",
     description:
@@ -129,7 +161,7 @@ export const projects: ProjectCard[] = [
       "Players, venue owners and admins all used the same booking system — and needed completely different answers from it.",
     resolution:
       "One system with a clear view for each role, from finding a court to settling the payment.",
-    featured: true,
+    featured: false,
     caseStudy: true,
   },
 
@@ -168,36 +200,37 @@ export const projects: ProjectCard[] = [
   },
 
   {
-    slug: "health-insurance-app",
-    title: "Health Insurance App",
+    slug: "yaana",
+    title: "Yaana",
     description:
-      "A mobile-first insurance experience simplifying hospital discovery, claims tracking and policy renewals.",
+      "One plan for Namma Metro and BMTC — live status, honest delays, and a trip that still works when the signal drops.",
     type: "personal",
-    category: "InsurTech / Mobile",
-    role: "UI/UX Designer",
-    year: "2025",
-    platform: "Mobile",
-    contribution: ["User flows", "Mobile UI", "Claims experience", "Information architecture"],
-    image: "/projects/insurance.png",
+    category: "Mobility / Mobile",
+    role: "UX/UI Designer (solo)",
+    year: "2026", // CHECK
+    platform: "iOS & Android",
+    contribution: ["Research plan", "IA & flows", "Mobile UI", "Edge cases & accessibility"],
+    image: "/projects/yaana.png", // Figma: Public Transport App → Cover (node 16:2)
     featured: false,
     caseStudy: false,
   },
 
   {
-    slug: "tripmate",
-    title: "Tripmate",
+    slug: "dailyfit",
+    title: "DailyFit",
     description:
-      "A mobile-first travel experience for discovering destinations, exploring curated tours and booking experiences.",
+      "A personal discipline PWA — win the Big 3 each day across fitness, work and an operating plan; everything else is a bonus.",
     type: "personal",
-    category: "Travel / Mobile",
-    role: "UI/UX Designer",
-    year: "2025",
-    platform: "Mobile",
-    contribution: ["Mobile UI", "User flows", "Booking experience", "Prototyping"],
-    image: "/projects/tripmate.png",
+    category: "Health / PWA",
+    role: "Product · Design · Build",
+    year: "2026",
+    platform: "PWA · iOS + Android",
+    contribution: ["Product strategy", "Design system", "Mobile screens", "Architecture & launch plan"],
+    image: "/projects/dailyfit.png", // Figma: Daily fit → Cover (node 13:2)
     featured: false,
     caseStudy: false,
   },
+
 ];
 
 /* ---------- helpers ---------- */

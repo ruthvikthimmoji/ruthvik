@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fail, istNow, rateLimited, sendMail, text } from "@/app/lib/mail";
+import { fail, istNow, logLead, rateLimited, sendMail, text } from "@/app/lib/mail";
 
 /* POST /api/resume-download — tells you who downloaded your résumé.
    Never blocks the download: the client downloads either way. */
@@ -19,11 +19,14 @@ export async function POST(req: Request) {
   const company = text(b.company, 120);
   const role = text(b.role, 40);
   const contact = text(b.contact, 120);
+  const repeat = b.repeat === true;
   if (!name) return fail("Add your name.");
   if (rateLimited(req, "resume", 10)) return NextResponse.json({ ok: true });
 
-  const sent = await sendMail({
-    subject: `📄 ${name}${company ? ` (${company})` : ""} downloaded your résumé`,
+  const [logged, sent] = await Promise.all([
+    logLead("Resume downloads", { name, company, role, contact: repeat ? `${contact} (repeat download)`.trim() : contact }),
+    sendMail({
+    subject: `📄 ${name}${company ? ` (${company})` : ""} ${repeat ? "downloaded your résumé again" : "downloaded your résumé"}`,
     replyTo: contact,
     body: [
       `Someone downloaded your résumé`,
@@ -35,7 +38,8 @@ export async function POST(req: Request) {
       ``,
       `When: ${istNow()}`,
     ].join("\n"),
-  });
+    }),
+  ]);
 
-  return NextResponse.json({ ok: true, notified: sent });
+  return NextResponse.json({ ok: true, emailed: sent, logged });
 }

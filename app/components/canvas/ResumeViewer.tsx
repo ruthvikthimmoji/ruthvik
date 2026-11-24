@@ -65,12 +65,36 @@ export default function ResumeViewer() {
     setError("");
   };
 
-  const onDownload = () => {
-    let known = false;
+  /* Who downloaded before (saved on this device after the form). */
+  const known = (): { name: string; company?: string; role?: string; contact?: string } | null => {
     try {
-      known = Boolean(localStorage.getItem(OK_KEY));
-    } catch {}
-    if (known) {
+      const raw = localStorage.getItem(OK_KEY);
+      if (!raw) return null;
+      const v = JSON.parse(raw);
+      return v && typeof v.name === "string" ? v : null; // old "1" values → ask again
+    } catch {
+      return null;
+    }
+  };
+
+  const notify = (who: { name: string; company?: string; role?: string; contact?: string }, repeat: boolean) => {
+    // Never block the download on the network — notify in the background.
+    fetch("/api/resume-download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...who, repeat, website }),
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (process.env.NODE_ENV !== "production") console.info("[résumé] notify result", d);
+      })
+      .catch(() => {});
+  };
+
+  const onDownload = () => {
+    const who = known();
+    if (who) {
+      notify(who, true);
       download();
       setDone(true);
       window.setTimeout(() => setDone(false), 2500);
@@ -84,14 +108,10 @@ export default function ResumeViewer() {
       return;
     }
     setSending(true);
-    // Never block the download on the network — notify in the background.
-    fetch("/api/resume-download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, company, role, contact, website }),
-    }).catch(() => {});
+    const who = { name: name.trim(), company: company.trim(), role, contact: contact.trim() };
+    notify(who, false);
     try {
-      localStorage.setItem(OK_KEY, "1");
+      localStorage.setItem(OK_KEY, JSON.stringify(who));
     } catch {}
     download();
     setSending(false);
@@ -139,12 +159,19 @@ export default function ResumeViewer() {
             </div>
 
             <div className="cv-rv-body">
-              <iframe src={`${PROFILE.resume}#toolbar=0&view=FitH`} title={`${PROFILE.fullName} résumé`} />
+              {/* Some browsers (Safari) paint embedded PDFs above everything — hide it while the form is open. */}
+              <iframe
+                src={`${PROFILE.resume}#toolbar=0&view=FitH`}
+                title={`${PROFILE.fullName} résumé`}
+                style={{ visibility: asking ? "hidden" : "visible" }}
+              />
+              {asking && <div className="cv-rv-behind" aria-hidden="true" />}
 
               <AnimatePresence>
                 {asking && (
                   <motion.form
                     className="cv-rv-ask cv-y"
+                    style={{ zIndex: 5 }}
                     onSubmit={submit}
                     noValidate
                     initial={{ opacity: 0, x: 40, rotate: 3 }}

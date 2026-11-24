@@ -53,3 +53,28 @@ export async function sendMail({ subject, body, replyTo }: { subject: string; bo
     return false;
   }
 }
+
+/* ---------------------------------------------------------
+   LEADS LOG — every form also lands as a row in your Google
+   Sheet (one tab per form). Setup: see LEADS-SETUP.md.
+     LEADS_WEBHOOK_URL=https://script.google.com/macros/s/…/exec
+     LEADS_SECRET=any-long-random-string (same as in the script)
+--------------------------------------------------------- */
+export type LeadType = "Resume downloads" | "Project briefs" | "Guestbook" | "Shop waitlist";
+
+/** Returns true when logged, false when not configured or failed. */
+export async function logLead(type: LeadType, fields: Record<string, string>) {
+  const url = process.env.LEADS_WEBHOOK_URL;
+  if (!url) return false;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret: process.env.LEADS_SECRET ?? "", type, when: istNow(), ...fields }),
+      redirect: "manual", // Apps Script answers with a 302 after saving the row
+    });
+    return res.status < 400 || res.type === "opaqueredirect";
+  } catch {
+    return false;
+  }
+}

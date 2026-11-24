@@ -30,6 +30,7 @@ export const CARD_LINES: Record<string, string> = {
   "parity-b2b": "Turned currency hedging into three plain-language choices for agencies billing abroad.",
   "studycrux-cms": "Restructured an editorial CMS so publishing takes fewer steps and fewer guesses.",
   sportsea: "One booking system with a clear view for players, venue owners and admins.",
+  buildbook: "Every rupee and every workday of a house build in one place — offline on site, synced to Google Sheets.",
 };
 
 /* A comment pin on the Work frame (set to null to hide) */
@@ -73,10 +74,10 @@ export const STORY: Chapter[] = [
   },
   {
     when: "2023",
-    title: "The detour into graphic design",
-    happened: "Took on ads and print work. It felt like a step sideways — but it taught me type, layout and hierarchy.",
+    title: "Graphic design on the side",
+    happened: "Took on graphic design projects for clients alongside my work — learning type, layout and hierarchy by doing.",
     learned: "Good design is mostly hierarchy.",
-    mood: 30,
+    mood: 55,
     color: "p",
   },
   {

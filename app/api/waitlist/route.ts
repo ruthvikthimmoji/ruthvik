@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fail, isEmail, istNow, rateLimited, sendMail, text } from "@/app/lib/mail";
+import { fail, isEmail, istNow, logLead, rateLimited, sendMail, text } from "@/app/lib/mail";
 
 /* POST /api/waitlist — "Notify me" for digital products → email to you. */
 
@@ -19,12 +19,13 @@ export async function POST(req: Request) {
   if (!isEmail(email)) return fail("Add a valid email.");
   if (rateLimited(req, "waitlist", 5)) return fail("You’re already on the list!", 429);
 
+  const logged = await logLead("Shop waitlist", { email, interests: interests.join(", ") });
   const sent = await sendMail({
     subject: `🛍️ Waitlist: ${email}${interests.length ? ` · ${interests.join(", ")}` : ""}`,
     replyTo: email,
     body: [`Someone joined the shop waitlist`, ``, `Email:      ${email}`, `Interested: ${interests.join(", ") || "Everything"}`, ``, `Joined ${istNow()}`].join("\n"),
   });
 
-  if (!sent) return fail("Couldn’t join right now.", 503);
+  if (!sent && !logged) return fail("Couldn’t join right now.", 503);
   return NextResponse.json({ ok: true });
 }

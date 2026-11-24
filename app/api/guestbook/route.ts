@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { istNow, logLead, sendMail } from "@/app/lib/mail";
 
 /* =========================================================
    POST /api/guestbook
@@ -56,36 +57,23 @@ export async function POST(req: Request) {
   if (recent.length >= LIMIT) return fail("That’s a lot of notes! Try again in a few minutes.", 429);
   hits.set(ip, [...recent, now]);
 
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.GUESTBOOK_TO;
-  if (!key || !to) return fail("The guestbook isn’t connected yet.", 503);
-
-  const lines = [
-    `New sticky note on your portfolio`,
-    ``,
-    `“${message}”`,
-    ``,
-    `From: ${name}${role ? ` (${role})` : ""}`,
-    `Reach them: ${contact || "not provided"}`,
-    `Sent: ${new Date(now).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST`,
-  ];
-
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: process.env.GUESTBOOK_FROM || "Portfolio guestbook <onboarding@resend.dev>",
-        to: [to],
-        subject: `📌 New note from ${name}${role ? ` · ${role}` : ""}`,
-        text: lines.join("\n"),
-        ...(isEmail ? { reply_to: contact } : {}),
-      }),
-    });
-    if (!res.ok) return fail("Couldn’t send your note right now.", 502);
-  } catch {
-    return fail("Couldn’t send your note right now.", 502);
-  }
+  const [logged, sent] = await Promise.all([
+    logLead("Guestbook", { name, role, contact, message }),
+    sendMail({
+      subject: `📌 New note from ${name}${role ? ` · ${role}` : ""}`,
+      replyTo: isEmail ? contact : undefined,
+      body: [
+        `New sticky note on your portfolio`,
+        ``,
+        `“${message}”`,
+        ``,
+        `From: ${name}${role ? ` (${role})` : ""}`,
+        `Reach them: ${contact || "not provided"}`,
+        `Sent: ${istNow()}`,
+      ].join("\n"),
+    }),
+  ]);
+  if (!sent && !logged) return fail("The guestbook isn’t connected yet.", 503);
 
   return NextResponse.json({ ok: true });
 }

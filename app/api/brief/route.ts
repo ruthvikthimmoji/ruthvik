@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fail, isEmail, istNow, rateLimited, sendMail, text } from "@/app/lib/mail";
+import { fail, isEmail, istNow, logLead, rateLimited, sendMail, text } from "@/app/lib/mail";
 
 /* POST /api/brief — "Start a project" form → email to you. */
 
@@ -27,6 +27,7 @@ export async function POST(req: Request) {
   if (message.length < 10) return fail("Tell me a little about the project.");
   if (rateLimited(req, "brief", 3)) return fail("You’ve sent a few briefs already — I’ll be in touch!", 429);
 
+  const logged = await logLead("Project briefs", { name, email, company, types: types.join(", "), budget, timeline, message });
   const sent = await sendMail({
     subject: `🧩 New project brief from ${name}${company ? ` · ${company}` : ""}`,
     replyTo: email,
@@ -47,6 +48,6 @@ export async function POST(req: Request) {
     ].join("\n"),
   });
 
-  if (!sent) return fail("Couldn’t send the brief right now.", 503);
+  if (!sent && !logged) return fail("Couldn’t send the brief right now.", 503);
   return NextResponse.json({ ok: true });
 }
